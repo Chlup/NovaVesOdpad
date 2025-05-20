@@ -8,27 +8,30 @@
 import Foundation
 import Factory
 
+@MainActor @Observable final class HomeModelState {
+    var days: [TrashDay] = []
+}
+
 @MainActor protocol HomeModel {
     var coordinator: HomeCoordinator { get }
-    var days: [TrashDay] { get }
-    
+
     func loadData()
     func titleForDay(_ day: TrashDay) -> String
 }
 
-@MainActor @Observable final class HomeModelImpl {
+@MainActor final class HomeModelImpl {
     @ObservationIgnored @Injected(\.tasksManager) private var tasks
     @ObservationIgnored @Injected(\.logger) private var logger
 
-    var days: [TrashDay] = []
-
+    let state: HomeModelState
     let coordinator: HomeCoordinator
 
     private let loadDaysTaskID = UUID().uuidString
     private let dayTitleDateFormatter: DateFormatter
 
-    init(coordinator: HomeCoordinator) {
+    init(state: HomeModelState, coordinator: HomeCoordinator) {
         self.coordinator = coordinator
+        self.state = state
         dayTitleDateFormatter = DateFormatter()
         dayTitleDateFormatter.dateFormat = "dd. MM. yyyy"
     }
@@ -58,7 +61,7 @@ import Factory
     }
 
     private func updateDays(_ days: [TrashDay]) {
-        self.days = days
+        state.days = days
     }
 }
 

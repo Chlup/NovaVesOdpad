@@ -11,11 +11,12 @@ import PDFKit
 
 struct TrashInfoView: View {
     let model: TrashInfoModel
+    let state: TrashInfoModelState
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                ForEach(model.sections) { section in
+                ForEach(state.sections) { section in
                     HStack {
                         Text(section.title)
                             .font(.title2)

@@ -8,27 +8,7 @@
 import Foundation
 import Factory
 
-@MainActor protocol SettingsModel: Observable {
-    var coordinator: SettingsCoordinator { get }
-    var noticationEnabledThreeDaysBefore: Bool { get nonmutating set }
-    var noticationEnabledTwoDaysBefore: Bool { get nonmutating set }
-    var noticationEnabledOneDaysBefore: Bool { get nonmutating set }
-    var noticationEnabledOnDay: Bool { get nonmutating set }
-
-    func notifSettingsChanged()
-}
-
-@MainActor @Observable final class SettingsModelImpl {
-    @ObservationIgnored @Injected(\.logger) private var logger
-
-    private enum Constants {
-        static let notificationEnabledThreeDaysBeforeUDKey = "noticationEnabledThreeDaysBefore"
-        static let notificationEnabledTwoDaysBeforeUDKey = "noticationEnabledTwoDaysBefore"
-        static let notificationEnabledOneDaysBeforeUDKey = "notificationEnabledOneDaysBefore"
-        static let notificationEnabledOnDayUDKey = "notificationEnabledOnDay"
-        static let selectedNotificationHourUDKey = "selectedNotificationHour"
-    }
-
+@MainActor @Observable final class SettingsModelState {
     let notificationHours: [Int]
     var selectedNotificationHour: Int
     var noticationEnabledThreeDaysBefore: Bool
@@ -36,11 +16,15 @@ import Factory
     var noticationEnabledOneDaysBefore: Bool
     var noticationEnabledOnDay: Bool
 
-    let coordinator: SettingsCoordinator
+    fileprivate enum Constants {
+        static let notificationEnabledThreeDaysBeforeUDKey = "noticationEnabledThreeDaysBefore"
+        static let notificationEnabledTwoDaysBeforeUDKey = "noticationEnabledTwoDaysBefore"
+        static let notificationEnabledOneDaysBeforeUDKey = "notificationEnabledOneDaysBefore"
+        static let notificationEnabledOnDayUDKey = "notificationEnabledOnDay"
+        static let selectedNotificationHourUDKey = "selectedNotificationHour"
+    }
 
-    init(coordinator: SettingsCoordinator) {
-        self.coordinator = coordinator
-
+    init() {
         let userDefault = UserDefaults.standard
         noticationEnabledThreeDaysBefore = userDefault.bool(forKey: Constants.notificationEnabledThreeDaysBeforeUDKey)
         noticationEnabledTwoDaysBefore = userDefault.bool(forKey: Constants.notificationEnabledTwoDaysBeforeUDKey)
@@ -56,14 +40,31 @@ import Factory
     }
 }
 
+@MainActor protocol SettingsModel: AnyObject {
+    var coordinator: SettingsCoordinator { get }
+    func notifSettingsChanged()
+}
+
+@MainActor final class SettingsModelImpl {
+    @ObservationIgnored @Injected(\.logger) private var logger
+
+    let state: SettingsModelState
+    let coordinator: SettingsCoordinator
+
+    init(state: SettingsModelState, coordinator: SettingsCoordinator) {
+        self.coordinator = coordinator
+        self.state = state
+    }
+}
+
 extension SettingsModelImpl: SettingsModel {
     func notifSettingsChanged() {
         let userDefault = UserDefaults.standard
-        userDefault.set(noticationEnabledThreeDaysBefore, forKey: Constants.notificationEnabledThreeDaysBeforeUDKey)
-        userDefault.set(noticationEnabledTwoDaysBefore, forKey: Constants.notificationEnabledTwoDaysBeforeUDKey)
-        userDefault.set(noticationEnabledOneDaysBefore, forKey: Constants.notificationEnabledOneDaysBeforeUDKey)
-        userDefault.set(noticationEnabledOnDay, forKey: Constants.notificationEnabledOnDayUDKey)
-        userDefault.set(selectedNotificationHour, forKey: Constants.selectedNotificationHourUDKey)
+        userDefault.set(state.noticationEnabledThreeDaysBefore, forKey: SettingsModelState.Constants.notificationEnabledThreeDaysBeforeUDKey)
+        userDefault.set(state.noticationEnabledTwoDaysBefore, forKey: SettingsModelState.Constants.notificationEnabledTwoDaysBeforeUDKey)
+        userDefault.set(state.noticationEnabledOneDaysBefore, forKey: SettingsModelState.Constants.notificationEnabledOneDaysBeforeUDKey)
+        userDefault.set(state.noticationEnabledOnDay, forKey: SettingsModelState.Constants.notificationEnabledOnDayUDKey)
+        userDefault.set(state.selectedNotificationHour, forKey: SettingsModelState.Constants.selectedNotificationHourUDKey)
 
         logger.debug("Changed")
     }

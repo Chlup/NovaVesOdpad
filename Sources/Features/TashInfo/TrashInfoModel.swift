@@ -8,26 +8,30 @@
 import Foundation
 import Factory
 
-@MainActor protocol TrashInfoModel {
-    var coordinator: TrashInfoCoordinator { get }
-    var sections: [TrashInfoSection] { get }
+@MainActor @Observable final class TrashInfoModelState {
+    var sections: [TrashInfoSection] = []
 }
 
-@MainActor @Observable final class TrashInfoModelImpl {
+@MainActor protocol TrashInfoModel {
+    var coordinator: TrashInfoCoordinator { get }
+}
+
+@MainActor final class TrashInfoModelImpl {
     @ObservationIgnored @Injected(\.logger) private var logger
 
-    var sections: [TrashInfoSection] = []
-
+    let state: TrashInfoModelState
     let coordinator: TrashInfoCoordinator
 
-    init(coordinator: TrashInfoCoordinator) {
+    init(state: TrashInfoModelState, coordinator: TrashInfoCoordinator) {
         self.coordinator = coordinator
+        self.state = state
         loadSections()
     }
 }
 
 extension TrashInfoModelImpl: TrashInfoModel {
     func loadSections() {
+        var sections: [TrashInfoSection] = []
         let bio = TrashInfoSection(
             bin: .bio,
             text: """
@@ -56,5 +60,7 @@ extension TrashInfoModelImpl: TrashInfoModel {
             ]
         )
         sections.append(plastic)
+
+        state.sections = sections
     }
 }

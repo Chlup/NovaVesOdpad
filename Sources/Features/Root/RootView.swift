@@ -12,7 +12,7 @@ struct RootView: View {
 
     var body: some View {
         NavigationStack(path: $model.coordinator.navigationPath) {
-            HomeView(model: HomeModelImpl(coordinator: HomeCoordinator(coordinator: model.coordinator)))
+            makeHomeView()
                 .navigationDestination(for: AppDestination.self) { destination in
                     destinationView(for: destination)
                 }
@@ -25,14 +25,21 @@ struct RootView: View {
 //        }
     }
 
+    @ViewBuilder func makeHomeView() -> some View {
+        let state = HomeModelState()
+        HomeView(model: HomeModelImpl(state: state, coordinator: HomeCoordinator(coordinator: model.coordinator)), state: state)
+    }
+
     @ViewBuilder func destinationView(for destination: AppDestination) -> some View {
         switch destination {
         case .home:
-            HomeView(model: HomeModelImpl(coordinator: HomeCoordinator(coordinator: model.coordinator)))
+            makeHomeView()
         case .trashInfo:
-            TrashInfoView(model: TrashInfoModelImpl(coordinator: TrashInfoCoordinator(coordinator: model.coordinator)))
+            let state = TrashInfoModelState()
+            TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: model.coordinator)), state: state)
         case .settings:
-            SettingsView(model: SettingsModelImpl(coordinator: SettingsCoordinator(coordinator: model.coordinator)))
+            let state = SettingsModelState()
+            SettingsView(model: SettingsModelImpl(state: state, coordinator: SettingsCoordinator(coordinator: model.coordinator)), state: state)
         }
     }
 }

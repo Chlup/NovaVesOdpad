@@ -10,11 +10,12 @@ import SwiftUI
 
 struct HomeView: View {
     let model: HomeModel
+    let state: HomeModelState
 
     var body: some View {
         VStack(alignment: .leading) {
             List {
-                ForEach(model.days) { day in
+                ForEach(state.days) { day in
                     Section {
                         VStack(alignment: .leading) {
                             ForEach(day.bins) { bin in

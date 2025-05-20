@@ -9,22 +9,23 @@ import Foundation
 import SwiftUI
 
 struct SettingsView: View {
-    @Bindable var model: SettingsModelImpl
+    let model: SettingsModel
+    @Bindable var state: SettingsModelState
 
     var body: some View {
         List {
             Section {
-                Toggle("Tři dny předem", isOn: $model.noticationEnabledThreeDaysBefore)
-                    .onChange(of: model.noticationEnabledThreeDaysBefore) { model.notifSettingsChanged() }
+                Toggle("Tři dny předem", isOn: $state.noticationEnabledThreeDaysBefore)
+                    .onChange(of: state.noticationEnabledThreeDaysBefore) { model.notifSettingsChanged() }
 
-                Toggle("Dva dny předem", isOn: $model.noticationEnabledTwoDaysBefore)
-                    .onChange(of: model.noticationEnabledTwoDaysBefore) { model.notifSettingsChanged() }
+                Toggle("Dva dny předem", isOn: $state.noticationEnabledTwoDaysBefore)
+                    .onChange(of: state.noticationEnabledTwoDaysBefore) { model.notifSettingsChanged() }
 
-                Toggle("Jeden den předem", isOn: $model.noticationEnabledOneDaysBefore)
-                    .onChange(of: model.noticationEnabledOneDaysBefore) { model.notifSettingsChanged() }
+                Toggle("Jeden den předem", isOn: $state.noticationEnabledOneDaysBefore)
+                    .onChange(of: state.noticationEnabledOneDaysBefore) { model.notifSettingsChanged() }
 
-                Toggle("V den svozu", isOn: $model.noticationEnabledOnDay)
-                    .onChange(of: model.noticationEnabledOnDay) { model.notifSettingsChanged() }
+                Toggle("V den svozu", isOn: $state.noticationEnabledOnDay)
+                    .onChange(of: state.noticationEnabledOnDay) { model.notifSettingsChanged() }
 
             } header: {
                 Text("Nastavení notifikací")
@@ -35,8 +36,8 @@ struct SettingsView: View {
             .textCase(nil)
 
             Section {
-                Picker("Čas notifikace", selection: $model.selectedNotificationHour) {
-                    ForEach(model.notificationHours, id: \.self) { hour in
+                Picker("Čas notifikace", selection: $state.selectedNotificationHour) {
+                    ForEach(state.notificationHours, id: \.self) { hour in
                         if hour < 10 {
                             Text("0\(hour):00")
                                 .tag(hour)
@@ -46,7 +47,7 @@ struct SettingsView: View {
                         }
                     }
                 }
-                .onChange(of: model.selectedNotificationHour) { model.notifSettingsChanged() }
+                .onChange(of: state.selectedNotificationHour) { model.notifSettingsChanged() }
             }
 
         }
