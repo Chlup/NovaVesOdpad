@@ -1,0 +1,73 @@
+//
+//  HomeModel.swift
+//  ArchExample
+//
+//  Created by Michal Fousek on 04.05.2025.
+//
+
+import Foundation
+import Factory
+
+@MainActor protocol HomeModel {
+    var coordinator: HomeCoordinator { get }
+    var days: [TrashDay] { get }
+    
+    func loadData()
+    func titleForDay(_ day: TrashDay) -> String
+}
+
+@MainActor @Observable final class HomeModelImpl {
+    @ObservationIgnored @Injected(\.tasksManager) private var tasks
+    @ObservationIgnored @Injected(\.logger) private var logger
+
+    var days: [TrashDay] = []
+
+    let coordinator: HomeCoordinator
+
+    private let loadDaysTaskID = UUID().uuidString
+    private let dayTitleDateFormatter: DateFormatter
+
+    init(coordinator: HomeCoordinator) {
+        self.coordinator = coordinator
+        dayTitleDateFormatter = DateFormatter()
+        dayTitleDateFormatter.dateFormat = "dd. MM. yyyy"
+    }
+
+    private func loadDays() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
+
+        guard let jsonURL = Bundle.main.url(forResource: "calendar", withExtension: "json") else {
+            logger.debug("Can't find calendar file in resources.")
+            return
+        }
+
+        do {
+            let now = Date()
+            let data = try Data(contentsOf: jsonURL)
+            let days = try jsonDecoder.decode([TrashDay].self, from: data)
+                .filter { $0.date >= now }
+
+            updateDays(days)
+        } catch {
+            logger.debug("Failed to load calendar file: \(error)")
+        }
+    }
+
+    private func updateDays(_ days: [TrashDay]) {
+        self.days = days
+    }
+}
+
+extension HomeModelImpl: HomeModel {
+    func loadData() {
+        tasks.addTask(id: loadDaysTaskID, loadDays)
+    }
+
+    func titleForDay(_ day: TrashDay) -> String {
+        return dayTitleDateFormatter.string(from: day.date)
+    }
+}
