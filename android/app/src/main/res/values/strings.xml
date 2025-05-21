@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Nová Ves Odpad</string>
+    
+    <!-- Home Screen -->
+    <string name="title_home">Přehled vývozu odpadu</string>
+    <string name="current_date">Dnešní datum</string>
+    
+    <!-- Settings Screen -->
+    <string name="title_settings">Nastavení</string>
+    <string name="notification_settings">Nastavení notifikací</string>
+    <string name="notification_time">Čas notifikace</string>
+    <string name="notification_permission_required">Notifikace nejsou povolené pro tuto aplikace, proto nebudou fungovat. Prosím povolte použití notifikací v nastavení vašeho zařízení.</string>
+    <string name="go_to_settings">Jít do nastavení</string>
+    <string name="three_days_before">Tři dny předem</string>
+    <string name="two_days_before">Dva dny předem</string>
+    <string name="one_day_before">Jeden den předem</string>
+    <string name="on_collection_day">V den svozu</string>
+    
+    <!-- TrashInfo Screen -->
+    <string name="title_trash_info">Co kam patří</string>
+    
+    <!-- Notifications -->
+    <string name="notification_channel_name">Odvoz odpadu</string>
+    <string name="notification_channel_description">Upozornění na odvoz odpadu</string>
+    <string name="notification_title_coming_soon">Odvoz odpadu se blíží</string>
+    <string name="notification_title_almost_here">Odvoz odpadu je již skoro tady</string>
+    <string name="notification_title_today">Dnes se vyváží odpad</string>
+    <string name="notification_body_three_days">Za tři dny se budou vyvážet tyto popelnice:</string>
+    <string name="notification_body_two_days">Za dva dny se budou vyvážet tyto popelnice:</string>
+    <string name="notification_body_one_day">Zítra se budou vyvážet tyto popelnice:</string>
+    <string name="notification_body_today">Dnes se budou vyvážet tyto popelnice:</string>
+</resources>
