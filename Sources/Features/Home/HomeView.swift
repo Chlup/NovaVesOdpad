@@ -15,6 +15,20 @@ struct HomeView: View {
     var body: some View {
         VStack(alignment: .leading) {
             List {
+                Section {
+                    HStack {
+                        Text("Dnešní datum")
+                            .font(.body)
+                            .bold()
+
+                        Spacer()
+
+                        Text(model.titleForDay(Date()))
+                            .font(.body)
+                    }
+                }
+                .listRowBackground(Color.clear)
+
                 ForEach(state.days) { day in
                     Section {
                         VStack(alignment: .leading) {
@@ -24,7 +38,7 @@ struct HomeView: View {
                             }
                         }
                     } header: {
-                        Text(model.titleForDay(day))
+                        Text(model.titleForDay(day.date))
                             .font(.title2)
                             .bold()
                             .foregroundStyle(.black)
@@ -38,7 +52,7 @@ struct HomeView: View {
         .padding(0)
         .onAppear { model.loadData() }
         .setupNavigation(model)
-        .setupToolbar(model)
+        .setupToolbar(model, state)
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             model.loadData()
         }
@@ -50,14 +64,14 @@ private extension View {
         return self
     }
 
-    func setupToolbar(_ model: HomeModel) -> some View {
+    func setupToolbar(_ model: HomeModel, _ state: HomeModelState) -> some View {
         return self
             .navigationTitle("Přehled vývozu odpadu")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
-                        model.coordinator.tapOnSettings()
+                        model.coordinator.tapOnSettings(days: state.days)
                     } label: {
                         Image(systemName: "gearshape")
                     }

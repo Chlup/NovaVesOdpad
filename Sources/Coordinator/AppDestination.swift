@@ -10,7 +10,7 @@ import Foundation
 enum AppDestination: Hashable {
     case home
     case trashInfo
-    case settings
+    case settings([TrashDay])
 }
 
 extension AppDestination: Identifiable {

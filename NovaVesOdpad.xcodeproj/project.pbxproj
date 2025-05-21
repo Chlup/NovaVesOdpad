@@ -27,6 +27,8 @@
 		3439DBF82DC74F08008BD7B0 /* TasksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DBF72DC74F08008BD7B0 /* TasksManager.swift */; };
 		3439DBFB2DC7501D008BD7B0 /* Factory in Frameworks */ = {isa = PBXBuildFile; productRef = 3439DBFA2DC7501D008BD7B0 /* Factory */; };
 		3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DC062DC7550F008BD7B0 /* Logger.swift */; };
+		344D192D2DDDAF6000E6A046 /* NotificationsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */; };
+		344D19512DDE00D000E6A046 /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D19502DDE00D000E6A046 /* SharedConstants.swift */; };
 		345593AE2DC75F4F002F346F /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593AD2DC75F4F002F346F /* MainButton.swift */; };
 		345593B02DC7610C002F346F /* GlobalCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593AF2DC7610C002F346F /* GlobalCoordinator.swift */; };
 		345593B22DC76118002F346F /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B12DC76118002F346F /* AppDestination.swift */; };
@@ -35,6 +37,19 @@
 		34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EBFC2DC7C23100C11F28 /* RootModel.swift */; };
 		34C2EC012DC7C33B00C11F28 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		344D19462DDDFFFC00E6A046 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		34113BA92DDD14C200EE09BA /* TrashInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashInfoModel.swift; sourceTree = "<group>"; };
@@ -57,6 +72,10 @@
 		3439DBEE2DC74B36008BD7B0 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		3439DBF72DC74F08008BD7B0 /* TasksManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksManager.swift; sourceTree = "<group>"; };
 		3439DC062DC7550F008BD7B0 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsBuilder.swift; sourceTree = "<group>"; };
+		344D19342DDDFFFB00E6A046 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		344D19362DDDFFFB00E6A046 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
+		344D19502DDE00D000E6A046 /* SharedConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstants.swift; sourceTree = "<group>"; };
 		345593AD2DC75F4F002F346F /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		345593AF2DC7610C002F346F /* GlobalCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoordinator.swift; sourceTree = "<group>"; };
 		345593B12DC76118002F346F /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
@@ -94,14 +113,6 @@
 			path = models;
 			sourceTree = "<group>";
 		};
-		343502AE2DDD0D1C0075036D /* models */ = {
-			isa = PBXGroup;
-			children = (
-				343502B12DDD0D2F0075036D /* TashDay.swift */,
-			);
-			path = models;
-			sourceTree = "<group>";
-		};
 		343502B32DDD145B0075036D /* TashInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +140,7 @@
 			children = (
 				3439DBEA2DC7492F008BD7B0 /* Sources */,
 				3439DBE32DC7492F008BD7B0 /* Resources */,
+				344D19332DDDFFFB00E6A046 /* Frameworks */,
 				3439DBD52DC748DF008BD7B0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -158,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				3439DC052DC75507008BD7B0 /* Logger */,
+				344D192B2DDDAF5300E6A046 /* NotificationsBuilder */,
 				3439DBF42DC74EF7008BD7B0 /* TasksManager */,
 			);
 			path = Dependencies;
@@ -190,7 +203,9 @@
 				3439DC0E2DC755E1008BD7B0 /* Coordinator */,
 				3439DBE42DC7492F008BD7B0 /* Dependencies */,
 				3439DBE82DC7492F008BD7B0 /* Features */,
+				344D19532DDE010500E6A046 /* models */,
 				345593AC2DC75F42002F346F /* UIComponents */,
+				344D194F2DDE00C400E6A046 /* utils */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -220,6 +235,39 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
+		344D192B2DDDAF5300E6A046 /* NotificationsBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */,
+			);
+			path = NotificationsBuilder;
+			sourceTree = "<group>";
+		};
+		344D19332DDDFFFB00E6A046 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				344D19342DDDFFFB00E6A046 /* UserNotifications.framework */,
+				344D19362DDDFFFB00E6A046 /* UserNotificationsUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		344D194F2DDE00C400E6A046 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				344D19502DDE00D000E6A046 /* SharedConstants.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		344D19532DDE010500E6A046 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				343502B12DDD0D2F0075036D /* TashDay.swift */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
 		345593AC2DC75F42002F346F /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,7 +282,6 @@
 				34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */,
 				345593B62DC76307002F346F /* HomeModel.swift */,
 				345593B42DC76303002F346F /* HomeView.swift */,
-				343502AE2DDD0D1C0075036D /* models */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -249,6 +296,7 @@
 				3439DBD02DC748DF008BD7B0 /* Sources */,
 				3439DBD12DC748DF008BD7B0 /* Frameworks */,
 				3439DBD22DC748DF008BD7B0 /* Resources */,
+				344D19462DDDFFFC00E6A046 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -278,11 +326,11 @@
 				};
 			};
 			buildConfigurationList = 3439DBCF2DC748DF008BD7B0 /* Build configuration list for PBXProject "NovaVesOdpad" */;
-			developmentRegion = en;
+			developmentRegion = cs;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				cs,
 			);
 			mainGroup = 3439DBCB2DC748DF008BD7B0;
 			minimizedProjectReferenceProxies = 1;
@@ -332,6 +380,7 @@
 				345593B22DC76118002F346F /* AppDestination.swift in Sources */,
 				3439DBF82DC74F08008BD7B0 /* TasksManager.swift in Sources */,
 				343502B22DDD0D2F0075036D /* TashDay.swift in Sources */,
+				344D19512DDE00D000E6A046 /* SharedConstants.swift in Sources */,
 				3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */,
 				34113BB52DDD181100EE09BA /* TrashInfoSection.swift in Sources */,
 				34113BB82DDD277700EE09BA /* NotificationHour.swift in Sources */,
@@ -339,6 +388,7 @@
 				34113BAA2DDD14C200EE09BA /* TrashInfoModel.swift in Sources */,
 				3439DBEF2DC74B36008BD7B0 /* RootView.swift in Sources */,
 				345593AE2DC75F4F002F346F /* MainButton.swift in Sources */,
+				344D192D2DDDAF6000E6A046 /* NotificationsBuilder.swift in Sources */,
 				34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -482,6 +532,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Odpad;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -516,6 +567,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Odpad;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

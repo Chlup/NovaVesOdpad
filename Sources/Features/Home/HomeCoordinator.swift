@@ -14,7 +14,7 @@ import Foundation
         coordinator.navigate(to: .trashInfo)
     }
 
-    func tapOnSettings() {
-        coordinator.navigate(to: .settings)
+    func tapOnSettings(days: [TrashDay]) {
+        coordinator.navigate(to: .settings(days))
     }
 }

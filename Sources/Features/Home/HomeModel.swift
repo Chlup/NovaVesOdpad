@@ -16,7 +16,7 @@ import Factory
     var coordinator: HomeCoordinator { get }
 
     func loadData()
-    func titleForDay(_ day: TrashDay) -> String
+    func titleForDay(_ date: Date) -> String
 }
 
 @MainActor final class HomeModelImpl {
@@ -33,7 +33,8 @@ import Factory
         self.coordinator = coordinator
         self.state = state
         dayTitleDateFormatter = DateFormatter()
-        dayTitleDateFormatter.dateFormat = "dd. MM. yyyy"
+        dayTitleDateFormatter.dateFormat = "EEEE dd. MM. yyyy"
+        dayTitleDateFormatter.locale = Locale.current
     }
 
     private func loadDays() {
@@ -70,7 +71,8 @@ extension HomeModelImpl: HomeModel {
         tasks.addTask(id: loadDaysTaskID, loadDays)
     }
 
-    func titleForDay(_ day: TrashDay) -> String {
-        return dayTitleDateFormatter.string(from: day.date)
+    func titleForDay(_ date: Date) -> String {
+        let result = dayTitleDateFormatter.string(from: date)
+        return result.prefix(1).uppercased() + result.dropFirst()
     }
 }

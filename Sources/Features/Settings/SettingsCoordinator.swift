@@ -6,11 +6,18 @@
 //
 
 import Foundation
+import UIKit
 
 @MainActor struct SettingsCoordinator {
     unowned let coordinator: GlobalCoordinator
 
     func back() {
         coordinator.dismiss()
+    }
+
+    func goToSettings() {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
+        }
     }
 }

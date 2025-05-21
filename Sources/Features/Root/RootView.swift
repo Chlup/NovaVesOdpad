@@ -34,12 +34,19 @@ struct RootView: View {
         switch destination {
         case .home:
             makeHomeView()
+
         case .trashInfo:
             let state = TrashInfoModelState()
             TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: model.coordinator)), state: state)
-        case .settings:
+
+        case let .settings(days):
             let state = SettingsModelState()
-            SettingsView(model: SettingsModelImpl(state: state, coordinator: SettingsCoordinator(coordinator: model.coordinator)), state: state)
+            let model =  SettingsModelImpl(
+                state: state,
+                coordinator: SettingsCoordinator(coordinator: model.coordinator),
+                days: days
+            )
+            SettingsView(model: model, state: state)
         }
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct TrashDay: Codable, Equatable, Identifiable {
+struct TrashDay: Codable, Equatable, Identifiable, Hashable {
     enum Bin: String, Codable, Identifiable {
         case mix
         case plastic
