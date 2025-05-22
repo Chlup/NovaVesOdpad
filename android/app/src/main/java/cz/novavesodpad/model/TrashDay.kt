@@ -9,6 +9,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 /**
  * Model representing a trash collection day with associated bin types
@@ -21,6 +22,9 @@ data class TrashDay(
 ) {
     val id: String
         get() = date.toString()
+    
+    val daysDifferenceToToday: Int
+        get() = ChronoUnit.DAYS.between(LocalDateTime.now().toLocalDate(), date.toLocalDate()).toInt()
 
     /**
      * Types of bins that can be collected
@@ -31,10 +35,10 @@ data class TrashDay(
         
         val title: String
             get() = when (this) {
-                mix -> "Směsný komunální odpad"
-                plastic -> "Plasty"
+                mix -> "Směs"
+                plastic -> "Plasty, kov, karton"
                 paper -> "Papír"
-                bio -> "Bio odpad"
+                bio -> "Bio"
             }
         
         val color: Color
@@ -43,6 +47,20 @@ data class TrashDay(
                 plastic -> Color.Yellow
                 paper -> Color.Blue
                 bio -> Color(0xFF964B00) // Brown
+            }
+        
+        val backgroundColor: Color
+            get() = when (this) {
+                mix -> Color(0xFF000000)      // Black
+                plastic -> Color(0xFFFFD60A)  // Yellow
+                paper -> Color(0xFF2577E7)    // Blue  
+                bio -> Color(0xFFC77234)      // Brown
+            }
+        
+        val iconColor: Color
+            get() = when (this) {
+                plastic -> Color.Black
+                paper, bio, mix -> Color.White
             }
     }
 }

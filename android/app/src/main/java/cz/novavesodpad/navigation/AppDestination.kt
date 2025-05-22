@@ -6,9 +6,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import cz.novavesodpad.model.TrashDay
+import cz.novavesodpad.ui.dayslist.DaysListScreen
 import cz.novavesodpad.ui.home.HomeScreen
+import cz.novavesodpad.ui.home.HomeViewModel
 import cz.novavesodpad.ui.settings.SettingsScreen
 import cz.novavesodpad.ui.trashinfo.TrashInfoScreen
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Enum defining all navigation destinations in the app
@@ -16,7 +19,10 @@ import cz.novavesodpad.ui.trashinfo.TrashInfoScreen
 sealed class AppDestination(val route: String) {
     object Home : AppDestination("home")
     object Settings : AppDestination("settings")
-    object TrashInfo : AppDestination("trash_info")
+    object TrashInfo : AppDestination("trash_info/{binType}") {
+        fun createRoute(binType: String) = "trash_info/$binType"
+    }
+    object DaysList : AppDestination("days_list")
 }
 
 /**
@@ -31,8 +37,14 @@ fun NavGraphBuilder.appNavGraph(
             onSettingsClick = { days ->
                 globalCoordinator.navigateToSettings(days)
             },
-            onInfoClick = {
-                globalCoordinator.navigateToTrashInfo()
+            onInfoClick = { binType ->
+                globalCoordinator.navigateToTrashInfo(binType)
+            },
+            onCalendarClick = { days ->
+                globalCoordinator.navigateToDaysList(days)
+            },
+            onSortingGuideClick = {
+                globalCoordinator.openSortingGuide()
             }
         )
     }
@@ -45,13 +57,34 @@ fun NavGraphBuilder.appNavGraph(
         )
     }
     
-    composable(AppDestination.TrashInfo.route) {
+    composable(AppDestination.TrashInfo.route) { backStackEntry ->
+        val binType = backStackEntry.arguments?.getString("binType") ?: "plastic"
+        val homeViewModel: HomeViewModel = koinViewModel()
+        
+        val sections = when (binType) {
+            "plastic" -> homeViewModel.plasticTrashInfoSection()
+            "paper" -> homeViewModel.paperTrashInfoSection()
+            "bio" -> homeViewModel.bioTrashInfoSection()
+            "mix" -> homeViewModel.mixTrashInfoSection()
+            else -> homeViewModel.plasticTrashInfoSection()
+        }
+        
         TrashInfoScreen(
+            sections = sections,
             onBackClick = {
                 navController.popBackStack()
-            },
-            onWebClick = {
-                globalCoordinator.openWeb()
+            }
+        )
+    }
+    
+    composable(AppDestination.DaysList.route) {
+        // For now, we'll get the days from the global coordinator
+        // In a production app, you might use navigation arguments or a shared ViewModel
+        val days = (globalCoordinator as? GlobalCoordinatorImpl)?.getCurrentDays() ?: emptyList()
+        DaysListScreen(
+            days = days,
+            onBackClick = {
+                navController.popBackStack()
             }
         )
     }

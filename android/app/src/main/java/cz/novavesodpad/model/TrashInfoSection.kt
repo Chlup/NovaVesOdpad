@@ -1,14 +1,14 @@
 package cz.novavesodpad.model
 
-import android.net.Uri
-
 /**
  * Model representing a section in the trash information screen
+ * Matches iOS TrashInfoSection structure
  */
 data class TrashInfoSection(
     val title: String,
-    val bin: TrashDay.Bin,
     val text: String? = null,
-    val pdfFileUris: List<Uri> = emptyList(),
-    val id: String = title
-)
+    val pdfFileName: String? = null
+) {
+    val id: String
+        get() = title
+}

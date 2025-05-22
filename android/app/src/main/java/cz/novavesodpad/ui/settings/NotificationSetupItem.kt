@@ -2,10 +2,15 @@ package cz.novavesodpad.ui.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -16,11 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cz.novavesodpad.model.NotificationHour
+import cz.novavesodpad.ui.theme.LocalAppColors
 
 /**
- * Reusable component for notification setup items
+ * Reusable component for notification setup items - redesigned to match iOS version
  */
 @Composable
 fun NotificationSetupItem(
@@ -31,34 +38,43 @@ fun NotificationSetupItem(
     onEnabledChanged: (Boolean) -> Unit,
     onHourSelected: (Int) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
+    val appColors = LocalAppColors.current
+    
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = appColors.sectionBackground)
     ) {
-        // Enable/disable toggle
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier.padding(15.dp)
         ) {
-            Text(
-                text = title,
-                modifier = Modifier.weight(1f)
-            )
+            // Enable/disable toggle
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = appColors.regularText,
+                    modifier = Modifier.weight(1f)
+                )
+                
+                Switch(
+                    checked = isEnabled,
+                    onCheckedChange = onEnabledChanged
+                )
+            }
             
-            Switch(
-                checked = isEnabled,
-                onCheckedChange = onEnabledChanged
-            )
-        }
-        
-        // Hour selector - only shown if notifications are enabled
-        if (isEnabled) {
-            NotificationTimeSelector(
-                selectedHour = selectedHour,
-                availableHours = availableHours,
-                onHourSelected = onHourSelected
-            )
+            // Hour selector - only shown if notifications are enabled
+            if (isEnabled) {
+                NotificationTimeSelector(
+                    selectedHour = selectedHour,
+                    availableHours = availableHours,
+                    onHourSelected = onHourSelected
+                )
+            }
         }
     }
 }
@@ -74,6 +90,7 @@ fun NotificationTimeSelector(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val selectedHourLabel = if (selectedHour < 10) "0$selectedHour:00" else "$selectedHour:00"
+    val appColors = LocalAppColors.current
     
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -83,11 +100,18 @@ fun NotificationTimeSelector(
     ) {
         Text(
             text = "Čas notifikace",
+            style = MaterialTheme.typography.bodyMedium,
+            color = appColors.regularText,
             modifier = Modifier.weight(1f)
         )
         
+        Spacer(modifier = Modifier.weight(1f))
+        
         OutlinedButton(onClick = { expanded = true }) {
-            Text(selectedHourLabel)
+            Text(
+                text = selectedHourLabel,
+                color = appColors.regularText
+            )
         }
         
         DropdownMenu(
@@ -96,7 +120,12 @@ fun NotificationTimeSelector(
         ) {
             availableHours.forEach { hour ->
                 DropdownMenuItem(
-                    text = { Text(hour.title) },
+                    text = { 
+                        Text(
+                            text = hour.title,
+                            color = appColors.regularText
+                        ) 
+                    },
                     onClick = {
                         onHourSelected(hour.hour)
                         expanded = false

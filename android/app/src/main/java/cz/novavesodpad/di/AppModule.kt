@@ -2,8 +2,7 @@ package cz.novavesodpad.di
 
 import cz.novavesodpad.service.NotificationsBuilder
 import cz.novavesodpad.service.NotificationsBuilderImpl
-import cz.novavesodpad.ui.home.AndroidAssetsProvider
-import cz.novavesodpad.ui.home.AssetsProvider
+import cz.novavesodpad.ui.dayslist.DaysListViewModel
 import cz.novavesodpad.ui.home.HomeViewModel
 import cz.novavesodpad.ui.settings.PreferencesManager
 import cz.novavesodpad.ui.settings.SettingsViewModel
@@ -24,19 +23,18 @@ val appModule = module {
     // Utils
     single<Logger> { LogcatLogger() }
     single<TasksManager> { TasksManagerImpl() }
-    single<AssetsProvider> { 
-        AndroidAssetsProvider(
-            resourcesProvider = { androidContext().resources },
-            packageName = androidContext().packageName
-        ) 
-    }
     
     // Notifications
     single<NotificationsBuilder> { NotificationsBuilderImpl(androidContext(), get()) }
     single<PreferencesManager> { SharedPreferencesManager(androidContext()) }
     
     // ViewModels
-    viewModel { HomeViewModel(get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get()) }
     viewModel { SettingsViewModel(androidContext(), get(), get(), get(), get()) }
-    viewModel { TrashInfoViewModel(androidContext()) }
+    viewModel { (sections: List<cz.novavesodpad.model.TrashInfoSection>) -> 
+        TrashInfoViewModel(sections)
+    }
+    viewModel { (days: List<cz.novavesodpad.model.TrashDay>) -> 
+        DaysListViewModel(days, get(), get())
+    }
 }
