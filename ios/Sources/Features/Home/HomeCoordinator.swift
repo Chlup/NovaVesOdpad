@@ -10,19 +10,11 @@ import Foundation
 @MainActor struct HomeCoordinator {
     unowned let coordinator: GlobalCoordinator
 
-    func tapOnInfo() {
-        coordinator.navigate(to: .trashInfo)
-    }
-
-    func tapOnSettings(days: [TrashDay]) {
-        coordinator.navigate(to: .settings(days))
-    }
-
-    func tapOnNotificationsButton() {
-        
+    func tapOnNotificationsButton(allDays: [TrashDay]) {
+        coordinator.presentSheet(.settings(allDays))
     }
 
     func tapOnCalendarButton() {
-        
+        coordinator.presentSheet(.trashInfo)
     }
 }

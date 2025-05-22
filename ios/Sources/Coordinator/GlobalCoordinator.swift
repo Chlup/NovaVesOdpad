@@ -10,15 +10,17 @@ import SwiftUI
 
 @MainActor protocol GlobalCoordinator: AnyObject {
     var navigationPath: NavigationPath { get set }
+    var presentedSheet: AppDestination? { get set }
 
     func navigate(to destination: AppDestination)
+    func presentSheet(_ destination: AppDestination)
     func dismiss()
     func navigateToRoot()
 }
 
 @MainActor @Observable final class GlobalCoordinatorImpl: GlobalCoordinator {
     var navigationPath = NavigationPath()
-//    var presentedSheet: AppDestination?
+    var presentedSheet: AppDestination?
 //    var presentedFullScreenCover: AppDestination?
 
     // Navigate to a new screen by pushing onto the stack
@@ -28,7 +30,9 @@ import SwiftUI
 
     // Go back one screen
     func dismiss() {
-        if !navigationPath.isEmpty {
+        if presentedSheet != nil {
+            self.presentedSheet = nil
+        } else if !navigationPath.isEmpty {
             navigationPath.removeLast()
         }
     }
@@ -38,10 +42,10 @@ import SwiftUI
         navigationPath = NavigationPath()
     }
 
-//    // Present a sheet
-//    func presentSheet(_ destination: AppDestination) {
-//        presentedSheet = destination
-//    }
+    // Present a sheet
+    func presentSheet(_ destination: AppDestination) {
+        presentedSheet = destination
+    }
 //
 //    // Dismiss sheet
 //    func dismissSheet() {

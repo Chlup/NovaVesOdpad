@@ -16,11 +16,13 @@ final class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUser
 
     let coordinator: GlobalCoordinator
     let rootModel: RootModel
+    let homeState: HomeModelState
 
     override init() {
         let coordinator = GlobalCoordinatorImpl()
         self.coordinator = coordinator
         rootModel = RootModelImpl(coordinator: coordinator)
+        homeState = HomeModelState()
         super.init()
     }
     
@@ -55,7 +57,7 @@ struct NovaVesOdpadApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView(model: appDelegate.rootModel)
+            RootView(model: appDelegate.rootModel, homeState: appDelegate.homeState)
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     appDelegate.rootModel.applicationWillEnterForegroundNotification()
                 }

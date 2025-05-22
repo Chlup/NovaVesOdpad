@@ -9,16 +9,28 @@ import SwiftUI
 
 struct RootView: View {
     @State var model: RootModel
+    let homeState: HomeModelState
 
     var body: some View {
-//        NavigationStack(path: $model.coordinator.navigationPath) {
-            makeHomeView()
-//                .navigationDestination(for: AppDestination.self) { destination in
-//                    destinationView(for: destination)
-//                }
+//        VStack(alignment: .leading) {
+//            makeHomeView()
 //        }
 //        .sheet(item: $model.coordinator.presentedSheet) { destination in
-//            model.coordinator.destinationView(for: destination)
+//            destinationView(for: destination)
+//        }
+
+        NavigationStack(path: $model.coordinator.navigationPath) {
+            makeHomeView()
+                .navigationDestination(for: AppDestination.self) { destination in
+                    destinationView(for: destination)
+                }
+
+        }
+        .sheet(item: $model.coordinator.presentedSheet) { destination in
+            destinationView(for: destination)
+        }
+//        .sheet(item: $model.coordinator.presentedSheet) { destination in
+//            destinationView(for: destination)
 //        }
 //        .fullScreenCover(item: $viewModel.coordinator.presentedFullScreenCover) { destination in
 //            model.coordinator.destinationView(for: destination)
@@ -26,8 +38,7 @@ struct RootView: View {
     }
 
     @ViewBuilder func makeHomeView() -> some View {
-        let state = HomeModelState()
-        HomeView(model: HomeModelImpl(state: state, coordinator: HomeCoordinator(coordinator: model.coordinator)), state: state)
+        HomeView(model: HomeModelImpl(state: homeState, coordinator: HomeCoordinator(coordinator: model.coordinator)), state: homeState)
     }
 
     @ViewBuilder func destinationView(for destination: AppDestination) -> some View {

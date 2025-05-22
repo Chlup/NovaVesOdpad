@@ -23,7 +23,7 @@ struct HomeView: View {
                 }
 
                 HStack {
-                    NotificationsButtonView(model: model)
+                    NotificationsButtonView(model: model, state: state)
                         .padding(.trailing, 10)
                     CalendarButtonView(model: model)
                 }
@@ -67,25 +67,7 @@ private extension View {
 
     func setupToolbar(_ model: HomeModel, _ state: HomeModelState) -> some View {
         return self
-//            .navigationTitle("Popelnice")
-//            .navigationBarTitleDisplayMode(.large)
-//            .toolbar {
-//                ToolbarItem(placement: .topBarLeading) {
-//                    Button {
-//                        model.coordinator.tapOnSettings(days: state.days)
-//                    } label: {
-//                        Image(systemName: "gearshape")
-//                    }
-//                }
-//
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    Button {
-//                        model.coordinator.tapOnInfo()
-//                    } label: {
-//                        Image(systemName: "info.circle")
-//                    }
-//                }
-//            }
+            .toolbar(.hidden, for: .navigationBar)
     }
 }
 
@@ -156,10 +138,11 @@ private struct NextTashDayView: View {
 
 private struct NotificationsButtonView: View {
     let model: HomeModel
+    let state: HomeModelState
 
     var body: some View {
         Button {
-            model.coordinator.tapOnNotificationsButton()
+            model.coordinator.tapOnNotificationsButton(allDays: state.allDays)
         } label: {
             HStack {
                 Image(systemName: "square.grid.2x2")

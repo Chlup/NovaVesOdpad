@@ -11,7 +11,7 @@ import UIKit
 @MainActor struct SettingsCoordinator {
     unowned let coordinator: GlobalCoordinator
 
-    func back() {
+    func dismiss() {
         coordinator.dismiss()
     }
 

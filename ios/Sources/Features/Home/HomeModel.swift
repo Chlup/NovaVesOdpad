@@ -9,7 +9,9 @@ import Foundation
 import Factory
 
 @MainActor @Observable final class HomeModelState {
-    var firstDay: TrashDay?
+    var firstDay: TrashDay? {
+        didSet { print("Did set first day") }
+    }
     var homeDays: [TrashDay] = []
     var allDays: [TrashDay] = []
 }
