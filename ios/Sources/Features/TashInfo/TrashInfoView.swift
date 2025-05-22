@@ -105,6 +105,7 @@ private struct PDFKitView: UIViewRepresentable {
     }
 }
 
-//#Preview {
-//    HomeView(model: HomeModelImpl(coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl())))
-//}
+#Preview {
+    let state = TrashInfoModelState()
+    TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: GlobalCoordinatorImpl())), state: state)
+}

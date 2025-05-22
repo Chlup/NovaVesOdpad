@@ -12,26 +12,15 @@ struct RootView: View {
     let homeState: HomeModelState
 
     var body: some View {
-//        VStack(alignment: .leading) {
-//            makeHomeView()
-//        }
-//        .sheet(item: $model.coordinator.presentedSheet) { destination in
-//            destinationView(for: destination)
-//        }
-
         NavigationStack(path: $model.coordinator.navigationPath) {
             makeHomeView()
                 .navigationDestination(for: AppDestination.self) { destination in
                     destinationView(for: destination)
                 }
-
         }
         .sheet(item: $model.coordinator.presentedSheet) { destination in
             destinationView(for: destination)
         }
-//        .sheet(item: $model.coordinator.presentedSheet) { destination in
-//            destinationView(for: destination)
-//        }
 //        .fullScreenCover(item: $viewModel.coordinator.presentedFullScreenCover) { destination in
 //            model.coordinator.destinationView(for: destination)
 //        }

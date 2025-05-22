@@ -14,6 +14,7 @@ extension Date {
     func daysDifference(to otherDate: Date) -> Int {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.day], from: self, to: otherDate)
-        return components.day ?? 0
+        // Why the fuck this always returns what I expect - 1 ?
+        return (components.day ?? 0) + 1
     }
 }

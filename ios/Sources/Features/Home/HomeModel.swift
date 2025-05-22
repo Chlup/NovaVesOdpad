@@ -115,7 +115,7 @@ extension HomeModelImpl: HomeModel {
         case 0:
             return "dnes"
         case 1:
-            return "za \(numberOfDays) den"
+            return "zítra"
         case 2...4:
             return "za \(numberOfDays) dny"
         default:
