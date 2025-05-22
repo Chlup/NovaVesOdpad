@@ -46,5 +46,6 @@ struct TrashDay: Codable, Equatable, Identifiable, Hashable {
 
     var id: String { "\(date)" }
     let date: Date
+    let isToday: Bool
     let bins: [Bin]
 }

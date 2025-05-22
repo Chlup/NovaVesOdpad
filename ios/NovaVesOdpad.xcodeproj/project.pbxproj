@@ -15,7 +15,6 @@
 		34113BB52DDD181100EE09BA /* TrashInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34113BB42DDD181100EE09BA /* TrashInfoSection.swift */; };
 		34113BB82DDD277700EE09BA /* NotificationHour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34113BB72DDD277700EE09BA /* NotificationHour.swift */; };
 		343502AB2DDD097E0075036D /* NovaVesOdpadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502AA2DDD097E0075036D /* NovaVesOdpadApp.swift */; };
-		343502AD2DDD09AD0075036D /* calendar.json in Resources */ = {isa = PBXBuildFile; fileRef = 343502AC2DDD09AD0075036D /* calendar.json */; };
 		343502B22DDD0D2F0075036D /* TashDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502B12DDD0D2F0075036D /* TashDay.swift */; };
 		343502B82DDD146F0075036D /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502B52DDD146F0075036D /* SettingsCoordinator.swift */; };
 		343502B92DDD146F0075036D /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502B62DDD146F0075036D /* SettingsModel.swift */; };
@@ -60,7 +59,6 @@
 		34113BB42DDD181100EE09BA /* TrashInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashInfoSection.swift; sourceTree = "<group>"; };
 		34113BB72DDD277700EE09BA /* NotificationHour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHour.swift; sourceTree = "<group>"; };
 		343502AA2DDD097E0075036D /* NovaVesOdpadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovaVesOdpadApp.swift; sourceTree = "<group>"; };
-		343502AC2DDD09AD0075036D /* calendar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = calendar.json; sourceTree = "<group>"; };
 		343502B12DDD0D2F0075036D /* TashDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TashDay.swift; sourceTree = "<group>"; };
 		343502B52DDD146F0075036D /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		343502B62DDD146F0075036D /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
@@ -161,7 +159,6 @@
 				34113BAD2DDD17FE00EE09BA /* papir_cz_2020.pdf */,
 				34113BAE2DDD17FE00EE09BA /* plasty_cz_2020.pdf */,
 				3439DBE22DC7492F008BD7B0 /* Assets.xcassets */,
-				343502AC2DDD09AD0075036D /* calendar.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -357,7 +354,6 @@
 				34113BB12DDD17FE00EE09BA /* plasty_cz_2020.pdf in Resources */,
 				34113BB22DDD17FE00EE09BA /* kovy_cz_2020.pdf in Resources */,
 				3439DBED2DC7492F008BD7B0 /* Assets.xcassets in Resources */,
-				343502AD2DDD09AD0075036D /* calendar.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

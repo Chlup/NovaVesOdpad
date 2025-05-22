@@ -38,31 +38,48 @@ import Factory
     }
 
     private func loadDays() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        let (nextWednesday, nextWednesdayIsToday) = nextWednesday()
 
-        let jsonDecoder = JSONDecoder()
-        jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
+        let calendar = Calendar.current
 
-        guard let jsonURL = Bundle.main.url(forResource: "calendar", withExtension: "json") else {
-            logger.debug("Can't find calendar file in resources.")
-            return
+        var days: [TrashDay] = []
+        for i in 0...52 {
+            guard let date = calendar.date(byAdding: .day, value: i * 7, to: nextWednesday) else { continue }
+
+            let weekNumber = calendar.component(.weekOfYear, from: date)
+
+            let bins: [TrashDay.Bin]
+            if weekNumber % 2 == 0 {
+                bins = [.mix, .paper, .bio]
+            } else {
+                bins = [.mix, .plastic]
+            }
+
+            let day = TrashDay(date: date, isToday: i == 0 ? nextWednesdayIsToday : false, bins: bins)
+            days.append(day)
         }
 
-        do {
-            let now = Date()
-            let data = try Data(contentsOf: jsonURL)
-            let days = try jsonDecoder.decode([TrashDay].self, from: data)
-                .filter { $0.date >= now }
-
-            updateDays(days)
-        } catch {
-            logger.debug("Failed to load calendar file: \(error)")
-        }
+        self.state.days = days
     }
 
-    private func updateDays(_ days: [TrashDay]) {
-        state.days = days
+    private func nextWednesday() -> (date: Date, isToday: Bool) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+
+        // Get the current weekday (1 = Sunday, 2 = Monday, ..., 4 = Wednesday, ..., 7 = Saturday)
+        let currentWeekday = calendar.component(.weekday, from: today)
+        let wednesdayWeekday = 4 // Wednesday
+
+        // If today is Wednesday, return today with isToday = true
+        if currentWeekday == wednesdayWeekday {
+            return (date: today, isToday: true)
+        }
+
+        // Calculate days until next Wednesday
+        let daysUntilWednesday = (wednesdayWeekday - currentWeekday + 7) % 7
+        let nextWednesdayDate = calendar.date(byAdding: .day, value: daysUntilWednesday, to: today) ?? today
+
+        return (date: nextWednesdayDate, isToday: false)
     }
 }
 
