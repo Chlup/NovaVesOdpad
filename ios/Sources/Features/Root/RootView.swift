@@ -11,12 +11,12 @@ struct RootView: View {
     @State var model: RootModel
 
     var body: some View {
-        NavigationStack(path: $model.coordinator.navigationPath) {
+//        NavigationStack(path: $model.coordinator.navigationPath) {
             makeHomeView()
-                .navigationDestination(for: AppDestination.self) { destination in
-                    destinationView(for: destination)
-                }
-        }
+//                .navigationDestination(for: AppDestination.self) { destination in
+//                    destinationView(for: destination)
+//                }
+//        }
 //        .sheet(item: $model.coordinator.presentedSheet) { destination in
 //            model.coordinator.destinationView(for: destination)
 //        }

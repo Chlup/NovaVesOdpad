@@ -20,32 +20,56 @@ struct TrashDay: Codable, Equatable, Identifiable, Hashable {
         var title: String {
             switch self {
             case .mix:
-                return "Směsný komunální odpad"
+                return "Směs"
             case .plastic:
-                return "Plasty"
+                return "Plast, kov, karton"
             case .paper:
                 return "Papír"
             case .bio:
-                return "Bio odpad"
+                return "Bio"
             }
         }
 
-        var color: Color {
+        var backgroundColor: Color {
             switch self {
             case .mix:
-                return .black
+                return .binBlack
             case .plastic:
-                return .yellow
+                return .binYellow
             case .paper:
-                return .blue
+                return .binBlue
             case .bio:
-                return .brown
+                return .binBrown
+            }
+        }
+
+        var iconColor: Color {
+            switch self {
+            case .plastic:
+                return .black
+            case .bio, .paper, .mix:
+                return .white
+            }
+        }
+
+        var icon: String {
+            switch self {
+            case .mix:
+                return "trash"
+            case .plastic:
+                return "arrow.3.trianglepath"
+            case .paper:
+                return "doc.plaintext"
+            case .bio:
+                return "tree"
             }
         }
     }
 
     var id: String { "\(date)" }
     let date: Date
-    let isToday: Bool
+    let daysDifferenceToToday: Int
     let bins: [Bin]
+
+    var isToday: Bool { daysDifferenceToToday == 0 }
 }

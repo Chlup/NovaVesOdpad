@@ -27,12 +27,12 @@
 		3439DBFB2DC7501D008BD7B0 /* Factory in Frameworks */ = {isa = PBXBuildFile; productRef = 3439DBFA2DC7501D008BD7B0 /* Factory */; };
 		3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DC062DC7550F008BD7B0 /* Logger.swift */; };
 		344D192D2DDDAF6000E6A046 /* NotificationsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */; };
-		344D19512DDE00D000E6A046 /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D19502DDE00D000E6A046 /* SharedConstants.swift */; };
 		345593AE2DC75F4F002F346F /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593AD2DC75F4F002F346F /* MainButton.swift */; };
 		345593B02DC7610C002F346F /* GlobalCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593AF2DC7610C002F346F /* GlobalCoordinator.swift */; };
 		345593B22DC76118002F346F /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B12DC76118002F346F /* AppDestination.swift */; };
 		345593B52DC76303002F346F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B42DC76303002F346F /* HomeView.swift */; };
 		345593B72DC76307002F346F /* HomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B62DC76307002F346F /* HomeModel.swift */; };
+		34A8B8AF2DDF55D7008B6BAA /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8AE2DDF55D7008B6BAA /* Date+Extensions.swift */; };
 		34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EBFC2DC7C23100C11F28 /* RootModel.swift */; };
 		34C2EC012DC7C33B00C11F28 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */; };
 /* End PBXBuildFile section */
@@ -73,12 +73,12 @@
 		344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsBuilder.swift; sourceTree = "<group>"; };
 		344D19342DDDFFFB00E6A046 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		344D19362DDDFFFB00E6A046 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
-		344D19502DDE00D000E6A046 /* SharedConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstants.swift; sourceTree = "<group>"; };
 		345593AD2DC75F4F002F346F /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		345593AF2DC7610C002F346F /* GlobalCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoordinator.swift; sourceTree = "<group>"; };
 		345593B12DC76118002F346F /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
 		345593B42DC76303002F346F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		345593B62DC76307002F346F /* HomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModel.swift; sourceTree = "<group>"; };
+		34A8B8AE2DDF55D7008B6BAA /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		34C2EBFC2DC7C23100C11F28 /* RootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootModel.swift; sourceTree = "<group>"; };
 		34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -252,7 +252,7 @@
 		344D194F2DDE00C400E6A046 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				344D19502DDE00D000E6A046 /* SharedConstants.swift */,
+				34A8B8AD2DDF55D0008B6BAA /* Extensions */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -281,6 +281,14 @@
 				345593B42DC76303002F346F /* HomeView.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		34A8B8AD2DDF55D0008B6BAA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				34A8B8AE2DDF55D7008B6BAA /* Date+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -374,9 +382,9 @@
 				343502B92DDD146F0075036D /* SettingsModel.swift in Sources */,
 				343502BA2DDD146F0075036D /* SettingsView.swift in Sources */,
 				345593B22DC76118002F346F /* AppDestination.swift in Sources */,
+				34A8B8AF2DDF55D7008B6BAA /* Date+Extensions.swift in Sources */,
 				3439DBF82DC74F08008BD7B0 /* TasksManager.swift in Sources */,
 				343502B22DDD0D2F0075036D /* TashDay.swift in Sources */,
-				344D19512DDE00D000E6A046 /* SharedConstants.swift in Sources */,
 				3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */,
 				34113BB52DDD181100EE09BA /* TrashInfoSection.swift in Sources */,
 				34113BB82DDD277700EE09BA /* NotificationHour.swift in Sources */,
@@ -527,14 +535,13 @@
 				DEVELOPMENT_TEAM = PANT4FKZGM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Odpad;
+				INFOPLIST_KEY_CFBundleDisplayName = Popelnice;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -562,14 +569,13 @@
 				DEVELOPMENT_TEAM = PANT4FKZGM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Odpad;
+				INFOPLIST_KEY_CFBundleDisplayName = Popelnice;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

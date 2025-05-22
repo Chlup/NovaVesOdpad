@@ -17,4 +17,12 @@ import Foundation
     func tapOnSettings(days: [TrashDay]) {
         coordinator.navigate(to: .settings(days))
     }
+
+    func tapOnNotificationsButton() {
+        
+    }
+
+    func tapOnCalendarButton() {
+        
+    }
 }

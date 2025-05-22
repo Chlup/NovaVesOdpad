@@ -23,7 +23,7 @@ struct TrashInfoView: View {
                             .bold()
 
                         Image(systemName: "trash")
-                            .foregroundStyle(section.bin.color)
+                            .foregroundStyle(section.bin.backgroundColor)
                     }
                     .padding(.top, 10)
 

@@ -9,14 +9,18 @@ import Foundation
 import Factory
 
 @MainActor @Observable final class HomeModelState {
-    var days: [TrashDay] = []
+    var firstDay: TrashDay?
+    var homeDays: [TrashDay] = []
+    var allDays: [TrashDay] = []
 }
 
 @MainActor protocol HomeModel {
     var coordinator: HomeCoordinator { get }
 
     func loadData()
+    func titleForNextDay(_ date: Date) -> String
     func titleForDay(_ date: Date) -> String
+    func daysToNextTrashDayText(numberOfDays: Int) -> String
 }
 
 @MainActor final class HomeModelImpl {
@@ -28,43 +32,50 @@ import Factory
 
     private let loadDaysTaskID = UUID().uuidString
     private let dayTitleDateFormatter: DateFormatter
+    private let nextTrashDayFormatter: DateFormatter
 
     init(state: HomeModelState, coordinator: HomeCoordinator) {
         self.coordinator = coordinator
         self.state = state
         dayTitleDateFormatter = DateFormatter()
-        dayTitleDateFormatter.dateFormat = "EEEE dd. MM. yyyy"
-        dayTitleDateFormatter.locale = Locale.current
+        dayTitleDateFormatter.dateFormat = "dd. MMMM"
+
+        nextTrashDayFormatter = DateFormatter()
+        nextTrashDayFormatter.dateFormat = "EEEE, dd. MMMM"
     }
 
     private func loadDays() {
-        let (nextWednesday, nextWednesdayIsToday) = nextWednesday()
+        let now = Date()
+        let nextWednesday = nextWednesday(from: now)
 
         let calendar = Calendar.current
 
         var days: [TrashDay] = []
         for i in 0...52 {
-            guard let date = calendar.date(byAdding: .day, value: i * 7, to: nextWednesday) else { continue }
+            guard let dayDate = calendar.date(byAdding: .day, value: i * 7, to: nextWednesday) else { continue }
 
-            let weekNumber = calendar.component(.weekOfYear, from: date)
+            let daysDifferenceToToday = now.daysDifference(to: dayDate)
+            let weekNumber = calendar.component(.weekOfYear, from: dayDate)
 
             let bins: [TrashDay.Bin]
             if weekNumber % 2 == 0 {
-                bins = [.mix, .paper, .bio]
+                bins = [.paper, .bio, .mix]
             } else {
-                bins = [.mix, .plastic]
+                bins = [.plastic, .mix]
             }
 
-            let day = TrashDay(date: date, isToday: i == 0 ? nextWednesdayIsToday : false, bins: bins)
+            let day = TrashDay(date: dayDate, daysDifferenceToToday: daysDifferenceToToday, bins: bins)
             days.append(day)
         }
 
-        self.state.days = days
+        self.state.allDays = days
+        self.state.firstDay = days.first
+        self.state.homeDays = Array(days[1...3])
     }
 
-    private func nextWednesday() -> (date: Date, isToday: Bool) {
+    private func nextWednesday(from date: Date) -> Date {
         let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
+        let today = calendar.startOfDay(for: date)
 
         // Get the current weekday (1 = Sunday, 2 = Monday, ..., 4 = Wednesday, ..., 7 = Saturday)
         let currentWeekday = calendar.component(.weekday, from: today)
@@ -72,14 +83,14 @@ import Factory
 
         // If today is Wednesday, return today with isToday = true
         if currentWeekday == wednesdayWeekday {
-            return (date: today, isToday: true)
+            return today
         }
 
         // Calculate days until next Wednesday
         let daysUntilWednesday = (wednesdayWeekday - currentWeekday + 7) % 7
         let nextWednesdayDate = calendar.date(byAdding: .day, value: daysUntilWednesday, to: today) ?? today
 
-        return (date: nextWednesdayDate, isToday: false)
+        return nextWednesdayDate
     }
 }
 
@@ -88,8 +99,25 @@ extension HomeModelImpl: HomeModel {
         tasks.addTask(id: loadDaysTaskID, loadDays)
     }
 
+    func titleForNextDay(_ date: Date) -> String {
+        return nextTrashDayFormatter.string(from: date)
+    }
+
     func titleForDay(_ date: Date) -> String {
         let result = dayTitleDateFormatter.string(from: date)
         return result.prefix(1).uppercased() + result.dropFirst()
+    }
+
+    func daysToNextTrashDayText(numberOfDays: Int) -> String {
+        switch numberOfDays {
+        case 0:
+            return "dnes"
+        case 1:
+            return "za \(numberOfDays) den"
+        case 2...4:
+            return "za \(numberOfDays) dny"
+        default:
+            return "za \(numberOfDays) dnů"
+        }
     }
 }
