@@ -37,6 +37,7 @@
 		34A8B8B62DDFC370008B6BAA /* DaysListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */; };
 		34A8B8B82DDFC375008B6BAA /* DaysListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B72DDFC375008B6BAA /* DaysListView.swift */; };
 		34A8B8BB2DDFC8B0008B6BAA /* TrashMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8BA2DDFC8B0008B6BAA /* TrashMonth.swift */; };
+		34A8B8BD2DDFDC22008B6BAA /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A8B8BC2DDFDC22008B6BAA /* Launch Screen.storyboard */; };
 		34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EBFC2DC7C23100C11F28 /* RootModel.swift */; };
 		34C2EC012DC7C33B00C11F28 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */; };
 /* End PBXBuildFile section */
@@ -87,6 +88,7 @@
 		34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListModel.swift; sourceTree = "<group>"; };
 		34A8B8B72DDFC375008B6BAA /* DaysListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListView.swift; sourceTree = "<group>"; };
 		34A8B8BA2DDFC8B0008B6BAA /* TrashMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashMonth.swift; sourceTree = "<group>"; };
+		34A8B8BC2DDFDC22008B6BAA /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		34C2EBFC2DC7C23100C11F28 /* RootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootModel.swift; sourceTree = "<group>"; };
 		34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -166,6 +168,7 @@
 				34113BAC2DDD17FE00EE09BA /* napojovy-karton_cz_2020.pdf */,
 				34113BAD2DDD17FE00EE09BA /* papir_cz_2020.pdf */,
 				34113BAE2DDD17FE00EE09BA /* plasty_cz_2020.pdf */,
+				34A8B8BC2DDFDC22008B6BAA /* Launch Screen.storyboard */,
 				3439DBE22DC7492F008BD7B0 /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -385,6 +388,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34A8B8BD2DDFDC22008B6BAA /* Launch Screen.storyboard in Resources */,
 				34113BAF2DDD17FE00EE09BA /* napojovy-karton_cz_2020.pdf in Resources */,
 				34113BB02DDD17FE00EE09BA /* papir_cz_2020.pdf in Resources */,
 				34113BB12DDD17FE00EE09BA /* plasty_cz_2020.pdf in Resources */,
@@ -572,6 +576,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
@@ -606,6 +611,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;

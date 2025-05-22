@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="KTj-gM-r8D">
+                                <rect key="frame" x="80" y="70" width="160" height="160"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="KTj-gM-r8D" secondAttribute="height" multiplier="1:1" id="GI1-Xm-X6d"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Popelnice" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RMK-FT-Kyb">
+                                <rect key="frame" x="65.5" y="250" width="189" height="48"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nová Ves pod Pleší" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4cz-XI-bIN">
+                                <rect key="frame" x="87.5" y="308" width="145.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="KTj-gM-r8D" firstAttribute="width" secondItem="Bcu-3y-fUS" secondAttribute="width" multiplier="0.5" id="1gQ-EJ-RVk"/>
+                            <constraint firstItem="KTj-gM-r8D" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="50" id="ACe-qK-bsk"/>
+                            <constraint firstItem="RMK-FT-Kyb" firstAttribute="top" secondItem="KTj-gM-r8D" secondAttribute="bottom" constant="20" id="BqR-X8-yZV"/>
+                            <constraint firstItem="4cz-XI-bIN" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="Rws-jg-yLT"/>
+                            <constraint firstItem="RMK-FT-Kyb" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="TcA-Tu-mdN"/>
+                            <constraint firstItem="KTj-gM-r8D" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="igL-s9-hWR"/>
+                            <constraint firstItem="4cz-XI-bIN" firstAttribute="top" secondItem="RMK-FT-Kyb" secondAttribute="bottom" constant="10" id="ihC-bN-rq4"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Logo" width="1024" height="1024"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
