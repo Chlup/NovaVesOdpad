@@ -14,39 +14,36 @@ struct TrashInfoView: View {
     let state: TrashInfoModelState
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                ForEach(state.sections) { section in
-                    HStack {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    ForEach(state.sections) { section in
                         Text(section.title)
-                            .font(.title2)
+                            .font(.title)
+                            .foregroundStyle(.regularText)
                             .bold()
 
-                        Image(systemName: "trash")
-                            .foregroundStyle(section.bin.backgroundColor)
-                    }
-                    .padding(.top, 10)
+                        if let text = section.text {
+                            Text(text)
+                                .foregroundStyle(.regularText)
+                                .padding(.top, 1)
+                        }
 
-                    if let text = section.text {
-                        Text(text)
-                            .foregroundStyle(.black)
-                            .padding(.top, 1)
+                        if let url = section.pdfFileURL {
+                            PDFKitView(url: url)
+                                .frame(height: 500)
+                                .padding(.top, 5)
+                        }
                     }
-
-                    ForEach(section.pdfFileURLs) { url in
-                        PDFKitView(url: url)
-                            .frame(height: 500)
-                            .padding(.top, 5)
-                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+            .padding(0)
+            .setupNavigation(model)
+            .setupToolbar(model)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(0)
-        .setupNavigation(model)
-        .setupToolbar(model)
     }
 }
 
@@ -57,23 +54,12 @@ private extension View {
 
     func setupToolbar(_ model: TrashInfoModel) -> some View {
         return self
-            .navigationTitle("Co kam patří")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        model.coordinator.back()
-                    } label: {
-                        Image(systemName: "chevron.backward")
-                    }
-                }
-
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        model.coordinator.openWeb()
+                        model.coordinator.dismiss()
                     } label: {
-                        Image(systemName: "square.and.arrow.up")
+                        Text("Zpět")
                     }
                 }
             }
@@ -105,7 +91,26 @@ private struct PDFKitView: UIViewRepresentable {
     }
 }
 
-#Preview {
-    let state = TrashInfoModelState()
+#Preview("Bio") {
+    let homeModel = HomeModelImpl(state: HomeModelState(), coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
+    let state = TrashInfoModelState(sections: homeModel.bioTrashInfoSection())
+    TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: GlobalCoordinatorImpl())), state: state)
+}
+
+#Preview("Paper") {
+    let homeModel = HomeModelImpl(state: HomeModelState(), coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
+    let state = TrashInfoModelState(sections: homeModel.paperTrashInfoSection())
+    TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: GlobalCoordinatorImpl())), state: state)
+}
+
+#Preview("Plastic") {
+    let homeModel = HomeModelImpl(state: HomeModelState(), coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
+    let state = TrashInfoModelState(sections: homeModel.plasticTrashInfoSection())
+    TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: GlobalCoordinatorImpl())), state: state)
+}
+
+#Preview("Mix") {
+    let homeModel = HomeModelImpl(state: HomeModelState(), coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
+    let state = TrashInfoModelState(sections: homeModel.mixTrashInfoSection())
     TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: GlobalCoordinatorImpl())), state: state)
 }

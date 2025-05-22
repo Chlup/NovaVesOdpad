@@ -35,8 +35,8 @@ struct RootView: View {
         case .home:
             makeHomeView()
 
-        case .trashInfo:
-            let state = TrashInfoModelState()
+        case let .trashInfo(sections):
+            let state = TrashInfoModelState(sections: sections)
             TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: model.coordinator)), state: state)
 
         case let .settings(days):

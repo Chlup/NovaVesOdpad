@@ -11,10 +11,9 @@ extension URL: @retroactive Identifiable {
     public var id: String { self.absoluteString }
 }
 
-struct TrashInfoSection: Equatable, Identifiable {
+struct TrashInfoSection: Equatable, Identifiable, Hashable {
     var id: String { title }
-    var title: String { bin.title }
-    let bin: TrashDay.Bin
+    let title: String
     let text: String?
-    let pdfFileURLs: [URL]
+    let pdfFileURL: URL?
 }

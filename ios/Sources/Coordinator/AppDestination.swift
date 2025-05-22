@@ -9,7 +9,7 @@ import Foundation
 
 enum AppDestination: Hashable {
     case home
-    case trashInfo
+    case trashInfo([TrashInfoSection])
     case settings([TrashDay])
 }
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 @MainActor struct HomeCoordinator {
     unowned let coordinator: GlobalCoordinator
@@ -15,6 +16,15 @@ import Foundation
     }
 
     func tapOnCalendarButton() {
-        coordinator.presentSheet(.trashInfo)
+//        coordinator.presentSheet(.trashInfo)
+    }
+
+    func tapOnBinInfo(_ trashInfoSections: [TrashInfoSection]) {
+        coordinator.presentSheet(.trashInfo(trashInfoSections))
+    }
+
+    func openSortingWeb() {
+        guard let url = URL(string: "https://www.jaktridit.cz") else { return }
+        UIApplication.shared.open(url)
     }
 }

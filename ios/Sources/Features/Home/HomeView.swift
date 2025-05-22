@@ -37,13 +37,25 @@ struct HomeView: View {
                     DayView(model: model, day: day)
                 }
 
-                Text("Typy popelnic")
-                    .font(.headline)
-                    .padding(.top, 10)
-                    .padding(.bottom, 10)
+                HStack {
+                    Text("Typy popelnic")
+                        .font(.headline)
 
+                    Spacer()
 
-                TrashBinsInfoView()
+                    Button {
+                        model.coordinator.openSortingWeb()
+                    } label: {
+                        Image(systemName: "info.circle")
+                            .resizable()
+                            .foregroundStyle(.regularText)
+                            .frame(width: 20, height: 20)
+                    }
+                }
+                .padding(.top, 10)
+                .padding(.bottom, 10)
+
+                TrashBinsInfoView(model: model)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
@@ -220,24 +232,28 @@ private struct DayView: View {
 }
 
 private struct TrashBinsInfoView: View {
+    let model: HomeModel
+
     var body: some View {
         HStack {
-            BinInfoView(bin: .plastic)
-            BinInfoView(bin: .paper)
+            BinInfoView(bin: .plastic) { model.coordinator.tapOnBinInfo(model.plasticTrashInfoSection()) }
+            BinInfoView(bin: .paper) { model.coordinator.tapOnBinInfo(model.paperTrashInfoSection()) }
         }
 
         HStack {
-            BinInfoView(bin: .bio)
-            BinInfoView(bin: .mix)
+            BinInfoView(bin: .bio) { model.coordinator.tapOnBinInfo(model.bioTrashInfoSection()) }
+            BinInfoView(bin: .mix) { model.coordinator.tapOnBinInfo(model.mixTrashInfoSection()) }
         }
     }
 }
 
 private struct BinInfoView: View {
     let bin: TrashDay.Bin
+    let action: () -> Void
 
     var body: some View {
         Button {
+            action()
         } label: {
             HStack {
                 BinIconView(bin: bin, size: 35)
@@ -258,25 +274,8 @@ private struct BinInfoView: View {
     }
 }
 
-private struct BinIconView: View {
-    let bin: TrashDay.Bin
-    let size: CGFloat
-
-    var body: some View {
-        ZStack {
-            Rectangle()
-                .fill(bin.backgroundColor)
-                .frame(width: size, height: size)
-                .cornerRadius(size / 2)
-
-            Image(systemName: bin.icon)
-                .resizable()
-                .foregroundStyle(bin.iconColor)
-                .frame(width: size / 2, height: size / 2)
-        }
-    }
+#Preview {
+    let state = HomeModelState()
+    let model = HomeModelImpl(state: state, coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
+    HomeView(model: model, state: state)
 }
-
-//#Preview {
-//    HomeView(model: HomeModelImpl(coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl())))
-//}

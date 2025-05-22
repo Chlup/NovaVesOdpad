@@ -27,12 +27,15 @@
 		3439DBFB2DC7501D008BD7B0 /* Factory in Frameworks */ = {isa = PBXBuildFile; productRef = 3439DBFA2DC7501D008BD7B0 /* Factory */; };
 		3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DC062DC7550F008BD7B0 /* Logger.swift */; };
 		344D192D2DDDAF6000E6A046 /* NotificationsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */; };
-		345593AE2DC75F4F002F346F /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593AD2DC75F4F002F346F /* MainButton.swift */; };
 		345593B02DC7610C002F346F /* GlobalCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593AF2DC7610C002F346F /* GlobalCoordinator.swift */; };
 		345593B22DC76118002F346F /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B12DC76118002F346F /* AppDestination.swift */; };
 		345593B52DC76303002F346F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B42DC76303002F346F /* HomeView.swift */; };
 		345593B72DC76307002F346F /* HomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B62DC76307002F346F /* HomeModel.swift */; };
 		34A8B8AF2DDF55D7008B6BAA /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8AE2DDF55D7008B6BAA /* Date+Extensions.swift */; };
+		34A8B8B12DDFBDB3008B6BAA /* BinIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B02DDFBDB3008B6BAA /* BinIconView.swift */; };
+		34A8B8B42DDFC36B008B6BAA /* DaysListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */; };
+		34A8B8B62DDFC370008B6BAA /* DaysListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */; };
+		34A8B8B82DDFC375008B6BAA /* DaysListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B72DDFC375008B6BAA /* DaysListView.swift */; };
 		34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EBFC2DC7C23100C11F28 /* RootModel.swift */; };
 		34C2EC012DC7C33B00C11F28 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */; };
 /* End PBXBuildFile section */
@@ -73,12 +76,15 @@
 		344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsBuilder.swift; sourceTree = "<group>"; };
 		344D19342DDDFFFB00E6A046 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		344D19362DDDFFFB00E6A046 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
-		345593AD2DC75F4F002F346F /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		345593AF2DC7610C002F346F /* GlobalCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoordinator.swift; sourceTree = "<group>"; };
 		345593B12DC76118002F346F /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
 		345593B42DC76303002F346F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		345593B62DC76307002F346F /* HomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModel.swift; sourceTree = "<group>"; };
 		34A8B8AE2DDF55D7008B6BAA /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		34A8B8B02DDFBDB3008B6BAA /* BinIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinIconView.swift; sourceTree = "<group>"; };
+		34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListCoordinator.swift; sourceTree = "<group>"; };
+		34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListModel.swift; sourceTree = "<group>"; };
+		34A8B8B72DDFC375008B6BAA /* DaysListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListView.swift; sourceTree = "<group>"; };
 		34C2EBFC2DC7C23100C11F28 /* RootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootModel.swift; sourceTree = "<group>"; };
 		34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,6 +191,7 @@
 		3439DBE82DC7492F008BD7B0 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				34A8B8B22DDFC35C008B6BAA /* DaysList */,
 				345593B32DC762FB002F346F /* Home */,
 				3439DBE72DC7492F008BD7B0 /* Root */,
 				343502B42DDD14650075036D /* Settings */,
@@ -268,7 +275,7 @@
 		345593AC2DC75F42002F346F /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
-				345593AD2DC75F4F002F346F /* MainButton.swift */,
+				34A8B8B02DDFBDB3008B6BAA /* BinIconView.swift */,
 			);
 			path = UIComponents;
 			sourceTree = "<group>";
@@ -289,6 +296,16 @@
 				34A8B8AE2DDF55D7008B6BAA /* Date+Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		34A8B8B22DDFC35C008B6BAA /* DaysList */ = {
+			isa = PBXGroup;
+			children = (
+				34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */,
+				34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */,
+				34A8B8B72DDFC375008B6BAA /* DaysListView.swift */,
+			);
+			path = DaysList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -375,8 +392,10 @@
 				345593B02DC7610C002F346F /* GlobalCoordinator.swift in Sources */,
 				34C2EC012DC7C33B00C11F28 /* HomeCoordinator.swift in Sources */,
 				343502BE2DDD14980075036D /* TrashInfoCoordinator.swift in Sources */,
+				34A8B8B12DDFBDB3008B6BAA /* BinIconView.swift in Sources */,
 				343502C02DDD14980075036D /* TrashInfoView.swift in Sources */,
 				345593B72DC76307002F346F /* HomeModel.swift in Sources */,
+				34A8B8B42DDFC36B008B6BAA /* DaysListCoordinator.swift in Sources */,
 				345593B52DC76303002F346F /* HomeView.swift in Sources */,
 				343502B82DDD146F0075036D /* SettingsCoordinator.swift in Sources */,
 				343502B92DDD146F0075036D /* SettingsModel.swift in Sources */,
@@ -388,10 +407,11 @@
 				3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */,
 				34113BB52DDD181100EE09BA /* TrashInfoSection.swift in Sources */,
 				34113BB82DDD277700EE09BA /* NotificationHour.swift in Sources */,
+				34A8B8B82DDFC375008B6BAA /* DaysListView.swift in Sources */,
 				343502AB2DDD097E0075036D /* NovaVesOdpadApp.swift in Sources */,
 				34113BAA2DDD14C200EE09BA /* TrashInfoModel.swift in Sources */,
+				34A8B8B62DDFC370008B6BAA /* DaysListModel.swift in Sources */,
 				3439DBEF2DC74B36008BD7B0 /* RootView.swift in Sources */,
-				345593AE2DC75F4F002F346F /* MainButton.swift in Sources */,
 				344D192D2DDDAF6000E6A046 /* NotificationsBuilder.swift in Sources */,
 				34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */,
 			);

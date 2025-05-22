@@ -1,13 +1,13 @@
 //
-//  HomeCoordinator.swift
-//  ArchExample
+//  DaysListCoordinator.swift
+//  NovaVesOdpad
 //
-//  Created by Michal Fousek on 04.05.2025.
+//  Created by Michal Fousek on 22.05.2025.
 //
 
 import Foundation
 
-@MainActor struct TrashInfoCoordinator {
+@MainActor struct DaysListCoordinator {
     unowned let coordinator: GlobalCoordinator
 
     func dismiss() {
