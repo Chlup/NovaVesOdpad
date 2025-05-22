@@ -119,7 +119,7 @@ private struct NextTashDayView: View {
                     ForEach(day.bins) { bin in
                         HStack {
                             BinIconView(bin: bin, size: 35)
-                                .padding(.trailing, -3)
+                                .padding(.trailing, 0)
 
                             Text(bin.title)
                                 .font(.callout)
