@@ -11,6 +11,7 @@ enum AppDestination: Hashable {
     case home
     case trashInfo([TrashInfoSection])
     case settings([TrashDay])
+    case daysList([TrashDay])
 }
 
 extension AppDestination: Identifiable {
@@ -19,6 +20,7 @@ extension AppDestination: Identifiable {
         case .home: "home"
         case .trashInfo: "trashInfo"
         case .settings: "settings"
+        case .daysList: "daysList"
         }
     }
 }

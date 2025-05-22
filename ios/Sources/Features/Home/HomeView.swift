@@ -25,7 +25,7 @@ struct HomeView: View {
                 HStack {
                     NotificationsButtonView(model: model, state: state)
                         .padding(.trailing, 10)
-                    CalendarButtonView(model: model)
+                    CalendarButtonView(model: model, state: state)
                 }
                 .padding(.bottom, 15)
 
@@ -85,13 +85,10 @@ private extension View {
 
 private struct TitleView: View {
     var body: some View {
-        Section {
-            Text("Popelnice")
-                .font(.largeTitle)
-                .bold()
-                .foregroundStyle(.regularText)
-        }
-        .listRowBackground(Color.clear)
+        Text("Popelnice")
+            .font(.largeTitle)
+            .bold()
+            .foregroundStyle(.regularText)
     }
 }
 
@@ -177,10 +174,11 @@ private struct NotificationsButtonView: View {
 
 private struct CalendarButtonView: View {
     let model: HomeModel
+    let state: HomeModelState
 
     var body: some View {
         Button {
-            model.coordinator.tapOnCalendarButton()
+            model.coordinator.tapOnCalendarButton(allDays: state.allDays)
         } label: {
             HStack {
                 Image(systemName: "calendar")
@@ -194,7 +192,7 @@ private struct CalendarButtonView: View {
         .background(.buttonLightBackground)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(.regularText, lineWidth: 1)
+                .stroke(.regularText, lineWidth: 2)
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .buttonStyle(.plain)

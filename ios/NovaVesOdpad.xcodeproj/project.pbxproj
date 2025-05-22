@@ -36,6 +36,7 @@
 		34A8B8B42DDFC36B008B6BAA /* DaysListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */; };
 		34A8B8B62DDFC370008B6BAA /* DaysListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */; };
 		34A8B8B82DDFC375008B6BAA /* DaysListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B72DDFC375008B6BAA /* DaysListView.swift */; };
+		34A8B8BB2DDFC8B0008B6BAA /* TrashMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8BA2DDFC8B0008B6BAA /* TrashMonth.swift */; };
 		34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EBFC2DC7C23100C11F28 /* RootModel.swift */; };
 		34C2EC012DC7C33B00C11F28 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */; };
 /* End PBXBuildFile section */
@@ -85,6 +86,7 @@
 		34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListCoordinator.swift; sourceTree = "<group>"; };
 		34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListModel.swift; sourceTree = "<group>"; };
 		34A8B8B72DDFC375008B6BAA /* DaysListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListView.swift; sourceTree = "<group>"; };
+		34A8B8BA2DDFC8B0008B6BAA /* TrashMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashMonth.swift; sourceTree = "<group>"; };
 		34C2EBFC2DC7C23100C11F28 /* RootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootModel.swift; sourceTree = "<group>"; };
 		34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -304,8 +306,17 @@
 				34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */,
 				34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */,
 				34A8B8B72DDFC375008B6BAA /* DaysListView.swift */,
+				34A8B8B92DDFC8A7008B6BAA /* models */,
 			);
 			path = DaysList;
+			sourceTree = "<group>";
+		};
+		34A8B8B92DDFC8A7008B6BAA /* models */ = {
+			isa = PBXGroup;
+			children = (
+				34A8B8BA2DDFC8B0008B6BAA /* TrashMonth.swift */,
+			);
+			path = models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -406,6 +417,7 @@
 				343502B22DDD0D2F0075036D /* TashDay.swift in Sources */,
 				3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */,
 				34113BB52DDD181100EE09BA /* TrashInfoSection.swift in Sources */,
+				34A8B8BB2DDFC8B0008B6BAA /* TrashMonth.swift in Sources */,
 				34113BB82DDD277700EE09BA /* NotificationHour.swift in Sources */,
 				34A8B8B82DDFC375008B6BAA /* DaysListView.swift in Sources */,
 				343502AB2DDD097E0075036D /* NovaVesOdpadApp.swift in Sources */,

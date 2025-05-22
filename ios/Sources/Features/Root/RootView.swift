@@ -47,6 +47,11 @@ struct RootView: View {
                 days: days
             )
             SettingsView(model: model, state: state)
+
+        case let .daysList(days):
+            let state = DaysListState(allDays: days)
+            let model = DaysListModelImpl(state: state, coordinator: DaysListCoordinator(coordinator: model.coordinator))
+            DaysListView(model: model, state: state)
         }
     }
 }

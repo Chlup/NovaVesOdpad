@@ -51,7 +51,7 @@ import Factory
         nextTrashDayFormatter.dateFormat = "EEEE, dd. MMMM"
     }
 
-    private func loadDays() {
+    func loadDays() {
         let now = Date()
         let nextWednesday = nextWednesday(from: now)
 

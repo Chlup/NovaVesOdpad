@@ -15,8 +15,8 @@ import UIKit
         coordinator.presentSheet(.settings(allDays))
     }
 
-    func tapOnCalendarButton() {
-//        coordinator.presentSheet(.trashInfo)
+    func tapOnCalendarButton(allDays: [TrashDay]) {
+        coordinator.presentSheet(.daysList(allDays))
     }
 
     func tapOnBinInfo(_ trashInfoSections: [TrashInfoSection]) {
