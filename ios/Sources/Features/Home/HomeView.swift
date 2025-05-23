@@ -59,6 +59,7 @@ struct HomeView: View {
                 .padding(.bottom, 4)
                 
                 TrashBinsInfoView(model: model)
+                    .padding(.bottom, 24)
             }
             .padding(.horizontal, 24)
         }
@@ -123,8 +124,9 @@ private struct NextTrashDayView: View {
 
                             Text(bin.title)
                                 .font(.callout)
-                                .padding(.leading, 0)
                                 .padding(.trailing, 10)
+                                .minimumScaleFactor(0.6)
+                                .fixedSize()
                         }
                         .frame(maxWidth: .infinity)
                     }
