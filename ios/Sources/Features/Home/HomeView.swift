@@ -16,33 +16,36 @@ struct HomeView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 TitleView()
-
+                
                 if let firstDay = state.firstDay {
-                    NextTashDayView(model: model, day: firstDay)
-                        .padding(.bottom, 15)
+                    NextTrashDayView(model: model, day: firstDay)
+                        .padding(.bottom, 18)
                 }
-
+                
                 HStack {
                     NotificationsButtonView(model: model, state: state)
                         .padding(.trailing, 10)
                     CalendarButtonView(model: model, state: state)
                 }
-                .padding(.bottom, 15)
-
+                .padding(.bottom, 18)
+                
                 Text("Budoucí vývozy")
-                    .font(.headline)
-                    .padding(.bottom, 10)
-
+                    .font(.title3)
+                    .bold()
+                    .padding(.bottom, 4)
+                
                 ForEach(state.homeDays) { day in
                     DayView(model: model, day: day)
+                        .padding(.bottom, 4)
                 }
-
+                
                 HStack {
                     Text("Typy popelnic")
-                        .font(.headline)
+                        .font(.title3)
+                        .bold()
 
                     Spacer()
-
+                    
                     Button {
                         model.coordinator.openSortingWeb()
                     } label: {
@@ -52,17 +55,15 @@ struct HomeView: View {
                             .frame(width: 20, height: 20)
                     }
                 }
-                .padding(.top, 10)
-                .padding(.bottom, 10)
-
+                .padding(.top, 18)
+                .padding(.bottom, 4)
+                
                 TrashBinsInfoView(model: model)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+            .padding(.horizontal, 24)
         }
+        .padding(.vertical, 1)
         .background(.screenBackground)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(0)
         .onAppear { model.loadData() }
         .setupNavigation(model)
         .setupToolbar(model, state)
@@ -92,7 +93,7 @@ private struct TitleView: View {
     }
 }
 
-private struct NextTashDayView: View {
+private struct NextTrashDayView: View {
     let model: HomeModel
     let day: TrashDay
 
@@ -100,20 +101,19 @@ private struct NextTashDayView: View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading) {
                 Text("Příští vývoz")
-                    .font(.headline)
+                    .font(.title2)
                     .bold()
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 1)
 
                 HStack {
                     Text(model.titleForNextDay(day.date))
-                        .font(.subheadline)
-                        .bold()
+                        .font(.callout)
 
                     Text(model.daysToNextTrashDayText(numberOfDays: day.daysDifferenceToToday))
                         .font(.subheadline)
                         .foregroundStyle(.grayText)
                 }
-                .padding(.bottom, 8)
+                .padding(.bottom, 12)
 
                 HStack {
                     ForEach(day.bins) { bin in
@@ -126,21 +126,27 @@ private struct NextTashDayView: View {
                                 .padding(.leading, 0)
                                 .padding(.trailing, 10)
                         }
+                        .frame(maxWidth: .infinity)
                     }
+                    
                     Spacer()
                 }
             }
             .padding(20)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
         .background(.sectionBackground)
-        .cornerRadius(10)
+        .cornerRadius(20)
         .shadow(
-            // TODO: Which shadow color should be here for dark mode?
-            color: Color.black.opacity(0.15),
-            radius: 8,
+            color: Color.black.opacity(0.12),
+            radius: 5,
             x: 0,
-            y: 2
+            y: 4
+        )
+        .shadow(
+            color: Color.black.opacity(0.01),
+            radius: 5,
+            x: 0,
+            y: -4
         )
     }
 }
@@ -167,7 +173,7 @@ private struct NotificationsButtonView: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(.black, lineWidth: 1)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
         .buttonStyle(.plain)
     }
 }
@@ -182,6 +188,7 @@ private struct CalendarButtonView: View {
         } label: {
             HStack {
                 Image(systemName: "calendar")
+
                 Text("Kalendář")
             }
             .padding(3)
@@ -189,12 +196,12 @@ private struct CalendarButtonView: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 45)
-        .background(.buttonLightBackground)
+        .background(.screenBackground)
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 12)
                 .stroke(.regularText, lineWidth: 2)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
         .buttonStyle(.plain)
     }
 }
@@ -210,9 +217,9 @@ private struct DayView: View {
             HStack {
                 Text(model.titleForDay(day.date))
                     .font(.callout)
-                    .bold()
 
                 Spacer()
+                
                 ForEach(day.bins) { bin in
                     BinIconView(bin: bin, size: 30)
                 }
@@ -225,7 +232,7 @@ private struct DayView: View {
         .background(.sectionBackground)
         .frame(maxWidth: .infinity)
         .frame(height: 55)
-        .cornerRadius(10)
+        .cornerRadius(12)
     }
 }
 
@@ -233,14 +240,16 @@ private struct TrashBinsInfoView: View {
     let model: HomeModel
 
     var body: some View {
-        HStack {
-            BinInfoView(bin: .plastic) { model.coordinator.tapOnBinInfo(model.plasticTrashInfoSection()) }
-            BinInfoView(bin: .paper) { model.coordinator.tapOnBinInfo(model.paperTrashInfoSection()) }
-        }
-
-        HStack {
-            BinInfoView(bin: .bio) { model.coordinator.tapOnBinInfo(model.bioTrashInfoSection()) }
-            BinInfoView(bin: .mix) { model.coordinator.tapOnBinInfo(model.mixTrashInfoSection()) }
+        VStack(spacing: 14) {
+            HStack(spacing: 14) {
+                BinInfoView(bin: .plastic) { model.coordinator.tapOnBinInfo(model.plasticTrashInfoSection()) }
+                BinInfoView(bin: .paper) { model.coordinator.tapOnBinInfo(model.paperTrashInfoSection()) }
+            }
+            
+            HStack(spacing: 14) {
+                BinInfoView(bin: .bio) { model.coordinator.tapOnBinInfo(model.bioTrashInfoSection()) }
+                BinInfoView(bin: .mix) { model.coordinator.tapOnBinInfo(model.mixTrashInfoSection()) }
+            }
         }
     }
 }
@@ -259,15 +268,13 @@ private struct BinInfoView: View {
                 Text(bin.title)
                     .lineLimit(nil)
                     .font(.callout)
-                    .padding(.leading, 0)
-                    .padding(.trailing, 10)
             }
-            .padding(10)
+            .padding(14)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: 70)
         .background(.sectionBackground)
-        .cornerRadius(10)
+        .cornerRadius(12)
         .buttonStyle(.plain)
     }
 }

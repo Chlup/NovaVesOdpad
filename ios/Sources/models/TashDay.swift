@@ -1,5 +1,5 @@
 //
-//  TashDay.swift
+//  TrashDay.swift
 //  NovaVesOdpad
 //
 //  Created by Michal Fousek on 20.05.2025.
@@ -22,7 +22,7 @@ struct TrashDay: Codable, Equatable, Identifiable, Hashable {
             case .mix:
                 return "Směs"
             case .plastic:
-                return "Plast, kov, karton"
+                return "Plast, kov, kartony"
             case .paper:
                 return "Papír"
             case .bio:
@@ -55,13 +55,13 @@ struct TrashDay: Codable, Equatable, Identifiable, Hashable {
         var icon: String {
             switch self {
             case .mix:
-                return "trash"
+                return "bin"
             case .plastic:
-                return "arrow.3.trianglepath"
+                return "recycle"
             case .paper:
-                return "doc.plaintext"
+                return "paper"
             case .bio:
-                return "tree"
+                return "bio"
             }
         }
     }

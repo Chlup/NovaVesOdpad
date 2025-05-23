@@ -1,5 +1,5 @@
 //
-//  TashInfoSection.swift
+//  TrashInfoSection.swift
 //  NovaVesOdpad
 //
 //  Created by Michal Fousek on 20.05.2025.

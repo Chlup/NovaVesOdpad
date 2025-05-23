@@ -19,10 +19,11 @@ struct BinIconView: View {
                 .frame(width: size, height: size)
                 .cornerRadius(size / 2)
 
-            Image(systemName: bin.icon)
+            Image(bin.icon)
                 .resizable()
+                .renderingMode(.template)
                 .foregroundStyle(bin.iconColor)
-                .frame(width: size / 2, height: size / 2)
+                .frame(width: size / 1.75, height: size / 1.75)
         }
     }
 }

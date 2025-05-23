@@ -45,10 +45,10 @@ import Factory
         self.coordinator = coordinator
         self.state = state
         dayTitleDateFormatter = DateFormatter()
-        dayTitleDateFormatter.dateFormat = "dd. MMMM"
+        dayTitleDateFormatter.dateFormat = "d. MMMM"
 
         nextTrashDayFormatter = DateFormatter()
-        nextTrashDayFormatter.dateFormat = "EEEE, dd. MMMM"
+        nextTrashDayFormatter.dateFormat = "EEEE, d. MMMM"
     }
 
     func loadDays() {
