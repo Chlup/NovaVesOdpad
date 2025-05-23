@@ -37,8 +37,8 @@ class HomeViewModel(
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow()
     
-    private val dayTitleFormatter = DateTimeFormatter.ofPattern("EEEE dd. MM. yyyy", Locale.getDefault())
-    private val nextDayTitleFormatter = DateTimeFormatter.ofPattern("EEEE dd. MM.", Locale.getDefault())
+    private val dayTitleFormatter = DateTimeFormatter.ofPattern("d. MMMM", Locale.getDefault())
+    private val nextDayTitleFormatter = DateTimeFormatter.ofPattern("EEEE, d. MMMM", Locale.getDefault())
     private val loadDaysTaskId = "load_days_task"
     
     /**
@@ -86,7 +86,7 @@ class HomeViewModel(
             val dayDate = nextWednesday.plusWeeks(i.toLong())
             val weekOfYear = dayDate.get(WeekFields.ISO.weekOfWeekBasedYear())
             
-            val bins = if (weekOfYear % 2 != 0) {
+            val bins = if (weekOfYear % 2 == 0) {
                 // Even weeks: paper, bio, mix
                 listOf(TrashDay.Bin.paper, TrashDay.Bin.bio, TrashDay.Bin.mix)
             } else {

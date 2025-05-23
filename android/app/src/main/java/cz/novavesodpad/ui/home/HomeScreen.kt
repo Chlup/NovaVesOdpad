@@ -89,8 +89,8 @@ fun HomeScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(15.dp)
+                .padding(horizontal = 24.dp, vertical = 1.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
             // Title
             item {
@@ -128,10 +128,10 @@ fun HomeScreen(
             item {
                 Text(
                     text = "Budoucí vývozy",
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = appColors.regularText,
-                    modifier = Modifier.padding(bottom = 10.dp)
+                    modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
             
@@ -139,7 +139,8 @@ fun HomeScreen(
             items(state.homeDays) { day ->
                 DayView(
                     day = day,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
             
@@ -147,7 +148,8 @@ fun HomeScreen(
             item {
                 TrashBinsInfoSection(
                     onInfoClick = onInfoClick,
-                    onSortingGuideClick = onSortingGuideClick
+                    onSortingGuideClick = onSortingGuideClick,
+                    modifier = Modifier.padding(bottom = 24.dp)
                 )
             }
         }
@@ -176,11 +178,11 @@ private fun NextTrashDayView(
         modifier = Modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 8.dp,
-                shape = RoundedCornerShape(10.dp),
-                spotColor = appColors.regularText.copy(alpha = 0.15f)
+                elevation = 5.dp,
+                shape = RoundedCornerShape(20.dp),
+                spotColor = appColors.regularText.copy(alpha = 0.12f)
             ),
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = appColors.sectionBackground)
     ) {
         Column(
@@ -188,19 +190,18 @@ private fun NextTrashDayView(
         ) {
             Text(
                 text = "Příští vývoz",
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = appColors.regularText,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 1.dp)
             )
             
             Row(
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 12.dp)
             ) {
                 Text(
                     text = viewModel.titleForNextDay(day.date),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = appColors.regularText
                 )
                 
@@ -227,7 +228,9 @@ private fun NextTrashDayView(
                         Text(
                             text = bin.title,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = appColors.regularText
+                            color = appColors.regularText,
+                            maxLines = 1,
+                            softWrap = false
                         )
                     }
                 }
@@ -248,14 +251,14 @@ private fun NotificationsButton(
             .height(45.dp)
             .background(
                 color = appColors.buttonDarkBackground,
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(12.dp)
             )
             .border(
                 width = 1.dp,
                 color = appColors.regularText,
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(12.dp)
             )
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(12.dp))
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
@@ -289,15 +292,15 @@ private fun CalendarButton(
         modifier = modifier
             .height(45.dp)
             .background(
-                color = appColors.buttonLightBackground,
-                shape = RoundedCornerShape(8.dp)
+                color = appColors.screenBackground,
+                shape = RoundedCornerShape(12.dp)
             )
             .border(
                 width = 2.dp,
                 color = appColors.regularText,
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(12.dp)
             )
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(12.dp))
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
@@ -323,15 +326,16 @@ private fun CalendarButton(
 @Composable
 private fun DayView(
     day: TrashDay,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    modifier: Modifier = Modifier
 ) {
     val appColors = LocalAppColors.current
     
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(55.dp),
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = appColors.sectionBackground)
     ) {
         Row(
@@ -343,7 +347,6 @@ private fun DayView(
             Text(
                 text = viewModel.titleForDay(day.date),
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
                 color = appColors.regularText
             )
             
@@ -363,20 +366,21 @@ private fun DayView(
 @Composable
 private fun TrashBinsInfoSection(
     onInfoClick: (String) -> Unit,
-    onSortingGuideClick: () -> Unit
+    onSortingGuideClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val appColors = LocalAppColors.current
     
-    Column {
+    Column(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp, bottom = 10.dp),
+                .padding(top = 18.dp, bottom = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Typy popelnic",
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = appColors.regularText
             )
@@ -402,10 +406,10 @@ private fun TrashBinsInfoView(
     onInfoClick: (String) -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             BinInfoView(
                 bin = TrashDay.Bin.plastic,
@@ -420,7 +424,7 @@ private fun TrashBinsInfoView(
         }
         
         Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             BinInfoView(
                 bin = TrashDay.Bin.bio,
@@ -448,13 +452,13 @@ private fun BinInfoView(
         modifier = modifier
             .height(70.dp)
             .clickable { onClick() },
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = appColors.sectionBackground)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp),
+                .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             BinView(bin = bin, size = 35.dp)
@@ -465,7 +469,8 @@ private fun BinInfoView(
                 text = bin.title,
                 style = MaterialTheme.typography.bodyMedium,
                 color = appColors.regularText,
-                maxLines = 2
+                maxLines = 2,
+                modifier = Modifier.weight(1f, fill = false)
             )
         }
     }

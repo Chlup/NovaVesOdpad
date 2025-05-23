@@ -36,7 +36,7 @@ data class TrashDay(
         val title: String
             get() = when (this) {
                 mix -> "Směs"
-                plastic -> "Plasty, kov, karton"
+                plastic -> "Plast, kov, kartony"
                 paper -> "Papír"
                 bio -> "Bio"
             }

@@ -6,18 +6,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
+import cz.novavesodpad.R
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.novavesodpad.model.TrashDay
@@ -44,10 +40,10 @@ fun BinView(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = getBinIcon(bin),
+                painter = painterResource(id = getBinIcon(bin)),
                 contentDescription = bin.title,
                 tint = bin.iconColor,
-                modifier = Modifier.size(size / 2)
+                modifier = Modifier.size(size / 1.75f)
             )
         }
         
@@ -61,14 +57,14 @@ fun BinView(
 }
 
 /**
- * Returns the appropriate Material icon for each bin type
- * Uses available Material Icons similar to iOS design intent
+ * Returns the appropriate drawable resource for each bin type
+ * Uses custom icons that match iOS design
  */
-private fun getBinIcon(bin: TrashDay.Bin): ImageVector {
+private fun getBinIcon(bin: TrashDay.Bin): Int {
     return when (bin) {
-        TrashDay.Bin.mix -> Icons.Default.Delete    // trash icon
-        TrashDay.Bin.plastic -> Icons.Default.Refresh // recycling/refresh icon
-        TrashDay.Bin.paper -> Icons.Default.Info      // document/info icon
-        TrashDay.Bin.bio -> Icons.Default.Star        // bio/star icon (temporary)
+        TrashDay.Bin.mix -> R.drawable.ic_bin
+        TrashDay.Bin.plastic -> R.drawable.ic_recycle
+        TrashDay.Bin.paper -> R.drawable.ic_paper
+        TrashDay.Bin.bio -> R.drawable.ic_bio
     }
 }

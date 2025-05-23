@@ -35,8 +35,8 @@ class DaysListViewModel(
     private val _state = MutableStateFlow(DaysListState(allDays = initialDays))
     val state: StateFlow<DaysListState> = _state.asStateFlow()
     
-    private val dayTitleFormatter = DateTimeFormatter.ofPattern("dd. MM. yyyy", Locale.getDefault())
-    private val monthTitleFormatter = DateTimeFormatter.ofPattern("LLLL yyyy", Locale.getDefault())
+    private val dayTitleFormatter = DateTimeFormatter.ofPattern("dd. MM. YYYY", Locale.getDefault())
+    private val monthTitleFormatter = DateTimeFormatter.ofPattern("LLLL YYYY", Locale.getDefault())
     private val groupDaysTaskId = "group_days_task"
     
     init {
