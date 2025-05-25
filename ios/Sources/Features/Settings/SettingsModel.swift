@@ -10,7 +10,7 @@ import Factory
 @preconcurrency import UserNotifications
 
 @MainActor @Observable final class SettingsModelState {
-    var notificationsAuthorized = false
+    var notificationsAuthorized = true
     var schedulingNotificationsInProgress = false
     let notificationHours: [Int]
     var noticationEnabledThreeDaysBefore: Bool
@@ -22,7 +22,7 @@ import Factory
     var noticationEnabledOnDay: Bool
     var selectedNotificationHourOnDay: Int
 
-    var noticiationsEnabledForAnyDay: Bool {
+    var notificationsEnabledForAnyDay: Bool {
         return
             noticationEnabledThreeDaysBefore ||
             noticationEnabledTwoDaysBefore ||
@@ -109,22 +109,19 @@ import Factory
 
     private func loadNotificationsAuthorizationStatus() async {
         let notificationSettings = await UNUserNotificationCenter.current().notificationSettings()
-        state.notificationsAuthorized =
-            notificationSettings.authorizationStatus == .authorized ||
-            notificationSettings.authorizationStatus == .notDetermined
+        state.notificationsAuthorized = notificationSettings.authorizationStatus == .authorized
     }
 
     private func requestNotificationAuthorization() async {
         let notificationSettings = await UNUserNotificationCenter.current().notificationSettings()
         guard notificationSettings.authorizationStatus != .authorized else {
-            tasks.addTask(id: "runSchedule-change-\(UUID().uuidString)", runScheduleNotifications)
+            await loadNotificationsAuthorizationStatus()
             return
         }
 
         do {
             if try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
                 logger.debug("Notification permission granted")
-                tasks.addTask(id: "runSchedule-\(UUID().uuidString)", runScheduleNotifications)
             } else {
                 logger.debug("Notification permission denied")
                 state.disableAllNotifications()
@@ -177,7 +174,7 @@ import Factory
 
 extension SettingsModelImpl: SettingsModel {
     func onAppear() {
-        tasks.addTask(id: "loadAuth", loadNotificationsAuthorizationStatus)
+        tasks.addTask(id: "notifAuth", requestNotificationAuthorization)
     }
 
     func notifSettingsChanged() {
@@ -203,8 +200,8 @@ extension SettingsModelImpl: SettingsModel {
             forKey: SettingsModelState.Constants.selectedNotificationHourOnDayUDKey
         )
 
-        if state.noticiationsEnabledForAnyDay {
-            tasks.addTask(id: "notifAuth", requestNotificationAuthorization)
+        if state.notificationsEnabledForAnyDay {
+            tasks.addTask(id: "runSchedule-change-\(UUID().uuidString)", runScheduleNotifications)
         } else {
             notificationsBuilder.cancelAllNotifications()
         }

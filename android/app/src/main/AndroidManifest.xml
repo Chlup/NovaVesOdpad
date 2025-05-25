@@ -42,7 +42,7 @@
         <!-- File provider for sharing PDFs -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="cz.novavesodpad.fileprovider"
+            android:authorities="com.mugeaters.popelnice.nvpp.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

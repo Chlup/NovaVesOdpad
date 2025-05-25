@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "cz.novavesodpad"
+    namespace = "com.mugeaters.popelnice.nvpp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "cz.novavesodpad"
+        applicationId = "com.mugeaters.popelnice.nvpp"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
