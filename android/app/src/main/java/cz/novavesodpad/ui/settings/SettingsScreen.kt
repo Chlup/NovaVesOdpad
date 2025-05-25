@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,13 +26,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import cz.novavesodpad.model.TrashDay
 import cz.novavesodpad.ui.theme.LocalAppColors
 import org.koin.androidx.compose.koinViewModel
 
@@ -40,23 +47,36 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    days: List<TrashDay> = emptyList(),
     viewModel: SettingsViewModel = koinViewModel(),
     onBackClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val appColors = LocalAppColors.current
     
-    // Request notification permission if needed (Android 13+)
+    // Set up permission launcher to handle permission results
     val permissionLauncher = rememberNotificationPermissionLauncher { isGranted ->
-        if (isGranted) {
-            viewModel.checkNotificationPermission()
-            viewModel.notificationSettingsChanged()
-        }
+        viewModel.onPermissionResult(isGranted)
     }
     
+    // Check permission status on first load but don't request it automatically
     LaunchedEffect(Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !state.notificationsAuthorized) {
-            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        viewModel.checkNotificationPermission()
+        viewModel.setDays(days)
+    }
+    
+    // Re-check permission when returning from system settings
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.checkNotificationPermission()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
     
@@ -103,8 +123,8 @@ fun SettingsScreen(
                     )
                 }
                 
-                // Notification permission warning
-                if (!state.notificationsAuthorized && state.notificationsEnabledForAnyDay) {
+                // Notification permission warning - show when permissions not authorized (Android 13+)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !state.notificationsAuthorized) {
                     item {
                         Column(
                             modifier = Modifier
@@ -122,13 +142,38 @@ fun SettingsScreen(
                             
                             Button(
                                 onClick = {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                        permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                                    }
+                                    viewModel.openSystemSettings()
                                 }
                             ) {
-                                Text("Jít do nastavení")
+                                Text("Nastavení")
                             }
+                        }
+                    }
+                }
+                
+                // Scheduling progress indicator - show when notifications are being scheduled
+                if (state.schedulingNotificationsInProgress) {
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Plánuji notifikace...",
+                                color = appColors.regularText,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            
+                            Spacer(modifier = Modifier.size(8.dp))
+                            
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = appColors.regularText,
+                                strokeWidth = 2.dp
+                            )
                         }
                     }
                 }
@@ -140,8 +185,11 @@ fun SettingsScreen(
                         isEnabled = state.notificationEnabledThreeDaysBefore,
                         selectedHour = state.selectedNotificationHourThreeDaysBefore,
                         availableHours = state.notificationHours,
-                        onEnabledChanged = viewModel::setNotificationEnabledThreeDaysBefore,
-                        onHourSelected = viewModel::setSelectedNotificationHourThreeDaysBefore
+                        onEnabledChanged = { enabled -> 
+                            viewModel.setNotificationEnabledThreeDaysBefore(enabled, permissionLauncher) 
+                        },
+                        onHourSelected = viewModel::setSelectedNotificationHourThreeDaysBefore,
+                        permissionsAuthorized = state.notificationsAuthorized
                     )
                 }
                 
@@ -152,8 +200,11 @@ fun SettingsScreen(
                         isEnabled = state.notificationEnabledTwoDaysBefore,
                         selectedHour = state.selectedNotificationHourTwoDaysBefore,
                         availableHours = state.notificationHours,
-                        onEnabledChanged = viewModel::setNotificationEnabledTwoDaysBefore,
-                        onHourSelected = viewModel::setSelectedNotificationHourTwoDaysBefore
+                        onEnabledChanged = { enabled -> 
+                            viewModel.setNotificationEnabledTwoDaysBefore(enabled, permissionLauncher) 
+                        },
+                        onHourSelected = viewModel::setSelectedNotificationHourTwoDaysBefore,
+                        permissionsAuthorized = state.notificationsAuthorized
                     )
                 }
                 
@@ -164,8 +215,11 @@ fun SettingsScreen(
                         isEnabled = state.notificationEnabledOneDayBefore,
                         selectedHour = state.selectedNotificationHourOneDayBefore,
                         availableHours = state.notificationHours,
-                        onEnabledChanged = viewModel::setNotificationEnabledOneDayBefore,
-                        onHourSelected = viewModel::setSelectedNotificationHourOneDayBefore
+                        onEnabledChanged = { enabled -> 
+                            viewModel.setNotificationEnabledOneDayBefore(enabled, permissionLauncher) 
+                        },
+                        onHourSelected = viewModel::setSelectedNotificationHourOneDayBefore,
+                        permissionsAuthorized = state.notificationsAuthorized
                     )
                 }
                 
@@ -176,8 +230,11 @@ fun SettingsScreen(
                         isEnabled = state.notificationEnabledOnDay,
                         selectedHour = state.selectedNotificationHourOnDay,
                         availableHours = state.notificationHours,
-                        onEnabledChanged = viewModel::setNotificationEnabledOnDay,
-                        onHourSelected = viewModel::setSelectedNotificationHourOnDay
+                        onEnabledChanged = { enabled -> 
+                            viewModel.setNotificationEnabledOnDay(enabled, permissionLauncher) 
+                        },
+                        onHourSelected = viewModel::setSelectedNotificationHourOnDay,
+                        permissionsAuthorized = state.notificationsAuthorized
                     )
                 }
             }

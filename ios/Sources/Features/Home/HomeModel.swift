@@ -37,7 +37,7 @@ import Factory
     let state: HomeModelState
     let coordinator: HomeCoordinator
 
-    private let loadDaysTaskID = UUID().uuidString
+    private let loadDaysTaskID = "loadDaysTaskID"
     private let dayTitleDateFormatter: DateFormatter
     private let nextTrashDayFormatter: DateFormatter
 

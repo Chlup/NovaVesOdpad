@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import cz.novavesodpad.MainActivity
 import cz.novavesodpad.R
@@ -37,6 +38,9 @@ data class NotificationBuilderInput(
  */
 interface NotificationsBuilder {
     suspend fun build(input: NotificationBuilderInput)
+    suspend fun cancelAll()
+    fun canScheduleExactAlarms(): Boolean
+    fun openExactAlarmSettings()
 }
 
 /**
@@ -48,6 +52,8 @@ class NotificationsBuilderImpl(
 ) : NotificationsBuilder {
     
     override suspend fun build(input: NotificationBuilderInput) {
+        logger.debug("🔔 NotificationsBuilder.build() called with ${input.days.size} days")
+        
         // Create notification channel if needed (for Android 8.0+)
         createNotificationChannel()
         
@@ -56,11 +62,19 @@ class NotificationsBuilderImpl(
         
         // Schedule new notifications
         for (day in input.days) {
+            logger.debug("📅 Processing day: ${day.date} with bins: ${day.bins.map { it.title }}")
             val requests = scheduleNotificationsForDay(day, input)
+            logger.debug("📝 Created ${requests.size} notification requests for ${day.date}")
             for (request in requests) {
                 scheduleNotification(request)
             }
         }
+        
+        logger.debug("✅ NotificationsBuilder.build() completed")
+    }
+    
+    override suspend fun cancelAll() {
+        cancelAllNotifications()
     }
     
     private fun createNotificationChannel() {
@@ -163,7 +177,7 @@ class NotificationsBuilderImpl(
         val date = day.date
         val notificationDate = date.plusDays(offsetDays.toLong())
             .withHour(hour)
-            .withMinute(40)
+            .withMinute(0)
             .withSecond(0)
         
         val now = LocalDateTime.now()
@@ -209,20 +223,23 @@ class NotificationsBuilderImpl(
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (alarmManager.canScheduleExactAlarms()) {
+                logger.debug("✅ Using exact alarm scheduling")
                 alarmManager.setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,
                     triggerTimeMillis,
                     pendingIntent
                 )
             } else {
-                logger.debug("Cannot schedule exact alarms, using inexact timing")
-                alarmManager.set(
+                logger.debug("⚠️ Cannot schedule exact alarms, using inexact timing. User may need to grant permission in system settings.")
+                // Use setAndAllowWhileIdle for better reliability with inexact timing
+                alarmManager.setAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,
                     triggerTimeMillis,
                     pendingIntent
                 )
             }
         } else {
+            logger.debug("✅ Using exact alarm scheduling (Android < 12)")
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 triggerTimeMillis,
@@ -231,6 +248,28 @@ class NotificationsBuilderImpl(
         }
         
         logger.debug("Scheduled notification with ID: ${request.notificationId} for ${Date(triggerTimeMillis)}")
+    }
+    
+    override fun canScheduleExactAlarms(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.canScheduleExactAlarms()
+        } else {
+            true // Always allowed on Android < 12
+        }
+    }
+    
+    override fun openExactAlarmSettings() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+            } catch (e: Exception) {
+                logger.debug("Failed to open exact alarm settings: ${e.message}")
+            }
+        }
     }
     
     private data class NotificationRequest(

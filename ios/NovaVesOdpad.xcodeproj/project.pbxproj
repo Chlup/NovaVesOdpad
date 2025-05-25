@@ -26,6 +26,9 @@
 		3439DBF82DC74F08008BD7B0 /* TasksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DBF72DC74F08008BD7B0 /* TasksManager.swift */; };
 		3439DBFB2DC7501D008BD7B0 /* Factory in Frameworks */ = {isa = PBXBuildFile; productRef = 3439DBFA2DC7501D008BD7B0 /* Factory */; };
 		3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DC062DC7550F008BD7B0 /* Logger.swift */; };
+		343AACCA2DE0745500D8E8BF /* UncheckedSendableMutableBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343AACC92DE0745500D8E8BF /* UncheckedSendableMutableBox.swift */; };
+		343AACCD2DE0745E00D8E8BF /* SendableCurrentValueSubject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343AACCB2DE0745E00D8E8BF /* SendableCurrentValueSubject.swift */; };
+		343AACCE2DE0745E00D8E8BF /* SendablePassthroughSubject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343AACCC2DE0745E00D8E8BF /* SendablePassthroughSubject.swift */; };
 		344D192D2DDDAF6000E6A046 /* NotificationsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */; };
 		345593B02DC7610C002F346F /* GlobalCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593AF2DC7610C002F346F /* GlobalCoordinator.swift */; };
 		345593B22DC76118002F346F /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B12DC76118002F346F /* AppDestination.swift */; };
@@ -75,6 +78,9 @@
 		3439DBEE2DC74B36008BD7B0 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		3439DBF72DC74F08008BD7B0 /* TasksManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksManager.swift; sourceTree = "<group>"; };
 		3439DC062DC7550F008BD7B0 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		343AACC92DE0745500D8E8BF /* UncheckedSendableMutableBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UncheckedSendableMutableBox.swift; sourceTree = "<group>"; };
+		343AACCB2DE0745E00D8E8BF /* SendableCurrentValueSubject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableCurrentValueSubject.swift; sourceTree = "<group>"; };
+		343AACCC2DE0745E00D8E8BF /* SendablePassthroughSubject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendablePassthroughSubject.swift; sourceTree = "<group>"; };
 		344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsBuilder.swift; sourceTree = "<group>"; };
 		344D19342DDDFFFB00E6A046 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		344D19362DDDFFFB00E6A046 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
@@ -264,6 +270,9 @@
 		344D194F2DDE00C400E6A046 /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				343AACCB2DE0745E00D8E8BF /* SendableCurrentValueSubject.swift */,
+				343AACCC2DE0745E00D8E8BF /* SendablePassthroughSubject.swift */,
+				343AACC92DE0745500D8E8BF /* UncheckedSendableMutableBox.swift */,
 				34A8B8AD2DDF55D0008B6BAA /* Extensions */,
 			);
 			path = utils;
@@ -408,6 +417,7 @@
 				34C2EC012DC7C33B00C11F28 /* HomeCoordinator.swift in Sources */,
 				343502BE2DDD14980075036D /* TrashInfoCoordinator.swift in Sources */,
 				34A8B8B12DDFBDB3008B6BAA /* BinIconView.swift in Sources */,
+				343AACCA2DE0745500D8E8BF /* UncheckedSendableMutableBox.swift in Sources */,
 				343502C02DDD14980075036D /* TrashInfoView.swift in Sources */,
 				345593B72DC76307002F346F /* HomeModel.swift in Sources */,
 				34A8B8B42DDFC36B008B6BAA /* DaysListCoordinator.swift in Sources */,
@@ -419,6 +429,8 @@
 				34A8B8AF2DDF55D7008B6BAA /* Date+Extensions.swift in Sources */,
 				3439DBF82DC74F08008BD7B0 /* TasksManager.swift in Sources */,
 				343502B22DDD0D2F0075036D /* TashDay.swift in Sources */,
+				343AACCD2DE0745E00D8E8BF /* SendableCurrentValueSubject.swift in Sources */,
+				343AACCE2DE0745E00D8E8BF /* SendablePassthroughSubject.swift in Sources */,
 				3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */,
 				34113BB52DDD181100EE09BA /* TrashInfoSection.swift in Sources */,
 				34A8B8BB2DDFC8B0008B6BAA /* TrashMonth.swift in Sources */,

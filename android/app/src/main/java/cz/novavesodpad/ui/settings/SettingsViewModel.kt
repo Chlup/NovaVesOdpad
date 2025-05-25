@@ -2,9 +2,12 @@ package cz.novavesodpad.ui.settings
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,17 +22,21 @@ import cz.novavesodpad.service.NotificationBuilderInput
 import cz.novavesodpad.service.NotificationsBuilder
 import cz.novavesodpad.util.Logger
 import cz.novavesodpad.util.TasksManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * ViewState for the Settings screen
  */
 data class SettingsState(
     val notificationsAuthorized: Boolean = false,
+    val permissionExplicitlyDenied: Boolean = false,
+    val shouldShowSystemSettingsPrompt: Boolean = false,
     val notificationHours: List<NotificationHour> = NotificationHour.createDefaultHours(),
     
     val notificationEnabledThreeDaysBefore: Boolean = false,
@@ -44,7 +51,8 @@ data class SettingsState(
     val notificationEnabledOnDay: Boolean = false,
     val selectedNotificationHourOnDay: Int = 8,
     
-    val days: List<TrashDay> = emptyList()
+    val days: List<TrashDay> = emptyList(),
+    val schedulingNotificationsInProgress: Boolean = false
 ) {
     val notificationsEnabledForAnyDay: Boolean
         get() = notificationEnabledThreeDaysBefore || 
@@ -70,8 +78,8 @@ class SettingsViewModel(
     private val scheduleNotificationsTaskId = "schedule_notifications_task"
     
     init {
+        logger.debug("⚙️ SettingsViewModel initialized")
         loadSettings()
-        checkNotificationPermission()
     }
     
     /**
@@ -116,16 +124,77 @@ class SettingsViewModel(
             true // Before Android 13, notification permission was granted by default
         }
         
-        _state.update { it.copy(notificationsAuthorized = permissionGranted) }
+        _state.update { 
+            it.copy(
+                notificationsAuthorized = permissionGranted,
+                // Reset denial flag if permission is now granted (user went to settings and enabled it)
+                permissionExplicitlyDenied = if (permissionGranted) false else it.permissionExplicitlyDenied
+            ) 
+        }
+    }
+    
+    /**
+     * Requests notification permission when needed
+     */
+    fun requestNotificationPermission(permissionLauncher: ManagedActivityResultLauncher<String, Boolean>?) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionLauncher?.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            // For older Android versions, permission is automatically granted
+            _state.update { it.copy(notificationsAuthorized = true) }
+            notificationSettingsChanged()
+        }
+    }
+    
+    
+    /**
+     * Opens system settings for notification permissions
+     */
+    fun openSystemSettings() {
+        try {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", context.packageName, null)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            logger.error("Failed to open system settings", e)
+        }
+    }
+    
+    /**
+     * Called when permission is granted or denied
+     */
+    fun onPermissionResult(granted: Boolean) {
+        _state.update { 
+            it.copy(
+                notificationsAuthorized = granted,
+                permissionExplicitlyDenied = !granted
+            ) 
+        }
+        if (granted) {
+            // Permission granted, now save settings and schedule notifications
+            notificationSettingsChanged()
+        }
+        // Don't automatically disable notifications when permission is denied
+        // Let the user keep their settings and show warning message instead
     }
     
     /**
      * Called when notification settings are changed
+     * Now requests permission if any notification is being enabled
      */
-    fun notificationSettingsChanged() {
+    fun notificationSettingsChanged(permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null) {
         val currentState = state.value
         
-        // Save settings to preferences
+        // Check if any notification is enabled and request permission if needed
+        // Only request permission if it hasn't been explicitly denied before
+        if (currentState.notificationsEnabledForAnyDay && !currentState.notificationsAuthorized && !currentState.permissionExplicitlyDenied) {
+            requestNotificationPermission(permissionLauncher)
+            return // Don't save settings until permission is granted
+        }
+        
+        // Save settings to preferences (even if permission denied - user can see warning)
         preferencesManager.saveNotificationSettings(
             NotificationSettings(
                 notificationEnabledThreeDaysBefore = currentState.notificationEnabledThreeDaysBefore,
@@ -142,16 +211,17 @@ class SettingsViewModel(
             )
         )
         
-        // Schedule notifications
+        // Always schedule/cancel notifications based on current settings
+        // The scheduleNotifications() method handles permissions internally
         scheduleNotifications()
     }
     
     /**
      * Sets the notification enabled state for three days before
      */
-    fun setNotificationEnabledThreeDaysBefore(enabled: Boolean) {
+    fun setNotificationEnabledThreeDaysBefore(enabled: Boolean, permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null) {
         _state.update { it.copy(notificationEnabledThreeDaysBefore = enabled) }
-        notificationSettingsChanged()
+        notificationSettingsChanged(permissionLauncher)
     }
     
     /**
@@ -165,9 +235,9 @@ class SettingsViewModel(
     /**
      * Sets the notification enabled state for two days before
      */
-    fun setNotificationEnabledTwoDaysBefore(enabled: Boolean) {
+    fun setNotificationEnabledTwoDaysBefore(enabled: Boolean, permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null) {
         _state.update { it.copy(notificationEnabledTwoDaysBefore = enabled) }
-        notificationSettingsChanged()
+        notificationSettingsChanged(permissionLauncher)
     }
     
     /**
@@ -181,9 +251,9 @@ class SettingsViewModel(
     /**
      * Sets the notification enabled state for one day before
      */
-    fun setNotificationEnabledOneDayBefore(enabled: Boolean) {
+    fun setNotificationEnabledOneDayBefore(enabled: Boolean, permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null) {
         _state.update { it.copy(notificationEnabledOneDayBefore = enabled) }
-        notificationSettingsChanged()
+        notificationSettingsChanged(permissionLauncher)
     }
     
     /**
@@ -197,9 +267,9 @@ class SettingsViewModel(
     /**
      * Sets the notification enabled state for the day of collection
      */
-    fun setNotificationEnabledOnDay(enabled: Boolean) {
+    fun setNotificationEnabledOnDay(enabled: Boolean, permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null) {
         _state.update { it.copy(notificationEnabledOnDay = enabled) }
-        notificationSettingsChanged()
+        notificationSettingsChanged(permissionLauncher)
     }
     
     /**
@@ -212,30 +282,56 @@ class SettingsViewModel(
     
     /**
      * Schedules notifications based on current settings
+     * Thread-safe implementation that cancels previous scheduling task before starting a new one
      */
     private fun scheduleNotifications() {
-        val currentState = state.value
+        // Show progress indicator immediately on main thread
+        _state.update { it.copy(schedulingNotificationsInProgress = true) }
         
-        // Only schedule if permission is granted and there are days
+        // Launch scheduling on background thread to avoid blocking UI
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Cancel any previous scheduling task and wait for completion
+                tasksManager.cancelTaskAndWait(scheduleNotificationsTaskId)
+                
+                // Execute the actual scheduling
+                executeScheduleNotifications(state.value)
+            } finally {
+                // Hide progress indicator on main thread
+                withContext(Dispatchers.Main) {
+                    _state.update { it.copy(schedulingNotificationsInProgress = false) }
+                }
+            }
+        }
+    }
+    
+    private suspend fun executeScheduleNotifications(currentState: SettingsState) {
+        // If no permissions or no days, cancel all notifications and return
         if (!currentState.notificationsAuthorized || currentState.days.isEmpty()) {
+            notificationsBuilder.cancelAll()
             return
         }
         
-        tasksManager.addTask(scheduleNotificationsTaskId) {
-            val input = NotificationBuilderInput(
-                days = currentState.days,
-                notificationEnabledThreeDaysBefore = currentState.notificationEnabledThreeDaysBefore,
-                selectedNotificationHourThreeDaysBefore = currentState.selectedNotificationHourThreeDaysBefore,
-                notificationEnabledTwoDaysBefore = currentState.notificationEnabledTwoDaysBefore,
-                selectedNotificationHourTwoDaysBefore = currentState.selectedNotificationHourTwoDaysBefore,
-                notificationEnabledOneDayBefore = currentState.notificationEnabledOneDayBefore,
-                selectedNotificationHourOneDayBefore = currentState.selectedNotificationHourOneDayBefore,
-                notificationEnabledOnDay = currentState.notificationEnabledOnDay,
-                selectedNotificationHourOnDay = currentState.selectedNotificationHourOnDay
-            )
-            
-            notificationsBuilder.build(input)
+        // If no notifications are enabled, cancel all notifications
+        if (!currentState.notificationsEnabledForAnyDay) {
+            notificationsBuilder.cancelAll()
+            return
         }
+
+        logger.debug("Running notifications schedule")
+        val input = NotificationBuilderInput(
+            days = currentState.days,
+            notificationEnabledThreeDaysBefore = currentState.notificationEnabledThreeDaysBefore,
+            selectedNotificationHourThreeDaysBefore = currentState.selectedNotificationHourThreeDaysBefore,
+            notificationEnabledTwoDaysBefore = currentState.notificationEnabledTwoDaysBefore,
+            selectedNotificationHourTwoDaysBefore = currentState.selectedNotificationHourTwoDaysBefore,
+            notificationEnabledOneDayBefore = currentState.notificationEnabledOneDayBefore,
+            selectedNotificationHourOneDayBefore = currentState.selectedNotificationHourOneDayBefore,
+            notificationEnabledOnDay = currentState.notificationEnabledOnDay,
+            selectedNotificationHourOnDay = currentState.selectedNotificationHourOnDay
+        )
+        
+        notificationsBuilder.build(input)
     }
     
     override fun onCleared() {

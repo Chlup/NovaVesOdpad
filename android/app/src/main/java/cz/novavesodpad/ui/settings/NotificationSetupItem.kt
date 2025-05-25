@@ -36,7 +36,8 @@ fun NotificationSetupItem(
     selectedHour: Int,
     availableHours: List<NotificationHour>,
     onEnabledChanged: (Boolean) -> Unit,
-    onHourSelected: (Int) -> Unit
+    onHourSelected: (Int) -> Unit,
+    permissionsAuthorized: Boolean = true
 ) {
     val appColors = LocalAppColors.current
     
@@ -63,7 +64,8 @@ fun NotificationSetupItem(
                 
                 Switch(
                     checked = isEnabled,
-                    onCheckedChange = onEnabledChanged
+                    onCheckedChange = if (permissionsAuthorized) onEnabledChanged else { _ -> },
+                    enabled = permissionsAuthorized
                 )
             }
             

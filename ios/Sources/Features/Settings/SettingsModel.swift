@@ -10,7 +10,8 @@ import Factory
 @preconcurrency import UserNotifications
 
 @MainActor @Observable final class SettingsModelState {
-    var notificationsAuthorized: Bool = false
+    var notificationsAuthorized = false
+    var schedulingNotificationsInProgress = false
     let notificationHours: [Int]
     var noticationEnabledThreeDaysBefore: Bool
     var selectedNotificationHourThreeDaysBefore: Int
@@ -73,13 +74,19 @@ import Factory
 
         notificationHours = Array(5...23)
     }
+
+    func disableAllNotifications() {
+        noticationEnabledThreeDaysBefore = false
+        noticationEnabledTwoDaysBefore = false
+        noticationEnabledOneDayBefore = false
+        noticationEnabledOnDay = false
+    }
 }
 
 @MainActor protocol SettingsModel: AnyObject {
     var coordinator: SettingsCoordinator { get }
     
     func onAppear()
-    func onDisappear()
     func notifSettingsChanged()
 }
 
@@ -88,7 +95,7 @@ import Factory
     @ObservationIgnored @Injected(\.logger) private var logger
     @ObservationIgnored @Injected(\.notificationsBuilder) private var notificationsBuilder
 
-    private let scheduleNotificationsTaskID = UUID().uuidString
+    private let scheduleNotificationsTaskID = "scheduleNotificationsTaskID"
 
     let state: SettingsModelState
     let coordinator: SettingsCoordinator
@@ -108,17 +115,32 @@ import Factory
     }
 
     private func requestNotificationAuthorization() async {
+        let notificationSettings = await UNUserNotificationCenter.current().notificationSettings()
+        guard notificationSettings.authorizationStatus != .authorized else {
+            tasks.addTask(id: "runSchedule-change-\(UUID().uuidString)", runScheduleNotifications)
+            return
+        }
+
         do {
             if try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
                 logger.debug("Notification permission granted")
+                tasks.addTask(id: "runSchedule-\(UUID().uuidString)", runScheduleNotifications)
             } else {
                 logger.debug("Notification permission denied")
+                state.disableAllNotifications()
+                notificationsBuilder.cancelAllNotifications()
             }
         } catch {
             logger.debug("Failed to request notifications authorization: \(error)")
         }
 
         await loadNotificationsAuthorizationStatus()
+    }
+
+    private func runScheduleNotifications() async {
+        state.schedulingNotificationsInProgress = true
+        await tasks.cancelTaskAndWait(id: scheduleNotificationsTaskID)
+        tasks.addTask(id: scheduleNotificationsTaskID, scheduleNotifications)
     }
 
     private func scheduleNotifications() async {
@@ -130,8 +152,11 @@ import Factory
 
         guard notificationSettings.authorizationStatus == .authorized else {
             logger.debug("⚠️ User didn't authorize notifications. Can't schedule.")
+            state.schedulingNotificationsInProgress = false
             return
         }
+
+        state.schedulingNotificationsInProgress = true
 
         let input = NotificationBuilderInput(
             days: days,
@@ -145,17 +170,14 @@ import Factory
             selectedNotificationHourOnDay: state.selectedNotificationHourOnDay
         )
         await notificationsBuilder.build(input: input)
+
+        state.schedulingNotificationsInProgress = false
     }
 }
 
 extension SettingsModelImpl: SettingsModel {
     func onAppear() {
         tasks.addTask(id: "loadAuth", loadNotificationsAuthorizationStatus)
-    }
-
-    func onDisappear() {
-        tasks.cancelTask(id: scheduleNotificationsTaskID)
-        tasks.addTask(id: scheduleNotificationsTaskID, scheduleNotifications)
     }
 
     func notifSettingsChanged() {
@@ -183,8 +205,8 @@ extension SettingsModelImpl: SettingsModel {
 
         if state.noticiationsEnabledForAnyDay {
             tasks.addTask(id: "notifAuth", requestNotificationAuthorization)
+        } else {
+            notificationsBuilder.cancelAllNotifications()
         }
-
-        logger.debug("Changed")
     }
 }

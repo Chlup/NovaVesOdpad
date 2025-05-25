@@ -45,8 +45,10 @@ class HomeViewModel(
      * Loads trash days data using programmatic generation (like iOS app)
      */
     fun loadData() {
+        logger.debug("🏠 HomeViewModel.loadData() called")
         tasksManager.addTask(loadDaysTaskId) {
             try {
+                logger.debug("🏠 Generating trash days...")
                 val days = generateTrashDays()
                 // Update state with all days, first day, and home days (like iOS)
                 val firstDay = days.firstOrNull()

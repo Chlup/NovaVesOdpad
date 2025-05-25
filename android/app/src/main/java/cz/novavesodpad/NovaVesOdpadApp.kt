@@ -1,7 +1,10 @@
 package cz.novavesodpad
 
 import android.app.Application
+import android.util.Log
 import cz.novavesodpad.di.appModule
+import cz.novavesodpad.util.Logger
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -12,8 +15,13 @@ import org.koin.core.logger.Level
  */
 class NovaVesOdpadApp : Application() {
     
+    private val logger: Logger by inject()
+    
     override fun onCreate() {
         super.onCreate()
+        
+        // Direct log to verify LogCat is working
+        Log.d("NovaVesOdpad", "🚀 NovaVesOdpadApp.onCreate() - Application starting...")
         
         // Initialize Koin dependency injection
         startKoin {
@@ -21,5 +29,9 @@ class NovaVesOdpadApp : Application() {
             androidContext(this@NovaVesOdpadApp)
             modules(appModule)
         }
+        
+        // Use injected logger after Koin initialization
+        logger.debug("🚀 NovaVesOdpadApp.onCreate() - Koin initialized successfully")
+        logger.debug("🚀 Application setup complete")
     }
 }

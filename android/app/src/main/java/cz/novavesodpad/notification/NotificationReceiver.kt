@@ -21,11 +21,13 @@ class NotificationReceiver : BroadcastReceiver(), KoinComponent {
     private val logger: Logger by inject()
     
     override fun onReceive(context: Context, intent: Intent) {
+        logger.debug("🔔 NotificationReceiver.onReceive() called!")
+        
         val notificationId = intent.getIntExtra(NOTIFICATION_ID, 0)
         val title = intent.getStringExtra(NOTIFICATION_TITLE) ?: "Odvoz odpadu"
         val content = intent.getStringExtra(NOTIFICATION_CONTENT) ?: ""
         
-        logger.debug("Received notification trigger: $notificationId, $title")
+        logger.debug("📱 Received notification trigger: ID=$notificationId, title=$title")
         
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         
@@ -51,6 +53,7 @@ class NotificationReceiver : BroadcastReceiver(), KoinComponent {
         
         // Show the notification
         notificationManager.notify(notificationId, notification)
+        logger.debug("✅ Notification shown with ID: $notificationId")
     }
     
     companion object {

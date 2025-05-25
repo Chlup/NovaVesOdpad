@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 interface TasksManager {
     fun addTask(id: String, task: suspend () -> Unit)
     fun cancelTask(id: String)
+    suspend fun cancelTaskAndWait(id: String)
     fun cancelAllTasks()
 }
 
@@ -20,7 +21,7 @@ interface TasksManager {
  * Implementation of tasks manager
  */
 class TasksManagerImpl : TasksManager {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val tasks = mutableMapOf<String, Job>()
     
     override fun addTask(id: String, task: suspend () -> Unit) {
@@ -39,6 +40,16 @@ class TasksManagerImpl : TasksManager {
         tasks[id]?.let { job ->
             if (job.isActive) {
                 job.cancel()
+            }
+            tasks.remove(id)
+        }
+    }
+    
+    override suspend fun cancelTaskAndWait(id: String) {
+        tasks[id]?.let { job ->
+            if (job.isActive) {
+                job.cancel()
+                job.join() // Wait for the job to actually complete cancellation
             }
             tasks.remove(id)
         }

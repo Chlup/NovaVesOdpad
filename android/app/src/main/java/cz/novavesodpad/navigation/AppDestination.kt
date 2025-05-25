@@ -50,7 +50,9 @@ fun NavGraphBuilder.appNavGraph(
     }
     
     composable(AppDestination.Settings.route) {
+        val days = (globalCoordinator as? GlobalCoordinatorImpl)?.getCurrentDays() ?: emptyList()
         SettingsScreen(
+            days = days,
             onBackClick = {
                 navController.popBackStack()
             }

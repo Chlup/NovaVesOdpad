@@ -18,6 +18,14 @@ struct SettingsView: View {
                 VStack(alignment: .leading) {
                     TitleView()
 
+                    if !state.notificationsAuthorized {
+                        NotificationsNotEnabledView(model: model)
+                    }
+
+                    if state.schedulingNotificationsInProgress {
+                        SchedulingNotificationsView()
+                    }
+
                     NotifSetupView(
                         model: model,
                         state: state,
@@ -59,7 +67,6 @@ struct SettingsView: View {
             .setupNavigation(model)
             .setupToolbar(model)
             .onAppear { model.onAppear() }
-            .onDisappear { model.onDisappear() }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                 model.onAppear()
             }
@@ -98,36 +105,6 @@ private struct TitleView: View {
     }
 }
 
-//private struct NotifSetupView2: View {
-//    let model: HomeModel
-//    let day: TrashDay
-//
-//    var body: some View {
-//        VStack(alignment: .leading) {
-//            Spacer()
-//
-//            HStack {
-//                Text(model.titleForDay(day.date))
-//                    .font(.callout)
-//                    .bold()
-//
-//                Spacer()
-//                ForEach(day.bins) { bin in
-//                    BinIconView(bin: bin, size: 30)
-//                }
-//            }
-//            .padding(.leading, 20)
-//            .padding(.trailing, 20)
-//
-//            Spacer()
-//        }
-//        .background(.sectionBackground)
-//        .frame(maxWidth: .infinity)
-//        .frame(height: 55)
-//        .cornerRadius(10)
-//    }
-//}
-
 private struct NotifSetupView: View {
     let model: SettingsModel
     let state: SettingsModelState
@@ -143,6 +120,7 @@ private struct NotifSetupView: View {
                 .bold()
                 .foregroundStyle(.regularText)
                 .padding(.trailing, 10)
+                .disabled(!state.notificationsAuthorized)
 
             if isOn {
                 HStack {
@@ -174,6 +152,62 @@ private struct NotifSetupView: View {
         .background(.sectionBackground)
         .frame(maxWidth: .infinity, minHeight: 55)
         .cornerRadius(10)
+    }
+}
+
+private struct NotificationsNotEnabledView: View {
+    let model: SettingsModel
+
+    var body: some View {
+        Section {
+            VStack(alignment: .center) {
+                Text("""
+                Notifikace nejsou povolené pro tuto aplikace, proto nebudou fungovat. Prosím povolte použití notifikací v nastavení vašeho \
+                zařízení.
+                """
+                )
+                .foregroundStyle(.notificationsNotEnabled)
+                .padding(10)
+
+                Button {
+                    model.coordinator.goToSettings()
+                } label: {
+                    Text("Jít do nastavení")
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 40)
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(0)
+            }
+            .padding(0)
+        }
+        .frame(alignment: .center)
+        .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets())
+    }
+}
+
+private struct SchedulingNotificationsView: View {
+    var body: some View {
+        Section {
+            HStack {
+                Spacer()
+                Text("""
+                Plánuji notifikace...
+                """
+                )
+                .foregroundStyle(.regularText)
+
+                ProgressView()
+                Spacer()
+            }
+            .frame(alignment: .center)
+            .padding(0)
+        }
+        .frame(alignment: .center)
+        .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets())
     }
 }
 

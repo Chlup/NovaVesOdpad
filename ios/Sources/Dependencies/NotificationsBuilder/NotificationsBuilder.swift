@@ -21,17 +21,18 @@ struct NotificationBuilderInput {
     let selectedNotificationHourOnDay: Int
 }
 
-protocol NotificationsBuilder: Actor {
+protocol NotificationsBuilder: Sendable {
     func build(input: NotificationBuilderInput) async
+    func cancelAllNotifications()
 }
 
 extension Container {
     var notificationsBuilder: Factory<NotificationsBuilder> { self { NotificationsBuilderImpl() }.singleton }
 }
 
-actor NotificationsBuilderImpl {
+struct NotificationsBuilderImpl {
     @ObservationIgnored @Injected(\.logger) private var logger
-    
+
     private func scheduleNotification(day: TrashDay, input: NotificationBuilderInput) -> [UNNotificationRequest] {
         var requests: [UNNotificationRequest] = []
 
@@ -41,7 +42,7 @@ actor NotificationsBuilderImpl {
                 offset: -(3 * 24 * 3600),
                 hour: input.selectedNotificationHourThreeDaysBefore,
                 title: "Odvoz odpadu se blíží",
-                body: "Za tři dny se budou vyvážet tyto popelnice:"
+                subtitle: "Za tři dny se budou vyvážet popelnice."
             ) {
                 requests.append(request)
             }
@@ -53,7 +54,7 @@ actor NotificationsBuilderImpl {
                 offset: -(2 * 24 * 3600),
                 hour: input.selectedNotificationHourTwoDaysBefore,
                 title: "Odvoz odpadu se blíží",
-                body: "Za dva dny se budou vyvážet tyto popelnice:"
+                subtitle: "Za dva dny se budou vyvážet popelnice."
             ) {
                 requests.append(request)
             }
@@ -65,7 +66,7 @@ actor NotificationsBuilderImpl {
                 offset: -(1 * 24 * 3600),
                 hour: input.selectedNotificationHourOneDayBefore,
                 title: "Odvoz odpadu je již skoro tady",
-                body: "Zítra se budou vyvážet tyto popelnice:"
+                subtitle: "Zítra se budou vyvážet popelnice:"
             ) {
                 requests.append(request)
             }
@@ -77,7 +78,7 @@ actor NotificationsBuilderImpl {
                 offset: 0,
                 hour: input.selectedNotificationHourOnDay,
                 title: "Dnes se vyváží odpad",
-                body: "Dnes se budou vyvážet tyto popelnice:"
+                subtitle: "Dnes se budou vyvážet popelnice."
             ) {
                 requests.append(request)
             }
@@ -86,7 +87,9 @@ actor NotificationsBuilderImpl {
         return requests
     }
 
-    private func scheduleNotification(day: TrashDay, offset: TimeInterval, hour: Int, title: String, body: String) -> UNNotificationRequest? {
+    private func scheduleNotification(day: TrashDay, offset: TimeInterval, hour: Int, title: String, subtitle: String) -> UNNotificationRequest? {
+        guard !Task.isCancelled else { return nil }
+
         let now = Date()
         guard let scheduleDate = createDateWithSameDay(originalDate: day.date.addingTimeInterval(offset), newHour: hour) else {
             logger.debug("Can't create schedule date for day \(day) \(offset) \(hour)")
@@ -103,11 +106,10 @@ actor NotificationsBuilderImpl {
 
         logger.debug("✅ Scheduling notification for day \(day) offset \(offset) hour \(hour) \(scheduleDate)")
 
-        let finalBody = "\(body)\n\(day.bins.map { $0.title }.joined(separator: "\n"))"
-
         let content = UNMutableNotificationContent()
         content.title = title
-        content.body = finalBody
+        content.subtitle = subtitle
+        content.body = "\(day.bins.map { $0.title }.joined(separator: "\n"))"
         content.sound = .default
 
         // Include minute and second to ensure precise triggering
@@ -136,8 +138,7 @@ actor NotificationsBuilderImpl {
         // Create a new DateComponents with the same day but different hour
         var newComponents = components
         newComponents.hour = newHour
-        newComponents.minute = 40
-
+        newComponents.minute = 0
         newComponents.second = 0
 
         // Create and return the new date
@@ -147,9 +148,10 @@ actor NotificationsBuilderImpl {
 
 extension NotificationsBuilderImpl: NotificationsBuilder {
     func build(input: NotificationBuilderInput) async {
+        logger.debug("NotificationsBuilderImpl running")
+
+        cancelAllNotifications()
         let center = UNUserNotificationCenter.current()
-        center.removeAllPendingNotificationRequests()
-        center.removeAllDeliveredNotifications()
 
         for day in input.days {
             if Task.isCancelled { break }
@@ -164,5 +166,14 @@ extension NotificationsBuilderImpl: NotificationsBuilder {
                 }
             }
         }
+
+        logger.debug("Finished running")
+    }
+
+    func cancelAllNotifications() {
+        logger.debug("Canceling all notifications")
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+        center.removeAllDeliveredNotifications()
     }
 }

@@ -34,6 +34,11 @@
             android:exported="false"
             android:theme="@style/Theme.NovaVesOdpad" />
         
+        <!-- Notification Receiver for scheduled notifications -->
+        <receiver
+            android:name=".notification.NotificationReceiver"
+            android:exported="false" />
+        
         <!-- File provider for sharing PDFs -->
         <provider
             android:name="androidx.core.content.FileProvider"

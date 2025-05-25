@@ -29,7 +29,7 @@ import Factory
     @ObservationIgnored @Injected(\.tasksManager) private var tasks
     @ObservationIgnored @Injected(\.logger) private var logger
 
-    let groupDaysTaskID = UUID().uuidString
+    let groupDaysTaskID = "groupDaysTaskID"
 
     let state: DaysListState
     let coordinator: DaysListCoordinator
