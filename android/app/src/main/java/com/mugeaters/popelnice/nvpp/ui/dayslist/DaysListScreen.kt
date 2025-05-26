@@ -159,7 +159,7 @@ private fun DayView(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp),
+            .height(55.dp),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = appColors.sectionBackground)
     ) {

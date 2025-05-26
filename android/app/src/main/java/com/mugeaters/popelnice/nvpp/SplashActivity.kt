@@ -30,7 +30,7 @@ import kotlinx.coroutines.delay
 class SplashActivity : ComponentActivity() {
     
     companion object {
-        private const val SPLASH_DELAY = 2000L // 2 seconds
+        private const val SPLASH_DELAY = 1000L // 1 second
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +51,7 @@ class SplashActivity : ComponentActivity() {
                     ) {
                         // Logo
                         Image(
-                            painter = painterResource(id = R.drawable.logo),
+                            painter = painterResource(id = R.drawable.splash_logo),
                             contentDescription = "App Logo",
                             modifier = Modifier.size(160.dp)
                         )

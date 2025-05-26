@@ -62,11 +62,11 @@ fun HomeScreen(
     val state by viewModel.state.collectAsState()
     val appColors = LocalAppColors.current
     
-    // Load data when screen appears and when returning to foreground
+    // Load data only on app launch and when returning from background
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
+            if (event == Lifecycle.Event.ON_START) {
                 viewModel.loadData()
             }
         }
@@ -75,11 +75,6 @@ fun HomeScreen(
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
-    }
-    
-    // Initial data load
-    LaunchedEffect(Unit) {
-        viewModel.loadData()
     }
     
     Column(
