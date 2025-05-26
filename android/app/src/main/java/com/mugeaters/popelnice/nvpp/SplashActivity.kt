@@ -40,7 +40,7 @@ class SplashActivity : ComponentActivity() {
             NovaVesOdpadTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = androidx.compose.ui.graphics.Color.White
                 ) {
                     Column(
                         modifier = Modifier

@@ -21,6 +21,7 @@ import java.util.Locale
  * ViewModel state for the Home screen
  */
 data class HomeState(
+    val isLoading: Boolean = true,
     val allDays: List<TrashDay> = emptyList(),
     val firstDay: TrashDay? = null,
     val homeDays: List<TrashDay> = emptyList()
@@ -46,6 +47,10 @@ class HomeViewModel(
      */
     fun loadData() {
         logger.debug("🏠 HomeViewModel.loadData() called")
+        
+        // Set loading state
+        _state.update { it.copy(isLoading = true) }
+        
         tasksManager.addTask(loadDaysTaskId) {
             try {
                 logger.debug("🏠 Generating trash days...")
@@ -62,6 +67,7 @@ class HomeViewModel(
                 
                 _state.update { 
                     it.copy(
+                        isLoading = false,
                         allDays = days,
                         firstDay = firstDay,
                         homeDays = homeDays
@@ -69,6 +75,7 @@ class HomeViewModel(
                 }
             } catch (e: Exception) {
                 logger.error("Failed to generate trash days", e)
+                _state.update { it.copy(isLoading = false) }
             }
         }
     }

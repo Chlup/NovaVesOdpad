@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
 import com.mugeaters.popelnice.nvpp.MainActivity
 import com.mugeaters.popelnice.nvpp.R
@@ -40,9 +41,13 @@ class NotificationReceiver : BroadcastReceiver(), KoinComponent {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         
+        // Create large icon from drawable logo (works better than adaptive icon for notifications)
+        val largeIcon = BitmapFactory.decodeResource(context.resources, R.drawable.logo)
+        
         // Build the notification
         val notification = NotificationCompat.Builder(context, NotificationsBuilderImpl.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_trash)
+            .setLargeIcon(largeIcon)
             .setContentTitle(title)
             .setContentText(content)
             .setStyle(NotificationCompat.BigTextStyle().bigText(content))

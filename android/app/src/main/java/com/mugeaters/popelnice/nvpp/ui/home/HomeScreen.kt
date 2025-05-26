@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -86,12 +87,15 @@ fun HomeScreen(
             .fillMaxSize()
             .background(appColors.screenBackground)
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 1.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ) {
+        if (state.isLoading) {
+            LoadingView()
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp, vertical = 1.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp)
+            ) {
             // Title
             item {
                 TitleView()
@@ -152,6 +156,31 @@ fun HomeScreen(
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
             }
+        }
+        }
+    }
+}
+
+@Composable
+private fun LoadingView() {
+    val appColors = LocalAppColors.current
+    
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            CircularProgressIndicator(
+                color = appColors.regularText
+            )
+            Text(
+                text = "Načítám...",
+                style = MaterialTheme.typography.bodyLarge,
+                color = appColors.regularText
+            )
         }
     }
 }
@@ -334,7 +363,7 @@ private fun DayView(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(40.dp),
+            .height(55.dp),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = appColors.sectionBackground)
     ) {
