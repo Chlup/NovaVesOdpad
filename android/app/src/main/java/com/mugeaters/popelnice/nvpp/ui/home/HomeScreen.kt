@@ -147,8 +147,17 @@ fun HomeScreen(
             item {
                 TrashBinsInfoSection(
                     onInfoClick = onInfoClick,
-                    onSortingGuideClick = onSortingGuideClick,
-                    modifier = Modifier.padding(bottom = 24.dp)
+                    onSortingGuideClick = onSortingGuideClick
+                )
+            }
+            
+            // Disclaimer
+            item {
+                Text(
+                    text = "Tato aplikace nereprezentuje jakoukoli státní nebo obecní entitu. Zdrojem dat v této aplikace je oficiální komunikační kanál obce Nová Ves pod Pleší.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = appColors.grayText,
+                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp)
                 )
             }
         }
