@@ -42,7 +42,7 @@ import Factory
         self.state = state
 
         dayTitleDateFormatter = DateFormatter()
-        dayTitleDateFormatter.dateFormat = "dd. MM. YYYY"
+        dayTitleDateFormatter.dateFormat = "d.M.YYYY"
 
         monthTitleFormatter = DateFormatter()
         monthTitleFormatter.dateFormat = "LLLL YYYY"

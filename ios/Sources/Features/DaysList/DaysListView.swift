@@ -24,22 +24,22 @@ struct DaysListView: View {
                         }
                     } header: {
                         Text(model.titleForMonth(month.date))
-                            .font(.title)
+                            .font(.title3)
                             .bold()
                             .foregroundStyle(.regularText)
                     }
                     .textCase(nil)
                     .listRowBackground(Color.sectionBackground)
-                    .frame(minHeight: 55)
-                    .cornerRadius(10)
+                    .frame(minHeight: 40)
+                    .cornerRadius(14)
                 }
             }
+            .padding(.vertical, 1)
+            .padding(.horizontal, 4)
             .listRowInsets(EdgeInsets())
             .listSectionSpacing(.compact)
             .scrollContentBackground(.hidden)
             .background(.screenBackground)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(0)
             .setupNavigation(model)
             .setupToolbar(model, state)
             .onAppear { model.onAppear() }
@@ -60,6 +60,7 @@ private extension View {
                         model.coordinator.dismiss()
                     } label: {
                         Text("Zpět")
+                            .foregroundStyle(.regularText)
                     }
                 }
             }
@@ -86,9 +87,9 @@ private struct DayView: View {
         HStack {
             Text(model.titleForDay(day.date))
                 .font(.callout)
-                .bold()
 
             Spacer()
+            
             ForEach(day.bins) { bin in
                 BinIconView(bin: bin, size: 30)
             }

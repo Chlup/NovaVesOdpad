@@ -58,12 +58,9 @@ struct SettingsView: View {
                         hour: $state.selectedNotificationHourOnDay
                     )
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                .padding(.horizontal, 24)
             }
             .background(.screenBackground)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(0)
             .setupNavigation(model)
             .setupToolbar(model)
             .onAppear { model.onAppear() }
@@ -87,6 +84,7 @@ private extension View {
                         model.coordinator.dismiss()
                     } label: {
                         Text("Zpět")
+                            .foregroundStyle(.regularText)
                     }
                 }
             }
@@ -102,6 +100,7 @@ private struct TitleView: View {
                 .foregroundStyle(.regularText)
         }
         .listRowBackground(Color.clear)
+        .padding(.top, 20)
     }
 }
 
@@ -116,8 +115,7 @@ private struct NotifSetupView: View {
         VStack(alignment: .leading) {
             Toggle(title, isOn: $isOn)
                 .onChange(of: isOn) { model.notifSettingsChanged() }
-                .font(.title2)
-                .bold()
+                .font(.headline)
                 .foregroundStyle(.regularText)
                 .padding(.trailing, 10)
                 .disabled(!state.notificationsAuthorized)
@@ -141,8 +139,7 @@ private struct NotifSetupView: View {
                             }
                         }
                     }
-                    .padding(0)
-                    .foregroundStyle(.regularText)
+                    .tint(.regularText)
                     .onChange(of: hour) { model.notifSettingsChanged() }
                 }
             }
@@ -151,7 +148,7 @@ private struct NotifSetupView: View {
         .padding(.leading, 5)
         .background(.sectionBackground)
         .frame(maxWidth: .infinity, minHeight: 55)
-        .cornerRadius(10)
+        .cornerRadius(14)
     }
 }
 
@@ -178,9 +175,7 @@ private struct NotificationsNotEnabledView: View {
                         .frame(height: 40)
                 }
                 .buttonStyle(.borderedProminent)
-                .padding(0)
             }
-            .padding(0)
         }
         .frame(alignment: .center)
         .listRowBackground(Color.clear)
@@ -203,7 +198,6 @@ private struct SchedulingNotificationsView: View {
                 Spacer()
             }
             .frame(alignment: .center)
-            .padding(0)
         }
         .frame(alignment: .center)
         .listRowBackground(Color.clear)

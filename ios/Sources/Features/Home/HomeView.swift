@@ -167,15 +167,15 @@ private struct NotificationsButtonView: View {
             }
             .padding(3)
             .foregroundStyle(.buttonLightBackground)
+            .frame(maxWidth: .infinity)
+            .frame(height: 45)
+            .background(.buttonDarkBackground)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.black, lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 45)
-        .background(.buttonDarkBackground)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(.black, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 12))
         .buttonStyle(.plain)
     }
 }
@@ -195,15 +195,15 @@ private struct CalendarButtonView: View {
             }
             .padding(3)
             .foregroundStyle(.regularText)
+            .frame(maxWidth: .infinity)
+            .frame(height: 45)
+            .background(.screenBackground)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(.regularText, lineWidth: 2)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 45)
-        .background(.screenBackground)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(.regularText, lineWidth: 2)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 12))
         .buttonStyle(.plain)
     }
 }
@@ -272,11 +272,11 @@ private struct BinInfoView: View {
                     .font(.callout)
             }
             .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(height: 70)
+            .background(.sectionBackground)
+            .cornerRadius(12)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(height: 70)
-        .background(.sectionBackground)
-        .cornerRadius(12)
         .buttonStyle(.plain)
     }
 }

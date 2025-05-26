@@ -35,14 +35,13 @@ struct TrashInfoView: View {
                                 .padding(.top, 5)
                         }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(0)
+            .padding(.top, 20)
+            .padding(.horizontal, 24)
             .setupNavigation(model)
             .setupToolbar(model)
+            .background(.screenBackground)
         }
     }
 }
@@ -60,6 +59,7 @@ private extension View {
                         model.coordinator.dismiss()
                     } label: {
                         Text("Zpět")
+                            .foregroundStyle(.regularText)
                     }
                 }
             }
