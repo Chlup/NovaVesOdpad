@@ -159,8 +159,8 @@ private fun DayView(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(55.dp),
-        shape = RoundedCornerShape(10.dp),
+            .height(40.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = appColors.sectionBackground)
     ) {
         Row(
@@ -172,7 +172,6 @@ private fun DayView(
             Text(
                 text = viewModel.titleForDay(day.date),
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
                 color = appColors.regularText
             )
             
