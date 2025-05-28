@@ -65,11 +65,11 @@ class SplashActivity : ComponentActivity() {
                         )
                         
                         // Subtitle
-                        Text(
-                            text = "Nová Ves pod Pleší",
-                            fontSize = 17.sp,
-                            modifier = Modifier.padding(top = 10.dp)
-                        )
+//                        Text(
+//                            text = "Nová Ves pod Pleší",
+//                            fontSize = 17.sp,
+//                            modifier = Modifier.padding(top = 10.dp)
+//                        )
                     }
                 }
             }

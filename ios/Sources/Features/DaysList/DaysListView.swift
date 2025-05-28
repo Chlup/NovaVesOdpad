@@ -97,17 +97,17 @@ private struct DayView: View {
     }
 }
 
-#Preview {
-    let homeState = HomeModelState()
-    let homeModel = HomeModelImpl(state: homeState, coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
-
-    let state = DaysListState(allDays: homeState.allDays)
-    let model = DaysListModelImpl(state: state, coordinator: DaysListCoordinator(coordinator: GlobalCoordinatorImpl()))
-    DaysListView(model: model, state: state)
-        .onAppear {
-            homeModel.loadDays()
-            state.allDays = homeState.allDays
-            model.groupDays()
-        }
-}
+//#Preview {
+//    let homeState = HomeModelState()
+//    let homeModel = HomeModelImpl(state: homeState, coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
+//
+//    let state = DaysListState(allDays: homeState.allDays)
+//    let model = DaysListModelImpl(state: state, coordinator: DaysListCoordinator(coordinator: GlobalCoordinatorImpl()))
+//    DaysListView(model: model, state: state)
+//        .onAppear {
+//            homeModel.loadDays()
+//            state.allDays = homeState.allDays
+//            model.groupDays()
+//        }
+//}
 

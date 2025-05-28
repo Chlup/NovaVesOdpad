@@ -96,6 +96,7 @@ fun HomeScreen(
                 TitleView()
             }
             
+            
             // Next trash day - prominent display
             item {
                 state.firstDay?.let { firstDay ->
@@ -154,12 +155,13 @@ fun HomeScreen(
             // Disclaimer
             item {
                 Text(
-                    text = "Tato aplikace nereprezentuje jakoukoli státní nebo obecní entitu. Zdrojem dat v této aplikace je oficiální komunikační kanál obce Nová Ves pod Pleší.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = appColors.grayText,
-                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp)
+                    text = "Tato aplikace není oficiálně spojena s žádnou vládní, obecní nebo jinou veřejnou institucí. Nejedná se o oficiální aplikaci obce Nová Ves pod Pleší, ani žádného jiného správního orgánu.\n\nVeškeré informace obsažené v této aplikaci byly shromážděny z veřejně dostupných zdrojů, konkrétně:\n\n- z oficiálních sociálních sítí obce Nová Ves pod Pleší,\n- na z webových stránek projektu www.jaktridit.cz.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = appColors.regularText,
+                    modifier = Modifier.padding(vertical = 12.dp)
                 )
             }
+            
         }
         }
     }
