@@ -153,7 +153,11 @@ extension NotificationsBuilderImpl: NotificationsBuilder {
         cancelAllNotifications()
         let center = UNUserNotificationCenter.current()
 
-        for day in input.days {
+        let count = min(5, input.days.count)
+
+//        for day in input.days {
+        for i in 0..<count {
+            let day = input.days[i]
             if Task.isCancelled { break }
             let dayRequests = scheduleNotification(day: day, input: input)
             for request in dayRequests {
