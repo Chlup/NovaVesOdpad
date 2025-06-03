@@ -91,7 +91,9 @@ fun NotificationTimeSelector(
     onHourSelected: (Int) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val selectedHourLabel = if (selectedHour < 10) "0$selectedHour:00" else "$selectedHour:00"
+    val selectedHourLabel = remember(selectedHour) {
+        if (selectedHour < 10) "0$selectedHour:00" else "$selectedHour:00"
+    }
     val appColors = LocalAppColors.current
     
     Row(

@@ -13,23 +13,33 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -37,6 +47,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.mugeaters.popelnice.nvpp.model.NotificationDayOffset
+import com.mugeaters.popelnice.nvpp.model.NotificationHour
 import com.mugeaters.popelnice.nvpp.model.TrashDay
 import com.mugeaters.popelnice.nvpp.ui.theme.LocalAppColors
 import org.koin.androidx.compose.koinViewModel
@@ -180,65 +192,146 @@ fun SettingsScreen(
                     }
                 }
                 
-                // Three days before
+                // Single notification setup
                 item {
-                    NotificationSetupItem(
-                        title = "Tři dny předem",
-                        isEnabled = state.notificationEnabledThreeDaysBefore,
-                        selectedHour = state.selectedNotificationHourThreeDaysBefore,
+                    SingleNotificationSetupCard(
+                        isEnabled = state.notificationEnabled,
+                        selectedDaysOffset = state.notificationDaysOffset,
+                        selectedHour = state.selectedNotificationHour,
+                        availableDayOffsets = state.notificationDayOffsets,
                         availableHours = state.notificationHours,
-                        onEnabledChanged = { enabled -> 
-                            viewModel.setNotificationEnabledThreeDaysBefore(enabled, permissionLauncher) 
-                        },
-                        onHourSelected = viewModel::setSelectedNotificationHourThreeDaysBefore,
+                        onEnabledChanged = viewModel::setNotificationEnabled,
+                        onDaysOffsetSelected = viewModel::setNotificationDaysOffset,
+                        onHourSelected = viewModel::setSelectedNotificationHour,
                         permissionsAuthorized = state.notificationsAuthorized
                     )
                 }
+            }
+        }
+    }
+}
+
+/**
+ * Simplified notification setup card for single notification (matching iOS)
+ */
+@Composable
+fun SingleNotificationSetupCard(
+    isEnabled: Boolean,
+    selectedDaysOffset: Int,
+    selectedHour: Int,
+    availableDayOffsets: List<NotificationDayOffset>,
+    availableHours: List<NotificationHour>,
+    onEnabledChanged: (Boolean) -> Unit,
+    onDaysOffsetSelected: (Int) -> Unit,
+    onHourSelected: (Int) -> Unit,
+    permissionsAuthorized: Boolean = true
+) {
+    val appColors = LocalAppColors.current
+    
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = appColors.sectionBackground)
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp)
+        ) {
+            // Enable/disable toggle
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Notifikace",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = appColors.regularText,
+                    modifier = Modifier.weight(1f)
+                )
                 
-                // Two days before
-                item {
-                    NotificationSetupItem(
-                        title = "Dva dny předem",
-                        isEnabled = state.notificationEnabledTwoDaysBefore,
-                        selectedHour = state.selectedNotificationHourTwoDaysBefore,
-                        availableHours = state.notificationHours,
-                        onEnabledChanged = { enabled -> 
-                            viewModel.setNotificationEnabledTwoDaysBefore(enabled, permissionLauncher) 
-                        },
-                        onHourSelected = viewModel::setSelectedNotificationHourTwoDaysBefore,
-                        permissionsAuthorized = state.notificationsAuthorized
-                    )
-                }
+                Switch(
+                    checked = isEnabled,
+                    onCheckedChange = if (permissionsAuthorized) onEnabledChanged else { _ -> },
+                    enabled = permissionsAuthorized
+                )
+            }
+            
+            // Day offset and hour selectors - only shown if notifications are enabled
+            if (isEnabled) {
+                // Day offset selector
+                DayOffsetSelector(
+                    selectedDaysOffset = selectedDaysOffset,
+                    availableDayOffsets = availableDayOffsets,
+                    onDaysOffsetSelected = onDaysOffsetSelected
+                )
                 
-                // One day before
-                item {
-                    NotificationSetupItem(
-                        title = "Jeden den předem",
-                        isEnabled = state.notificationEnabledOneDayBefore,
-                        selectedHour = state.selectedNotificationHourOneDayBefore,
-                        availableHours = state.notificationHours,
-                        onEnabledChanged = { enabled -> 
-                            viewModel.setNotificationEnabledOneDayBefore(enabled, permissionLauncher) 
-                        },
-                        onHourSelected = viewModel::setSelectedNotificationHourOneDayBefore,
-                        permissionsAuthorized = state.notificationsAuthorized
-                    )
-                }
+                Spacer(modifier = Modifier.height(8.dp))
                 
-                // On the day
-                item {
-                    NotificationSetupItem(
-                        title = "V den svozu",
-                        isEnabled = state.notificationEnabledOnDay,
-                        selectedHour = state.selectedNotificationHourOnDay,
-                        availableHours = state.notificationHours,
-                        onEnabledChanged = { enabled -> 
-                            viewModel.setNotificationEnabledOnDay(enabled, permissionLauncher) 
-                        },
-                        onHourSelected = viewModel::setSelectedNotificationHourOnDay,
-                        permissionsAuthorized = state.notificationsAuthorized
-                    )
-                }
+                // Hour selector
+                NotificationTimeSelector(
+                    selectedHour = selectedHour,
+                    availableHours = availableHours,
+                    onHourSelected = onHourSelected
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Day offset selector dropdown
+ */
+@Composable
+fun DayOffsetSelector(
+    selectedDaysOffset: Int,
+    availableDayOffsets: List<NotificationDayOffset>,
+    onDaysOffsetSelected: (Int) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val selectedOffsetLabel = remember(selectedDaysOffset, availableDayOffsets) {
+        availableDayOffsets.find { it.daysOffset == selectedDaysOffset }?.title ?: "V den vývozu"
+    }
+    val appColors = LocalAppColors.current
+    
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+    ) {
+        Text(
+            text = "Kdy upozornit",
+            style = MaterialTheme.typography.bodyMedium,
+            color = appColors.regularText,
+            modifier = Modifier.weight(1f)
+        )
+        
+        Spacer(modifier = Modifier.weight(1f))
+        
+        OutlinedButton(onClick = { expanded = true }) {
+            Text(
+                text = selectedOffsetLabel,
+                color = appColors.regularText
+            )
+        }
+        
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            availableDayOffsets.forEach { dayOffset ->
+                DropdownMenuItem(
+                    text = { 
+                        Text(
+                            text = dayOffset.title,
+                            color = appColors.regularText
+                        ) 
+                    },
+                    onClick = {
+                        onDaysOffsetSelected(dayOffset.daysOffset)
+                        expanded = false
+                    }
+                )
             }
         }
     }

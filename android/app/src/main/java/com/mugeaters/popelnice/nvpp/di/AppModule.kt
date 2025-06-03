@@ -29,7 +29,7 @@ val appModule = module {
     single<PreferencesManager> { SharedPreferencesManager(androidContext()) }
     
     // ViewModels
-    viewModel { HomeViewModel(get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel(androidContext(), get(), get(), get(), get()) }
     viewModel { (sections: List<com.mugeaters.popelnice.nvpp.model.TrashInfoSection>) -> 
         TrashInfoViewModel(sections)

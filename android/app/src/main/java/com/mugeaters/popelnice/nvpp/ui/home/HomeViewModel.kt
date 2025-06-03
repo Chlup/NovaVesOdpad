@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mugeaters.popelnice.nvpp.model.TrashDay
 import com.mugeaters.popelnice.nvpp.model.TrashInfoSection
+import com.mugeaters.popelnice.nvpp.service.NotificationBuilderInput
+import com.mugeaters.popelnice.nvpp.service.NotificationsBuilder
+import com.mugeaters.popelnice.nvpp.ui.settings.PreferencesManager
 import com.mugeaters.popelnice.nvpp.util.Logger
 import com.mugeaters.popelnice.nvpp.util.TasksManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +35,9 @@ data class HomeState(
  */
 class HomeViewModel(
     private val tasksManager: TasksManager,
-    private val logger: Logger
+    private val logger: Logger,
+    private val notificationsBuilder: NotificationsBuilder,
+    private val preferencesManager: PreferencesManager
 ) : ViewModel() {
     
     private val _state = MutableStateFlow(HomeState())
@@ -41,6 +46,10 @@ class HomeViewModel(
     private val dayTitleFormatter = DateTimeFormatter.ofPattern("d. MMMM", Locale.getDefault())
     private val nextDayTitleFormatter = DateTimeFormatter.ofPattern("EEEE, d. MMMM", Locale.getDefault())
     private val loadDaysTaskId = "load_days_task"
+    private val rescheduleNotificationsTaskId = "reschedule_notifications_task"
+    
+    // Flag to ensure notifications are only rescheduled once per session
+    private var notificationsRescheduled = false
     
     /**
      * Loads trash days data using programmatic generation (like iOS app)
@@ -73,6 +82,13 @@ class HomeViewModel(
                         homeDays = homeDays
                     ) 
                 }
+                
+                // Reschedule notifications once per session (like iOS) but asynchronously to avoid blocking startup
+                if (!notificationsRescheduled) {
+                    logger.debug("🔔 Triggering async notification reschedule on app startup")
+                    rescheduleNotificationsAsync(days)
+                    notificationsRescheduled = true
+                }
             } catch (e: Exception) {
                 logger.error("Failed to generate trash days", e)
                 _state.update { it.copy(isLoading = false) }
@@ -84,7 +100,7 @@ class HomeViewModel(
      * Generates trash collection days programmatically
      * Algorithm matches iOS implementation - every Wednesday, alternating bin types based on week number
      */
-    private fun generateTrashDays(): List<TrashDay> {
+    fun generateTrashDays(): List<TrashDay> {
         val now = LocalDateTime.now()
         val nextWednesday = getNextWednesday(now)
         
@@ -245,8 +261,41 @@ V souvislosti s tímto odpadem se můžeme setkat také s označením zbytkový 
         )
     }
     
+    /**
+     * Reschedules notifications asynchronously to avoid blocking app startup
+     */
+    private fun rescheduleNotificationsAsync(days: List<TrashDay>) {
+        // Launch in a separate coroutine to avoid blocking the data loading
+        viewModelScope.launch {
+            try {
+                logger.debug("🔔 Starting background notification reschedule")
+                
+                // Get current settings
+                val settings = preferencesManager.getNotificationSettings()
+                
+                // Build notifications input
+                val input = NotificationBuilderInput(
+                    days = days,
+                    notificationEnabled = settings.notificationEnabled,
+                    notificationDaysOffset = settings.notificationDaysOffset,
+                    selectedNotificationHour = settings.selectedNotificationHour
+                )
+                
+                logger.debug("🔔 Calling NotificationsBuilder with settings: enabled=${settings.notificationEnabled}")
+                
+                // Schedule notifications
+                notificationsBuilder.build(input)
+                
+                logger.debug("✅ Background notification reschedule completed")
+            } catch (e: Exception) {
+                logger.error("Failed to reschedule notifications in background", e)
+            }
+        }
+    }
+    
     override fun onCleared() {
         super.onCleared()
         tasksManager.cancelTask(loadDaysTaskId)
+        tasksManager.cancelTask(rescheduleNotificationsTaskId)
     }
 }

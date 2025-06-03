@@ -13,7 +13,28 @@ data class NotificationHour(
     
     companion object {
         fun createDefaultHours(): List<NotificationHour> {
-            return (7..20).map { NotificationHour(it) }
+            return (5..23).map { NotificationHour(it) }
+        }
+    }
+}
+
+/**
+ * Model representing notification day offset options
+ */
+data class NotificationDayOffset(
+    val daysOffset: Int,
+    val title: String
+) {
+    val id: String = daysOffset.toString()
+    
+    companion object {
+        fun createDefaultOptions(): List<NotificationDayOffset> {
+            return listOf(
+                NotificationDayOffset(3, "Tři dny předem"),
+                NotificationDayOffset(2, "Dva dny předem"),
+                NotificationDayOffset(1, "Den předem"),
+                NotificationDayOffset(0, "V den vývozu")
+            )
         }
     }
 }

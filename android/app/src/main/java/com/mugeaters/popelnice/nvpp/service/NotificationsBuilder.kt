@@ -11,6 +11,7 @@ import android.provider.Settings
 import com.mugeaters.popelnice.nvpp.model.TrashDay
 import com.mugeaters.popelnice.nvpp.notification.NotificationReceiver
 import com.mugeaters.popelnice.nvpp.util.Logger
+import kotlinx.coroutines.yield
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
@@ -20,14 +21,9 @@ import java.util.Date
  */
 data class NotificationBuilderInput(
     val days: List<TrashDay>,
-    val notificationEnabledThreeDaysBefore: Boolean,
-    val selectedNotificationHourThreeDaysBefore: Int,
-    val notificationEnabledTwoDaysBefore: Boolean,
-    val selectedNotificationHourTwoDaysBefore: Int,
-    val notificationEnabledOneDayBefore: Boolean,
-    val selectedNotificationHourOneDayBefore: Int,
-    val notificationEnabledOnDay: Boolean,
-    val selectedNotificationHourOnDay: Int
+    val notificationEnabled: Boolean,
+    val notificationDaysOffset: Int,
+    val selectedNotificationHour: Int
 )
 
 /**
@@ -49,7 +45,7 @@ class NotificationsBuilderImpl(
 ) : NotificationsBuilder {
     
     override suspend fun build(input: NotificationBuilderInput) {
-        logger.debug("🔔 NotificationsBuilder.build() called with ${input.days.size} days")
+        logger.debug("🔔 NotificationsBuilder.build() called with ${input.days.size} days, enabled: ${input.notificationEnabled}, offset: ${input.notificationDaysOffset}, hour: ${input.selectedNotificationHour}")
         
         // Create notification channel if needed (for Android 8.0+)
         createNotificationChannel()
@@ -57,17 +53,34 @@ class NotificationsBuilderImpl(
         // Cancel all existing notifications
         cancelAllNotifications()
         
-        // Schedule new notifications
-        for (day in input.days) {
+        // If notifications are disabled, just return after canceling
+        if (!input.notificationEnabled) {
+            logger.debug("Notifications disabled, not scheduling any")
+            return
+        }
+        
+        // Schedule new notifications for all available days
+        var scheduledCount = 0
+        var skippedCount = 0
+        
+        for ((index, day) in input.days.withIndex()) {
+            // Yield every 10 iterations to prevent blocking
+            if (index % 10 == 0) {
+                yield()
+            }
+            
             logger.debug("📅 Processing day: ${day.date} with bins: ${day.bins.map { it.title }}")
-            val requests = scheduleNotificationsForDay(day, input)
-            logger.debug("📝 Created ${requests.size} notification requests for ${day.date}")
-            for (request in requests) {
+            val request = scheduleNotificationForDay(day, input)
+            if (request != null) {
+                logger.debug("📝 Created notification request for ${day.date}")
                 scheduleNotification(request)
+                scheduledCount++
+            } else {
+                skippedCount++
             }
         }
         
-        logger.debug("✅ NotificationsBuilder.build() completed")
+        logger.debug("✅ NotificationsBuilder.build() completed: scheduled $scheduledCount notifications, skipped $skippedCount")
     }
     
     override suspend fun cancelAll() {
@@ -109,57 +122,39 @@ class NotificationsBuilderImpl(
         notificationManager.cancelAll()
     }
     
-    private fun scheduleNotificationsForDay(
+    private fun scheduleNotificationForDay(
         day: TrashDay, 
         input: NotificationBuilderInput
-    ): List<NotificationRequest> {
-        val requests = mutableListOf<NotificationRequest>()
+    ): NotificationRequest? {
+        val title: String
+        val body: String
         
-        // Three days before
-        if (input.notificationEnabledThreeDaysBefore) {
-            createNotificationRequest(
-                day = day,
-                offsetDays = -3,
-                hour = input.selectedNotificationHourThreeDaysBefore,
-                title = "Odvoz odpadu se blíží",
-                body = "Za tři dny se budou vyvážet tyto popelnice:"
-            )?.let { requests.add(it) }
-        }
-        
-        // Two days before
-        if (input.notificationEnabledTwoDaysBefore) {
-            createNotificationRequest(
-                day = day,
-                offsetDays = -2,
-                hour = input.selectedNotificationHourTwoDaysBefore,
-                title = "Odvoz odpadu se blíží",
-                body = "Za dva dny se budou vyvážet tyto popelnice:"
-            )?.let { requests.add(it) }
-        }
-        
-        // One day before
-        if (input.notificationEnabledOneDayBefore) {
-            createNotificationRequest(
-                day = day,
-                offsetDays = -1,
-                hour = input.selectedNotificationHourOneDayBefore,
-                title = "Odvoz odpadu je již skoro tady",
-                body = "Zítra se budou vyvážet tyto popelnice:"
-            )?.let { requests.add(it) }
-        }
-        
-        // On the day
-        if (input.notificationEnabledOnDay) {
-            createNotificationRequest(
-                day = day,
-                offsetDays = 0,
-                hour = input.selectedNotificationHourOnDay,
-                title = "Dnes se vyváží odpad",
+        when (input.notificationDaysOffset) {
+            0 -> {
+                title = "Dnes se vyváží odpad"
                 body = "Dnes se budou vyvážet tyto popelnice:"
-            )?.let { requests.add(it) }
+            }
+            1 -> {
+                title = "Odvoz odpadu je již skoro tady"
+                body = "Zítra se budou vyvážet tyto popelnice:"
+            }
+            2 -> {
+                title = "Odvoz odpadu se blíží"
+                body = "Za dva dny se budou vyvážet tyto popelnice:"
+            }
+            else -> {
+                title = "Odvoz odpadu se blíží"
+                body = "Za tři dny se budou vyvážet tyto popelnice:"
+            }
         }
         
-        return requests
+        return createNotificationRequest(
+            day = day,
+            offsetDays = -input.notificationDaysOffset,
+            hour = input.selectedNotificationHour,
+            title = title,
+            body = body
+        )
     }
     
     private fun createNotificationRequest(

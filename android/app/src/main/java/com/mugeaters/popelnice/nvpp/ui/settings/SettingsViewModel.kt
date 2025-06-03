@@ -17,12 +17,14 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mugeaters.popelnice.nvpp.model.NotificationHour
+import com.mugeaters.popelnice.nvpp.model.NotificationDayOffset
 import com.mugeaters.popelnice.nvpp.model.TrashDay
 import com.mugeaters.popelnice.nvpp.service.NotificationBuilderInput
 import com.mugeaters.popelnice.nvpp.service.NotificationsBuilder
 import com.mugeaters.popelnice.nvpp.util.Logger
 import com.mugeaters.popelnice.nvpp.util.TasksManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,28 +40,15 @@ data class SettingsState(
     val permissionExplicitlyDenied: Boolean = false,
     val shouldShowSystemSettingsPrompt: Boolean = false,
     val notificationHours: List<NotificationHour> = NotificationHour.createDefaultHours(),
+    val notificationDayOffsets: List<NotificationDayOffset> = NotificationDayOffset.createDefaultOptions(),
     
-    val notificationEnabledThreeDaysBefore: Boolean = false,
-    val selectedNotificationHourThreeDaysBefore: Int = 8,
-    
-    val notificationEnabledTwoDaysBefore: Boolean = false,
-    val selectedNotificationHourTwoDaysBefore: Int = 8,
-    
-    val notificationEnabledOneDayBefore: Boolean = false,
-    val selectedNotificationHourOneDayBefore: Int = 8,
-    
-    val notificationEnabledOnDay: Boolean = false,
-    val selectedNotificationHourOnDay: Int = 8,
+    val notificationEnabled: Boolean = false,
+    val notificationDaysOffset: Int = 0,
+    val selectedNotificationHour: Int = 8,
     
     val days: List<TrashDay> = emptyList(),
     val schedulingNotificationsInProgress: Boolean = false
-) {
-    val notificationsEnabledForAnyDay: Boolean
-        get() = notificationEnabledThreeDaysBefore || 
-                notificationEnabledTwoDaysBefore || 
-                notificationEnabledOneDayBefore || 
-                notificationEnabledOnDay
-}
+)
 
 /**
  * ViewModel for the Settings screen
@@ -89,19 +78,15 @@ class SettingsViewModel(
         val settings = preferencesManager.getNotificationSettings()
         _state.update { 
             it.copy(
-                notificationEnabledThreeDaysBefore = settings.notificationEnabledThreeDaysBefore,
-                selectedNotificationHourThreeDaysBefore = settings.selectedNotificationHourThreeDaysBefore,
-                
-                notificationEnabledTwoDaysBefore = settings.notificationEnabledTwoDaysBefore,
-                selectedNotificationHourTwoDaysBefore = settings.selectedNotificationHourTwoDaysBefore,
-                
-                notificationEnabledOneDayBefore = settings.notificationEnabledOneDayBefore,
-                selectedNotificationHourOneDayBefore = settings.selectedNotificationHourOneDayBefore,
-                
-                notificationEnabledOnDay = settings.notificationEnabledOnDay,
-                selectedNotificationHourOnDay = settings.selectedNotificationHourOnDay
+                notificationEnabled = settings.notificationEnabled,
+                notificationDaysOffset = settings.notificationDaysOffset,
+                selectedNotificationHour = settings.selectedNotificationHour
             )
         }
+        
+        // Reschedule notifications when settings screen is opened (like iOS app startup)
+        logger.debug("⚙️ Settings loaded, triggering notification reschedule")
+        rescheduleNotificationsIfNeeded()
     }
     
     /**
@@ -196,20 +181,14 @@ class SettingsViewModel(
     fun notificationSettingsChanged() {
         val currentState = state.value
         
+        logger.debug("📝 Notification settings changed: enabled=${currentState.notificationEnabled}, offset=${currentState.notificationDaysOffset}, hour=${currentState.selectedNotificationHour}")
+        
         // Save settings to preferences (even if permission denied - user can see warning)
         preferencesManager.saveNotificationSettings(
             NotificationSettings(
-                notificationEnabledThreeDaysBefore = currentState.notificationEnabledThreeDaysBefore,
-                selectedNotificationHourThreeDaysBefore = currentState.selectedNotificationHourThreeDaysBefore,
-                
-                notificationEnabledTwoDaysBefore = currentState.notificationEnabledTwoDaysBefore,
-                selectedNotificationHourTwoDaysBefore = currentState.selectedNotificationHourTwoDaysBefore,
-                
-                notificationEnabledOneDayBefore = currentState.notificationEnabledOneDayBefore,
-                selectedNotificationHourOneDayBefore = currentState.selectedNotificationHourOneDayBefore,
-                
-                notificationEnabledOnDay = currentState.notificationEnabledOnDay,
-                selectedNotificationHourOnDay = currentState.selectedNotificationHourOnDay
+                notificationEnabled = currentState.notificationEnabled,
+                notificationDaysOffset = currentState.notificationDaysOffset,
+                selectedNotificationHour = currentState.selectedNotificationHour
             )
         )
         
@@ -219,67 +198,53 @@ class SettingsViewModel(
     }
     
     /**
-     * Sets the notification enabled state for three days before
+     * Sets whether notifications are enabled
      */
-    fun setNotificationEnabledThreeDaysBefore(enabled: Boolean, permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null) {
-        _state.update { it.copy(notificationEnabledThreeDaysBefore = enabled) }
+    fun setNotificationEnabled(enabled: Boolean) {
+        logger.debug("🔧 User changed notification enabled to: $enabled")
+        _state.update { it.copy(notificationEnabled = enabled) }
         notificationSettingsChanged()
     }
     
     /**
-     * Sets the notification hour for three days before
+     * Sets the notification day offset (0 = on day, 1 = one day before, etc.)
      */
-    fun setSelectedNotificationHourThreeDaysBefore(hour: Int) {
-        _state.update { it.copy(selectedNotificationHourThreeDaysBefore = hour) }
+    fun setNotificationDaysOffset(daysOffset: Int) {
+        logger.debug("🔧 User changed notification days offset to: $daysOffset")
+        _state.update { it.copy(notificationDaysOffset = daysOffset) }
         notificationSettingsChanged()
     }
     
     /**
-     * Sets the notification enabled state for two days before
+     * Sets the notification hour
      */
-    fun setNotificationEnabledTwoDaysBefore(enabled: Boolean, permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null) {
-        _state.update { it.copy(notificationEnabledTwoDaysBefore = enabled) }
+    fun setSelectedNotificationHour(hour: Int) {
+        logger.debug("🔧 User changed notification hour to: $hour")
+        _state.update { it.copy(selectedNotificationHour = hour) }
         notificationSettingsChanged()
     }
     
     /**
-     * Sets the notification hour for two days before
+     * Manually reschedules all notifications (like iOS app startup behavior)
+     * This can be called when the settings screen is opened to ensure notifications are up to date
      */
-    fun setSelectedNotificationHourTwoDaysBefore(hour: Int) {
-        _state.update { it.copy(selectedNotificationHourTwoDaysBefore = hour) }
-        notificationSettingsChanged()
-    }
-    
-    /**
-     * Sets the notification enabled state for one day before
-     */
-    fun setNotificationEnabledOneDayBefore(enabled: Boolean, permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null) {
-        _state.update { it.copy(notificationEnabledOneDayBefore = enabled) }
-        notificationSettingsChanged()
-    }
-    
-    /**
-     * Sets the notification hour for one day before
-     */
-    fun setSelectedNotificationHourOneDayBefore(hour: Int) {
-        _state.update { it.copy(selectedNotificationHourOneDayBefore = hour) }
-        notificationSettingsChanged()
-    }
-    
-    /**
-     * Sets the notification enabled state for the day of collection
-     */
-    fun setNotificationEnabledOnDay(enabled: Boolean, permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null) {
-        _state.update { it.copy(notificationEnabledOnDay = enabled) }
-        notificationSettingsChanged()
-    }
-    
-    /**
-     * Sets the notification hour for the day of collection
-     */
-    fun setSelectedNotificationHourOnDay(hour: Int) {
-        _state.update { it.copy(selectedNotificationHourOnDay = hour) }
-        notificationSettingsChanged()
+    fun rescheduleNotificationsIfNeeded() {
+        val currentState = state.value
+        logger.debug("🔄 Checking if notifications need rescheduling: authorized=${currentState.notificationsAuthorized}, days=${currentState.days.size}")
+        
+        if (currentState.notificationsAuthorized && currentState.days.isNotEmpty()) {
+            logger.debug("🔄 Triggering notification reschedule in background")
+            // Launch on background thread to avoid blocking UI
+            viewModelScope.launch {
+                try {
+                    executeScheduleNotifications(currentState)
+                } catch (e: Exception) {
+                    logger.error("Failed to reschedule notifications", e)
+                }
+            }
+        } else {
+            logger.debug("🔄 Skipping notification reschedule: not authorized or no days available")
+        }
     }
     
     /**
@@ -287,21 +252,31 @@ class SettingsViewModel(
      * Thread-safe implementation that cancels previous scheduling task before starting a new one
      */
     private fun scheduleNotifications() {
+        logger.debug("🔄 Starting notification scheduling with progress indicator")
+        
         // Show progress indicator immediately on main thread
         _state.update { it.copy(schedulingNotificationsInProgress = true) }
         
-        // Launch scheduling on background thread to avoid blocking UI
+        // Launch scheduling on IO dispatcher to avoid blocking UI
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                // Small delay to allow UI to update with progress indicator
+                delay(50)
+                
                 // Cancel any previous scheduling task and wait for completion
                 tasksManager.cancelTaskAndWait(scheduleNotificationsTaskId)
                 
-                // Execute the actual scheduling
+                // Execute the actual scheduling on IO thread
                 executeScheduleNotifications(state.value)
+                
+                logger.debug("🔄 Notification scheduling completed")
+            } catch (e: Exception) {
+                logger.error("Failed to schedule notifications", e)
             } finally {
                 // Hide progress indicator on main thread
                 withContext(Dispatchers.Main) {
                     _state.update { it.copy(schedulingNotificationsInProgress = false) }
+                    logger.debug("🔄 Progress indicator hidden")
                 }
             }
         }
@@ -314,8 +289,8 @@ class SettingsViewModel(
             return
         }
         
-        // If no notifications are enabled, cancel all notifications
-        if (!currentState.notificationsEnabledForAnyDay) {
+        // If notifications are not enabled, cancel all notifications
+        if (!currentState.notificationEnabled) {
             notificationsBuilder.cancelAll()
             return
         }
@@ -323,14 +298,9 @@ class SettingsViewModel(
         logger.debug("Running notifications schedule")
         val input = NotificationBuilderInput(
             days = currentState.days,
-            notificationEnabledThreeDaysBefore = currentState.notificationEnabledThreeDaysBefore,
-            selectedNotificationHourThreeDaysBefore = currentState.selectedNotificationHourThreeDaysBefore,
-            notificationEnabledTwoDaysBefore = currentState.notificationEnabledTwoDaysBefore,
-            selectedNotificationHourTwoDaysBefore = currentState.selectedNotificationHourTwoDaysBefore,
-            notificationEnabledOneDayBefore = currentState.notificationEnabledOneDayBefore,
-            selectedNotificationHourOneDayBefore = currentState.selectedNotificationHourOneDayBefore,
-            notificationEnabledOnDay = currentState.notificationEnabledOnDay,
-            selectedNotificationHourOnDay = currentState.selectedNotificationHourOnDay
+            notificationEnabled = currentState.notificationEnabled,
+            notificationDaysOffset = currentState.notificationDaysOffset,
+            selectedNotificationHour = currentState.selectedNotificationHour
         )
         
         notificationsBuilder.build(input)
@@ -346,17 +316,9 @@ class SettingsViewModel(
  * Data class for storing notification settings
  */
 data class NotificationSettings(
-    val notificationEnabledThreeDaysBefore: Boolean = false,
-    val selectedNotificationHourThreeDaysBefore: Int = 8,
-    
-    val notificationEnabledTwoDaysBefore: Boolean = false,
-    val selectedNotificationHourTwoDaysBefore: Int = 8,
-    
-    val notificationEnabledOneDayBefore: Boolean = false,
-    val selectedNotificationHourOneDayBefore: Int = 8,
-    
-    val notificationEnabledOnDay: Boolean = false,
-    val selectedNotificationHourOnDay: Int = 8
+    val notificationEnabled: Boolean = false,
+    val notificationDaysOffset: Int = 0,
+    val selectedNotificationHour: Int = 8
 )
 
 /**
@@ -377,50 +339,26 @@ class SharedPreferencesManager(context: Context) : PreferencesManager {
     
     override fun getNotificationSettings(): NotificationSettings {
         return NotificationSettings(
-            notificationEnabledThreeDaysBefore = preferences.getBoolean(KEY_NOTIF_ENABLED_3_DAYS, false),
-            selectedNotificationHourThreeDaysBefore = preferences.getInt(KEY_NOTIF_HOUR_3_DAYS, 8),
-            
-            notificationEnabledTwoDaysBefore = preferences.getBoolean(KEY_NOTIF_ENABLED_2_DAYS, false),
-            selectedNotificationHourTwoDaysBefore = preferences.getInt(KEY_NOTIF_HOUR_2_DAYS, 8),
-            
-            notificationEnabledOneDayBefore = preferences.getBoolean(KEY_NOTIF_ENABLED_1_DAY, false),
-            selectedNotificationHourOneDayBefore = preferences.getInt(KEY_NOTIF_HOUR_1_DAY, 8),
-            
-            notificationEnabledOnDay = preferences.getBoolean(KEY_NOTIF_ENABLED_0_DAYS, false),
-            selectedNotificationHourOnDay = preferences.getInt(KEY_NOTIF_HOUR_0_DAYS, 8)
+            notificationEnabled = preferences.getBoolean(KEY_NOTIF_ENABLED, false),
+            notificationDaysOffset = preferences.getInt(KEY_NOTIF_DAYS_OFFSET, 0),
+            selectedNotificationHour = preferences.getInt(KEY_NOTIF_HOUR, 8)
         )
     }
     
     override fun saveNotificationSettings(settings: NotificationSettings) {
         preferences.edit().apply {
-            putBoolean(KEY_NOTIF_ENABLED_3_DAYS, settings.notificationEnabledThreeDaysBefore)
-            putInt(KEY_NOTIF_HOUR_3_DAYS, settings.selectedNotificationHourThreeDaysBefore)
-            
-            putBoolean(KEY_NOTIF_ENABLED_2_DAYS, settings.notificationEnabledTwoDaysBefore)
-            putInt(KEY_NOTIF_HOUR_2_DAYS, settings.selectedNotificationHourTwoDaysBefore)
-            
-            putBoolean(KEY_NOTIF_ENABLED_1_DAY, settings.notificationEnabledOneDayBefore)
-            putInt(KEY_NOTIF_HOUR_1_DAY, settings.selectedNotificationHourOneDayBefore)
-            
-            putBoolean(KEY_NOTIF_ENABLED_0_DAYS, settings.notificationEnabledOnDay)
-            putInt(KEY_NOTIF_HOUR_0_DAYS, settings.selectedNotificationHourOnDay)
+            putBoolean(KEY_NOTIF_ENABLED, settings.notificationEnabled)
+            putInt(KEY_NOTIF_DAYS_OFFSET, settings.notificationDaysOffset)
+            putInt(KEY_NOTIF_HOUR, settings.selectedNotificationHour)
         }.apply()
     }
     
     companion object {
         private const val PREFERENCES_NAME = "nova_ves_odpad_prefs"
         
-        private const val KEY_NOTIF_ENABLED_3_DAYS = "notification_enabled_3_days"
-        private const val KEY_NOTIF_HOUR_3_DAYS = "notification_hour_3_days"
-        
-        private const val KEY_NOTIF_ENABLED_2_DAYS = "notification_enabled_2_days"
-        private const val KEY_NOTIF_HOUR_2_DAYS = "notification_hour_2_days"
-        
-        private const val KEY_NOTIF_ENABLED_1_DAY = "notification_enabled_1_day"
-        private const val KEY_NOTIF_HOUR_1_DAY = "notification_hour_1_day"
-        
-        private const val KEY_NOTIF_ENABLED_0_DAYS = "notification_enabled_0_days"
-        private const val KEY_NOTIF_HOUR_0_DAYS = "notification_hour_0_days"
+        private const val KEY_NOTIF_ENABLED = "notification_enabled"
+        private const val KEY_NOTIF_DAYS_OFFSET = "notification_days_offset"
+        private const val KEY_NOTIF_HOUR = "notification_hour"
     }
 }
 
