@@ -65,11 +65,11 @@ struct HomeView: View {
         }
         .padding(.vertical, 1)
         .background(.screenBackground)
-        .onAppear { model.loadData() }
+        .onAppear { model.onAppear() }
         .setupNavigation(model)
         .setupToolbar(model, state)
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            model.loadData()
+            model.onWillEnterForegroundNotification()
         }
     }
 }

@@ -14,9 +14,7 @@ protocol Logger: Sendable {
     func debug(_ message: String)
 }
 
-struct LoggerImpl {
-    static let shared = LoggerImpl()
-}
+struct LoggerImpl { }
 
 extension LoggerImpl: Logger {
     func debug(_ message: String) {

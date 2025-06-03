@@ -34,6 +34,7 @@
 		345593B22DC76118002F346F /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B12DC76118002F346F /* AppDestination.swift */; };
 		345593B52DC76303002F346F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B42DC76303002F346F /* HomeView.swift */; };
 		345593B72DC76307002F346F /* HomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B62DC76307002F346F /* HomeModel.swift */; };
+		349CC4472DEEF54800559CFC /* DaysLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349CC4462DEEF54800559CFC /* DaysLoader.swift */; };
 		34A8B8AF2DDF55D7008B6BAA /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8AE2DDF55D7008B6BAA /* Date+Extensions.swift */; };
 		34A8B8B12DDFBDB3008B6BAA /* BinIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B02DDFBDB3008B6BAA /* BinIconView.swift */; };
 		34A8B8B42DDFC36B008B6BAA /* DaysListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */; };
@@ -88,6 +89,7 @@
 		345593B12DC76118002F346F /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
 		345593B42DC76303002F346F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		345593B62DC76307002F346F /* HomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModel.swift; sourceTree = "<group>"; };
+		349CC4462DEEF54800559CFC /* DaysLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysLoader.swift; sourceTree = "<group>"; };
 		34A8B8AE2DDF55D7008B6BAA /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		34A8B8B02DDFBDB3008B6BAA /* BinIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinIconView.swift; sourceTree = "<group>"; };
 		34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListCoordinator.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 		3439DBE42DC7492F008BD7B0 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				349CC4452DEEF53B00559CFC /* DaysLoader */,
 				3439DC052DC75507008BD7B0 /* Logger */,
 				344D192B2DDDAF5300E6A046 /* NotificationsBuilder */,
 				3439DBF42DC74EF7008BD7B0 /* TasksManager */,
@@ -302,6 +305,14 @@
 				345593B42DC76303002F346F /* HomeView.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		349CC4452DEEF53B00559CFC /* DaysLoader */ = {
+			isa = PBXGroup;
+			children = (
+				349CC4462DEEF54800559CFC /* DaysLoader.swift */,
+			);
+			path = DaysLoader;
 			sourceTree = "<group>";
 		};
 		34A8B8AD2DDF55D0008B6BAA /* Extensions */ = {
@@ -436,6 +447,7 @@
 				34A8B8BB2DDFC8B0008B6BAA /* TrashMonth.swift in Sources */,
 				34113BB82DDD277700EE09BA /* NotificationHour.swift in Sources */,
 				34A8B8B82DDFC375008B6BAA /* DaysListView.swift in Sources */,
+				349CC4472DEEF54800559CFC /* DaysLoader.swift in Sources */,
 				343502AB2DDD097E0075036D /* NovaVesOdpadApp.swift in Sources */,
 				34113BAA2DDD14C200EE09BA /* TrashInfoModel.swift in Sources */,
 				34A8B8B62DDFC370008B6BAA /* DaysListModel.swift in Sources */,
@@ -579,7 +591,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = W5KABFU8SV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -615,7 +627,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = W5KABFU8SV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

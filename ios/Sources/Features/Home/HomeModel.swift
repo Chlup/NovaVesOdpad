@@ -9,9 +9,7 @@ import Foundation
 import Factory
 
 @MainActor @Observable final class HomeModelState {
-    var firstDay: TrashDay? {
-        didSet { print("Did set first day") }
-    }
+    var firstDay: TrashDay?
     var homeDays: [TrashDay] = []
     var allDays: [TrashDay] = []
 }
@@ -19,7 +17,8 @@ import Factory
 @MainActor protocol HomeModel {
     var coordinator: HomeCoordinator { get }
 
-    func loadData()
+    func onAppear()
+    func onWillEnterForegroundNotification()
     func titleForNextDay(_ date: Date) -> String
     func titleForDay(_ date: Date) -> String
     func daysToNextTrashDayText(numberOfDays: Int) -> String
@@ -33,11 +32,15 @@ import Factory
 @MainActor final class HomeModelImpl {
     @ObservationIgnored @Injected(\.tasksManager) private var tasks
     @ObservationIgnored @Injected(\.logger) private var logger
+    @ObservationIgnored @Injected(\.daysLoader) private var daysLoader
+    @ObservationIgnored @Injected(\.notificationsBuilder) private var notificationsBuilder
 
     let state: HomeModelState
     let coordinator: HomeCoordinator
 
     private let loadDaysTaskID = "loadDaysTaskID"
+    private let scheduleNotificationsTaskID = "scheduleNotificationsTaskIDHome"
+
     private let dayTitleDateFormatter: DateFormatter
     private let nextTrashDayFormatter: DateFormatter
 
@@ -52,58 +55,34 @@ import Factory
     }
 
     func loadDays() async {
-        let now = Date()
-        let nextWednesday = nextWednesday(from: now)
-
-        let calendar = Calendar.current
-
-        var days: [TrashDay] = []
-        for i in 0...52 {
-            guard let dayDate = calendar.date(byAdding: .day, value: i * 7, to: nextWednesday) else { continue }
-
-            let daysDifferenceToToday = now.daysDifference(to: dayDate)
-            let weekNumber = calendar.component(.weekOfYear, from: dayDate)
-
-            let bins: [TrashDay.Bin]
-            if weekNumber % 2 == 0 {
-                bins = [.paper, .bio, .mix]
-            } else {
-                bins = [.plastic, .mix]
-            }
-
-            let day = TrashDay(date: dayDate, daysDifferenceToToday: daysDifferenceToToday, bins: bins)
-            days.append(day)
-        }
+        let days = daysLoader.load()
 
         self.state.allDays = days
         self.state.firstDay = days.first
         self.state.homeDays = Array(days[1...3])
     }
 
-    private func nextWednesday(from date: Date) -> Date {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: date)
-
-        // Get the current weekday (1 = Sunday, 2 = Monday, ..., 4 = Wednesday, ..., 7 = Saturday)
-        let currentWeekday = calendar.component(.weekday, from: today)
-        let wednesdayWeekday = 4 // Wednesday
-
-        // If today is Wednesday, return today with isToday = true
-        if currentWeekday == wednesdayWeekday {
-            return today
-        }
-
-        // Calculate days until next Wednesday
-        let daysUntilWednesday = (wednesdayWeekday - currentWeekday + 7) % 7
-        let nextWednesdayDate = calendar.date(byAdding: .day, value: daysUntilWednesday, to: today) ?? today
-
-        return nextWednesdayDate
+    func scheduleNotifications() async {
+        let days = daysLoader.load()
+        let state = SettingsModelState()
+        let input = NotificationBuilderInput(
+            days: days,
+            notificationEnabled: state.notificationEnabled,
+            notificationDaysOffset: state.notificationDaysOffset,
+            selectedNotificationHour: state.selectedNotificationHour
+        )
+        await notificationsBuilder.build(input: input)
     }
 }
 
 extension HomeModelImpl: HomeModel {
-    func loadData() {
+    func onAppear() {
         tasks.addTask(id: loadDaysTaskID, loadDays)
+    }
+
+    func onWillEnterForegroundNotification() {
+        tasks.addTask(id: loadDaysTaskID, loadDays)
+        tasks.addTask(id: scheduleNotificationsTaskID, scheduleNotifications)
     }
 
     func titleForNextDay(_ date: Date) -> String {

@@ -29,33 +29,10 @@ struct SettingsView: View {
                     NotifSetupView(
                         model: model,
                         state: state,
-                        title: "Tři dny předem",
-                        isOn: $state.noticationEnabledThreeDaysBefore,
-                        hour: $state.selectedNotificationHourThreeDaysBefore
-                    )
-
-                    NotifSetupView(
-                        model: model,
-                        state: state,
-                        title: "Dva dny předem",
-                        isOn: $state.noticationEnabledTwoDaysBefore,
-                        hour: $state.selectedNotificationHourTwoDaysBefore
-                    )
-
-                    NotifSetupView(
-                        model: model,
-                        state: state,
-                        title: "Jeden den předem",
-                        isOn: $state.noticationEnabledOneDayBefore,
-                        hour: $state.selectedNotificationHourOneDayBefore
-                    )
-
-                    NotifSetupView(
-                        model: model,
-                        state: state,
-                        title: "V den svozu",
-                        isOn: $state.noticationEnabledOnDay,
-                        hour: $state.selectedNotificationHourOnDay
+                        title: "Zapnutá notifikace",
+                        isOn: $state.notificationEnabled,
+                        dayOffset: $state.notificationDaysOffset,
+                        hour: $state.selectedNotificationHour
                     )
                 }
                 .padding(.horizontal, 24)
@@ -109,6 +86,7 @@ private struct NotifSetupView: View {
     let state: SettingsModelState
     let title: String
     @Binding var isOn: Bool
+    @Binding var dayOffset: Int
     @Binding var hour: Int
 
     var body: some View {
@@ -121,6 +99,30 @@ private struct NotifSetupView: View {
                 .disabled(!state.notificationsAuthorized)
 
             if isOn {
+                HStack {
+                    Text("Den notifikace")
+                        .font(.body)
+                        .foregroundStyle(.regularText)
+
+                    Spacer()
+
+                    Picker("", selection: $dayOffset) {
+                        Text("Tři dny před svozem")
+                            .tag(3)
+
+                        Text("Dva dny před svozem")
+                            .tag(2)
+
+                        Text("Jeden den před svozem")
+                            .tag(1)
+
+                        Text("V den svozu")
+                            .tag(0)
+                    }
+                    .tint(.regularText)
+                    .onChange(of: dayOffset) { model.notifSettingsChanged() }
+                }
+
                 HStack {
                     Text("Čas notifikace")
                         .font(.body)

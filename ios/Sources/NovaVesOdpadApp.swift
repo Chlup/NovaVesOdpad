@@ -13,6 +13,8 @@ import UserNotificationsUI
 
 final class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotificationCenterDelegate {
     @ObservationIgnored @Injected(\.logger) private var logger
+    @ObservationIgnored @Injected(\.daysLoader) private var daysLoader
+    @ObservationIgnored @Injected(\.notificationsBuilder) private var notificationsBuilder
 
     let coordinator: GlobalCoordinator
     let rootModel: RootModel
@@ -32,6 +34,19 @@ final class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUser
     ) -> Bool {
         // Register the notification delegate
         UNUserNotificationCenter.current().delegate = self
+
+        let days = daysLoader.load()
+        let state = SettingsModelState()
+        let input = NotificationBuilderInput(
+            days: days,
+            notificationEnabled: state.notificationEnabled,
+            notificationDaysOffset: state.notificationDaysOffset,
+            selectedNotificationHour: state.selectedNotificationHour
+        )
+        Task {
+            await notificationsBuilder.build(input: input)
+        }
+
         return true
     }
 

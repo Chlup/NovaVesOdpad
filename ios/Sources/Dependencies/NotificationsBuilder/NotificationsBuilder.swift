@@ -11,14 +11,9 @@ import Factory
 
 struct NotificationBuilderInput {
     let days: [TrashDay]
-    let noticationEnabledThreeDaysBefore: Bool
-    let selectedNotificationHourThreeDaysBefore: Int
-    let noticationEnabledTwoDaysBefore: Bool
-    let selectedNotificationHourTwoDaysBefore: Int
-    let noticationEnabledOneDayBefore: Bool
-    let selectedNotificationHourOneDayBefore: Int
-    let noticationEnabledOnDay: Bool
-    let selectedNotificationHourOnDay: Int
+    var notificationEnabled: Bool
+    var notificationDaysOffset: Int
+    var selectedNotificationHour: Int
 }
 
 protocol NotificationsBuilder: Sendable {
@@ -32,59 +27,77 @@ extension Container {
 
 struct NotificationsBuilderImpl {
     @ObservationIgnored @Injected(\.logger) private var logger
+    @ObservationIgnored @Injected(\.tasksManager) private var tasks
+
+    private let scheduleNotificationsTaskID = "scheduleNotificationsTaskID"
+
+    private func runBuild(input: NotificationBuilderInput) async {
+        let notificationSettings = await UNUserNotificationCenter.current().notificationSettings()
+        guard notificationSettings.authorizationStatus == .authorized else {
+            logger.debug("Notifications permission not authored. Not building notifications")
+            return
+        }
+
+        logger.debug("NotificationsBuilderImpl running")
+
+        cancelAllNotifications()
+        let center = UNUserNotificationCenter.current()
+
+        guard input.notificationEnabled else {
+            logger.debug("Notifications not enabled. Not scheduling any.")
+            return
+        }
+
+        for day in input.days {
+            if Task.isCancelled { break }
+            let dayRequests = scheduleNotification(day: day, input: input)
+            for request in dayRequests {
+                if Task.isCancelled { break }
+                do {
+                    logger.debug("Adding notif request for day \(day)")
+                    try await center.add(request)
+                } catch {
+                    logger.debug("Failed to add local notification request: \(error)")
+                }
+            }
+        }
+
+        logger.debug("Finished running")
+    }
 
     private func scheduleNotification(day: TrashDay, input: NotificationBuilderInput) -> [UNNotificationRequest] {
-        var requests: [UNNotificationRequest] = []
+        let title: String
+        let subtitle: String
 
-        if input.noticationEnabledThreeDaysBefore {
-            if let request = scheduleNotification(
-                day: day,
-                offset: -(3 * 24 * 3600),
-                hour: input.selectedNotificationHourThreeDaysBefore,
-                title: "Odvoz odpadu se blíží",
-                subtitle: "Za tři dny se budou vyvážet popelnice."
-            ) {
-                requests.append(request)
-            }
+        switch input.notificationDaysOffset {
+        case 0:
+            title = "Dnes se vyváží odpad"
+            subtitle = "Dnes se budou vyvážet popelnice."
+        case 1:
+            title = "Odvoz odpadu je již skoro tady"
+            subtitle = "Zítra se budou vyvážet popelnice:"
+        case 2:
+            title = "Odvoz odpadu se blíží"
+            subtitle = "Za dva dny se budou vyvážet popelnice."
+        default:
+            title = "Odvoz odpadu se blíží"
+            subtitle = "Za tři dny se budou vyvážet popelnice."
         }
 
-        if input.noticationEnabledTwoDaysBefore {
-            if let request = scheduleNotification(
-                day: day,
-                offset: -(2 * 24 * 3600),
-                hour: input.selectedNotificationHourTwoDaysBefore,
-                title: "Odvoz odpadu se blíží",
-                subtitle: "Za dva dny se budou vyvážet popelnice."
-            ) {
-                requests.append(request)
-            }
-        }
+        let dayOffset = -(input.notificationDaysOffset * 24 * 3600)
+        let request = scheduleNotification(
+            day: day,
+            offset: TimeInterval(dayOffset),
+            hour: input.selectedNotificationHour,
+            title: title,
+            subtitle: subtitle
+        )
 
-        if input.noticationEnabledOneDayBefore {
-            if let request = scheduleNotification(
-                day: day,
-                offset: -(1 * 24 * 3600),
-                hour: input.selectedNotificationHourOneDayBefore,
-                title: "Odvoz odpadu je již skoro tady",
-                subtitle: "Zítra se budou vyvážet popelnice:"
-            ) {
-                requests.append(request)
-            }
+        if let request {
+            return [request]
+        } else {
+            return []
         }
-
-        if input.noticationEnabledOnDay {
-            if let request = scheduleNotification(
-                day: day,
-                offset: 0,
-                hour: input.selectedNotificationHourOnDay,
-                title: "Dnes se vyváží odpad",
-                subtitle: "Dnes se budou vyvážet popelnice."
-            ) {
-                requests.append(request)
-            }
-        }
-
-        return requests
     }
 
     private func scheduleNotification(day: TrashDay, offset: TimeInterval, hour: Int, title: String, subtitle: String) -> UNNotificationRequest? {
@@ -147,31 +160,10 @@ struct NotificationsBuilderImpl {
 }
 
 extension NotificationsBuilderImpl: NotificationsBuilder {
+    
     func build(input: NotificationBuilderInput) async {
-        logger.debug("NotificationsBuilderImpl running")
-
-        cancelAllNotifications()
-        let center = UNUserNotificationCenter.current()
-
-        let count = min(5, input.days.count)
-
-//        for day in input.days {
-        for i in 0..<count {
-            let day = input.days[i]
-            if Task.isCancelled { break }
-            let dayRequests = scheduleNotification(day: day, input: input)
-            for request in dayRequests {
-                if Task.isCancelled { break }
-                do {
-                    logger.debug("Adding notif request for day \(day)")
-                    try await center.add(request)
-                } catch {
-                    logger.debug("Failed to add local notification request: \(error)")
-                }
-            }
-        }
-
-        logger.debug("Finished running")
+        await tasks.cancelTaskAndWait(id: scheduleNotificationsTaskID)
+        await tasks.addTask(id: scheduleNotificationsTaskID) { await self.runBuild(input: input) }
     }
 
     func cancelAllNotifications() {

@@ -13,73 +13,33 @@ import Factory
     var notificationsAuthorized = true
     var schedulingNotificationsInProgress = false
     let notificationHours: [Int]
-    var noticationEnabledThreeDaysBefore: Bool
-    var selectedNotificationHourThreeDaysBefore: Int
-    var noticationEnabledTwoDaysBefore: Bool
-    var selectedNotificationHourTwoDaysBefore: Int
-    var noticationEnabledOneDayBefore: Bool
-    var selectedNotificationHourOneDayBefore: Int
-    var noticationEnabledOnDay: Bool
-    var selectedNotificationHourOnDay: Int
-
-    var notificationsEnabledForAnyDay: Bool {
-        return
-            noticationEnabledThreeDaysBefore ||
-            noticationEnabledTwoDaysBefore ||
-            noticationEnabledOneDayBefore ||
-            noticationEnabledOnDay
-    }
+    var notificationEnabled: Bool
+    var notificationDaysOffset: Int
+    var selectedNotificationHour: Int
 
     fileprivate enum Constants {
-        static let notificationEnabledThreeDaysBeforeUDKey = "noticationEnabledThreeDaysBefore"
-        static let notificationEnabledTwoDaysBeforeUDKey = "noticationEnabledTwoDaysBefore"
-        static let notificationEnabledOneDayBeforeUDKey = "notificationEnabledOneDayBefore"
-        static let notificationEnabledOnDayUDKey = "notificationEnabledOnDay"
-        static let selectedNotificationHourThreeDaysBeforeUDKey = "selectedNotificationHourThreeDaysBefore"
-        static let selectedNotificationHourTwoDaysBeforeUDKey = "selectedNotificationHourTwoDaysBefore"
-        static let selectedNotificationHourOneDayBeforeUDKey = "selectedNotificationHourOneDayBefore"
-        static let selectedNotificationHourOnDayUDKey = "selectedNotificationHourOnDay"
+        static let notificationEnabledUDKey = "notificationEnabled"
+        static let notificationDaysOffsetUDKey = "notificationDaysOffset"
+        static let selectedNotificationHourUDKey = "selectedNotificationHour"
     }
 
     init() {
         let userDefault = UserDefaults.standard
-        noticationEnabledThreeDaysBefore = userDefault.bool(forKey: Constants.notificationEnabledThreeDaysBeforeUDKey)
-        noticationEnabledTwoDaysBefore = userDefault.bool(forKey: Constants.notificationEnabledTwoDaysBeforeUDKey)
-        noticationEnabledOneDayBefore = userDefault.bool(forKey: Constants.notificationEnabledOneDayBeforeUDKey)
-        noticationEnabledOnDay = userDefault.bool(forKey: Constants.notificationEnabledOnDayUDKey)
+        notificationEnabled = userDefault.bool(forKey: Constants.notificationEnabledUDKey)
+        notificationDaysOffset = userDefault.integer(forKey: Constants.notificationDaysOffsetUDKey)
 
-        var selectedNotificationHourThreeDaysBefore = userDefault.integer(forKey: Constants.selectedNotificationHourThreeDaysBeforeUDKey)
-        if selectedNotificationHourThreeDaysBefore == 0 {
-            selectedNotificationHourThreeDaysBefore = 8
+        var selectedNotificationHour = userDefault.integer(forKey: Constants.selectedNotificationHourUDKey)
+        if selectedNotificationHour == 0 {
+            selectedNotificationHour = 8
         }
-        self.selectedNotificationHourThreeDaysBefore = selectedNotificationHourThreeDaysBefore
-
-        var selectedNotificationHourTwoDaysBefore = userDefault.integer(forKey: Constants.selectedNotificationHourTwoDaysBeforeUDKey)
-        if selectedNotificationHourTwoDaysBefore == 0 {
-            selectedNotificationHourTwoDaysBefore = 8
-        }
-        self.selectedNotificationHourTwoDaysBefore = selectedNotificationHourTwoDaysBefore
-
-        var selectedNotificationHourOneDayBefore = userDefault.integer(forKey: Constants.selectedNotificationHourOneDayBeforeUDKey)
-        if selectedNotificationHourOneDayBefore == 0 {
-            selectedNotificationHourOneDayBefore = 8
-        }
-        self.selectedNotificationHourOneDayBefore = selectedNotificationHourOneDayBefore
-
-        var selectedNotificationHourOnDay = userDefault.integer(forKey: Constants.selectedNotificationHourOnDayUDKey)
-        if selectedNotificationHourOnDay == 0 {
-            selectedNotificationHourOnDay = 8
-        }
-        self.selectedNotificationHourOnDay = selectedNotificationHourOnDay
+        self.selectedNotificationHour = selectedNotificationHour
 
         notificationHours = Array(5...23)
     }
 
     func disableAllNotifications() {
-        noticationEnabledThreeDaysBefore = false
-        noticationEnabledTwoDaysBefore = false
-        noticationEnabledOneDayBefore = false
-        noticationEnabledOnDay = false
+        notificationEnabled = false
+        UserDefaults.standard.set(notificationEnabled, forKey: SettingsModelState.Constants.notificationEnabledUDKey)
     }
 }
 
@@ -94,8 +54,6 @@ import Factory
     @ObservationIgnored @Injected(\.tasksManager) private var tasks
     @ObservationIgnored @Injected(\.logger) private var logger
     @ObservationIgnored @Injected(\.notificationsBuilder) private var notificationsBuilder
-
-    private let scheduleNotificationsTaskID = "scheduleNotificationsTaskID"
 
     let state: SettingsModelState
     let coordinator: SettingsCoordinator
@@ -134,12 +92,6 @@ import Factory
         await loadNotificationsAuthorizationStatus()
     }
 
-    private func runScheduleNotifications() async {
-        state.schedulingNotificationsInProgress = true
-        await tasks.cancelTaskAndWait(id: scheduleNotificationsTaskID)
-        tasks.addTask(id: scheduleNotificationsTaskID, scheduleNotifications)
-    }
-
     private func scheduleNotifications() async {
         logger.debug("Starting to schedule notifications")
         
@@ -157,14 +109,9 @@ import Factory
 
         let input = NotificationBuilderInput(
             days: days,
-            noticationEnabledThreeDaysBefore: state.noticationEnabledThreeDaysBefore,
-            selectedNotificationHourThreeDaysBefore: state.selectedNotificationHourThreeDaysBefore,
-            noticationEnabledTwoDaysBefore: state.noticationEnabledTwoDaysBefore,
-            selectedNotificationHourTwoDaysBefore: state.selectedNotificationHourTwoDaysBefore,
-            noticationEnabledOneDayBefore: state.noticationEnabledOneDayBefore,
-            selectedNotificationHourOneDayBefore: state.selectedNotificationHourOneDayBefore,
-            noticationEnabledOnDay: state.noticationEnabledOnDay,
-            selectedNotificationHourOnDay: state.selectedNotificationHourOnDay
+            notificationEnabled: state.notificationEnabled,
+            notificationDaysOffset: state.notificationDaysOffset,
+            selectedNotificationHour: state.selectedNotificationHour
         )
         await notificationsBuilder.build(input: input)
 
@@ -179,29 +126,12 @@ extension SettingsModelImpl: SettingsModel {
 
     func notifSettingsChanged() {
         let userDefault = UserDefaults.standard
-        userDefault.set(state.noticationEnabledThreeDaysBefore, forKey: SettingsModelState.Constants.notificationEnabledThreeDaysBeforeUDKey)
-        userDefault.set(state.noticationEnabledTwoDaysBefore, forKey: SettingsModelState.Constants.notificationEnabledTwoDaysBeforeUDKey)
-        userDefault.set(state.noticationEnabledOneDayBefore, forKey: SettingsModelState.Constants.notificationEnabledOneDayBeforeUDKey)
-        userDefault.set(state.noticationEnabledOnDay, forKey: SettingsModelState.Constants.notificationEnabledOnDayUDKey)
-        userDefault.set(
-            state.selectedNotificationHourThreeDaysBefore,
-            forKey: SettingsModelState.Constants.selectedNotificationHourThreeDaysBeforeUDKey
-        )
-        userDefault.set(
-            state.selectedNotificationHourTwoDaysBefore,
-            forKey: SettingsModelState.Constants.selectedNotificationHourTwoDaysBeforeUDKey
-        )
-        userDefault.set(
-            state.selectedNotificationHourOneDayBefore,
-            forKey: SettingsModelState.Constants.selectedNotificationHourOneDayBeforeUDKey
-        )
-        userDefault.set(
-            state.selectedNotificationHourOnDay,
-            forKey: SettingsModelState.Constants.selectedNotificationHourOnDayUDKey
-        )
+        userDefault.set(state.notificationEnabled, forKey: SettingsModelState.Constants.notificationEnabledUDKey)
+        userDefault.set(state.notificationDaysOffset, forKey: SettingsModelState.Constants.notificationDaysOffsetUDKey)
+        userDefault.set(state.selectedNotificationHour, forKey: SettingsModelState.Constants.selectedNotificationHourUDKey)
 
-        if state.notificationsEnabledForAnyDay {
-            tasks.addTask(id: "runSchedule-change-\(UUID().uuidString)", runScheduleNotifications)
+        if state.notificationEnabled {
+            tasks.addTask(id: "runSchedule-change-\(UUID().uuidString)", scheduleNotifications)
         } else {
             notificationsBuilder.cancelAllNotifications()
         }

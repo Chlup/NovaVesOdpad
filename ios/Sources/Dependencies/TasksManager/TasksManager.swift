@@ -9,7 +9,7 @@ import Foundation
 import Factory
 import Combine
 
-@MainActor protocol TasksManager {
+@MainActor protocol TasksManager: Sendable {
     func addTask(id: String, _ operation: @escaping () async -> Void)
     func cancelTask(id: String)
     func cancelTaskAndWait(id: String) async
@@ -19,7 +19,7 @@ extension Container {
     var tasksManager: Factory<TasksManager> { self { TasksManagerImpl() }.singleton }
 }
 
-@MainActor final class TasksManagerImpl {
+@MainActor final class TasksManagerImpl: @unchecked Sendable {
     @ObservationIgnored @Injected(\.logger) private var logger
 
     enum TaskEvent {
