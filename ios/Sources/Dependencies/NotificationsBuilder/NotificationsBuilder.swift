@@ -163,7 +163,7 @@ extension NotificationsBuilderImpl: NotificationsBuilder {
     
     func build(input: NotificationBuilderInput) async {
         await tasks.cancelTaskAndWait(id: scheduleNotificationsTaskID)
-        await tasks.addTask(id: scheduleNotificationsTaskID) { await self.runBuild(input: input) }
+        await tasks.addTaskAndWait(id: scheduleNotificationsTaskID) { await self.runBuild(input: input) }
     }
 
     func cancelAllNotifications() {

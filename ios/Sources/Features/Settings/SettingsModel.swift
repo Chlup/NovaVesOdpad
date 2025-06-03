@@ -11,7 +11,9 @@ import Factory
 
 @MainActor @Observable final class SettingsModelState {
     var notificationsAuthorized = true
-    var schedulingNotificationsInProgress = false
+    var schedulingNotificationsInProgress = false {
+        didSet { print("schedulingNotificationsInProgress to \(schedulingNotificationsInProgress)")}
+    }
     let notificationHours: [Int]
     var notificationEnabled: Bool
     var notificationDaysOffset: Int

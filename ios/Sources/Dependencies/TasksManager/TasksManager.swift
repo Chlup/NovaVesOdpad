@@ -11,6 +11,7 @@ import Combine
 
 @MainActor protocol TasksManager: Sendable {
     func addTask(id: String, _ operation: @escaping () async -> Void)
+    func addTaskAndWait(id: String, _ operation: @escaping () async -> Void) async
     func cancelTask(id: String)
     func cancelTaskAndWait(id: String) async
 }
@@ -83,6 +84,11 @@ extension TasksManagerImpl: TasksManager {
         }
 
         tasks[id] = task
+    }
+
+    func addTaskAndWait(id: String, _ operation: @escaping () async -> Void) async {
+        addTask(id: id, operation)
+        await waintUniltaskIsCanceledOrFinished(id)
     }
 
     func cancelTask(id: String) {
