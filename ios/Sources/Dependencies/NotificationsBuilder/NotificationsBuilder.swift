@@ -72,16 +72,16 @@ struct NotificationsBuilderImpl {
         switch input.notificationDaysOffset {
         case 0:
             title = "Dnes se vyváží odpad"
-            subtitle = "Dnes se budou vyvážet popelnice."
+            subtitle = "Nachystejte popelnice:"
         case 1:
             title = "Odvoz odpadu je již skoro tady"
             subtitle = "Zítra se budou vyvážet popelnice:"
         case 2:
             title = "Odvoz odpadu se blíží"
-            subtitle = "Za dva dny se budou vyvážet popelnice."
+            subtitle = "Za dva dny se budou vyvážet popelnice:"
         default:
             title = "Odvoz odpadu se blíží"
-            subtitle = "Za tři dny se budou vyvážet popelnice."
+            subtitle = "Za tři dny se budou vyvážet popelnice:"
         }
 
         let dayOffset = -(input.notificationDaysOffset * 24 * 3600)
