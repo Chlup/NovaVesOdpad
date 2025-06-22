@@ -12,6 +12,7 @@ import com.mugeaters.popelnice.nvpp.util.LogcatLogger
 import com.mugeaters.popelnice.nvpp.util.Logger
 import com.mugeaters.popelnice.nvpp.util.TasksManager
 import com.mugeaters.popelnice.nvpp.util.TasksManagerImpl
+import com.mugeaters.popelnice.nvpp.util.TrashDayGenerator
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -23,13 +24,14 @@ val appModule = module {
     // Utils
     single<Logger> { LogcatLogger() }
     single<TasksManager> { TasksManagerImpl() }
+    single { TrashDayGenerator() }
     
     // Notifications
     single<NotificationsBuilder> { NotificationsBuilderImpl(androidContext(), get()) }
     single<PreferencesManager> { SharedPreferencesManager(androidContext()) }
     
     // ViewModels
-    viewModel { HomeViewModel(get(), get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get()) }
     viewModel { SettingsViewModel(androidContext(), get(), get(), get(), get()) }
     viewModel { (sections: List<com.mugeaters.popelnice.nvpp.model.TrashInfoSection>) -> 
         TrashInfoViewModel(sections)
