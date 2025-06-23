@@ -170,7 +170,7 @@ class NotificationsBuilderImpl(
         val date = day.date
         val notificationDate = date.plusDays(offsetDays.toLong())
             .withHour(hour)
-            .withMinute(25)
+            .withMinute(0)
             .withSecond(0)
         
         val now = LocalDateTime.now()
