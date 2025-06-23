@@ -85,6 +85,7 @@ fun SettingsScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 viewModel.checkNotificationPermission()
+                viewModel.checkExactAlarmPermission()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -162,6 +163,15 @@ fun SettingsScreen(
                                 Text("Nastavení")
                             }
                         }
+                    }
+                }
+                
+                // Permission warning for exact alarms
+                if (state.notificationsAuthorized && !state.canScheduleExactAlarms) {
+                    item {
+                        ExactAlarmPermissionCard(
+                            onEnableExactAlarmsClick = viewModel::enableAccurateNotifications
+                        )
                     }
                 }
                 
@@ -331,6 +341,50 @@ fun DayOffsetSelector(
                         onDaysOffsetSelected(dayOffset.daysOffset)
                         expanded = false
                     }
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Permission warning card for exact alarms
+ */
+@Composable
+fun ExactAlarmPermissionCard(
+    onEnableExactAlarmsClick: () -> Unit
+) {
+    val appColors = LocalAppColors.current
+    
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = appColors.sectionBackground)
+    ) {
+        Column(
+            modifier = Modifier.padding(15.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = "⚠️ Pro přesné doručování notifikací",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.error
+            )
+            
+            Text(
+                text = "Přesné alarmy nejsou povoleny. Notifikace mohou přijít se zpožděním 10-60 minut.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = appColors.regularText
+            )
+            
+            OutlinedButton(
+                onClick = onEnableExactAlarmsClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Povolit přesné alarmy",
+                    color = appColors.regularText
                 )
             }
         }

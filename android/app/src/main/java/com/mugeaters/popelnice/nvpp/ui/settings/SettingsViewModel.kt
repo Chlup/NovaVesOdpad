@@ -47,7 +47,10 @@ data class SettingsState(
     val selectedNotificationHour: Int = 8,
     
     val days: List<TrashDay> = emptyList(),
-    val schedulingNotificationsInProgress: Boolean = false
+    val schedulingNotificationsInProgress: Boolean = false,
+    
+    // Exact alarm permission state for accurate notifications
+    val canScheduleExactAlarms: Boolean = true
 )
 
 /**
@@ -69,6 +72,7 @@ class SettingsViewModel(
     init {
         logger.debug("⚙️ SettingsViewModel initialized")
         loadSettings()
+        checkExactAlarmPermission()
     }
     
     /**
@@ -116,6 +120,20 @@ class SettingsViewModel(
                 permissionExplicitlyDenied = if (permissionGranted) false else it.permissionExplicitlyDenied
             ) 
         }
+        
+        // Also check exact alarm permission
+        checkExactAlarmPermission()
+    }
+    
+    /**
+     * Checks exact alarm permission
+     */
+    fun checkExactAlarmPermission() {
+        val canScheduleExact = notificationsBuilder.canScheduleExactAlarms()
+        
+        _state.update {
+            it.copy(canScheduleExactAlarms = canScheduleExact)
+        }
     }
     
     /**
@@ -155,6 +173,21 @@ class SettingsViewModel(
         } catch (e: Exception) {
             logger.error("Failed to open system settings", e)
         }
+    }
+    
+    /**
+     * Opens exact alarm settings
+     */
+    fun openExactAlarmSettings() {
+        notificationsBuilder.openExactAlarmSettings()
+    }
+    
+    /**
+     * Enables accurate notifications by opening exact alarm settings
+     */
+    fun enableAccurateNotifications() {
+        logger.debug("Opening exact alarm settings")
+        openExactAlarmSettings()
     }
     
     /**

@@ -59,6 +59,9 @@ class NotificationsBuilderImpl(
             return
         }
         
+        // Check exact alarm permission and warn if needed
+        checkExactAlarmPermission()
+        
         // Schedule new notifications for all available days
         var scheduledCount = 0
         var skippedCount = 0
@@ -167,7 +170,7 @@ class NotificationsBuilderImpl(
         val date = day.date
         val notificationDate = date.plusDays(offsetDays.toLong())
             .withHour(hour)
-            .withMinute(0)
+            .withMinute(25)
             .withSecond(0)
         
         val now = LocalDateTime.now()
@@ -220,13 +223,22 @@ class NotificationsBuilderImpl(
                     pendingIntent
                 )
             } else {
-                logger.debug("⚠️ Cannot schedule exact alarms, using inexact timing. User may need to grant permission in system settings.")
-                // Use setAndAllowWhileIdle for better reliability with inexact timing
-                alarmManager.setAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    triggerTimeMillis,
-                    pendingIntent
-                )
+                logger.debug("⚠️ Cannot schedule exact alarms, using setExactAndAllowWhileIdle with inexact fallback")
+                // Try setExactAndAllowWhileIdle first, then fall back to inexact if needed
+                try {
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerTimeMillis,
+                        pendingIntent
+                    )
+                } catch (e: SecurityException) {
+                    logger.debug("⚠️ Falling back to inexact alarm due to security exception")
+                    alarmManager.setAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerTimeMillis,
+                        pendingIntent
+                    )
+                }
             }
         } else {
             logger.debug("✅ Using exact alarm scheduling (Android < 12)")
@@ -259,6 +271,12 @@ class NotificationsBuilderImpl(
             } catch (e: Exception) {
                 logger.debug("Failed to open exact alarm settings: ${e.message}")
             }
+        }
+    }
+    
+    private fun checkExactAlarmPermission() {
+        if (!canScheduleExactAlarms()) {
+            logger.debug("⚠️ Exact alarm permission not granted - notifications may be delayed")
         }
     }
     

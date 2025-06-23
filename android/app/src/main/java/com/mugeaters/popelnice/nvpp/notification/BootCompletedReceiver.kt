@@ -114,6 +114,14 @@ class BootCompletedReceiver : BroadcastReceiver(), KoinComponent {
                 selectedNotificationHour = notificationSettings.selectedNotificationHour
             )
             
+            // Check exact alarm permission before scheduling
+            val canScheduleExact = notificationsBuilder.canScheduleExactAlarms()
+            logger.debug("🔧 Can schedule exact alarms: $canScheduleExact")
+            
+            if (!canScheduleExact) {
+                logger.debug("⚠️ Exact alarm permission not granted - notifications may be delayed after reboot")
+            }
+            
             // Reschedule all notifications
             logger.debug("🔧 Calling notificationsBuilder.build()")
             notificationsBuilder.build(input)
