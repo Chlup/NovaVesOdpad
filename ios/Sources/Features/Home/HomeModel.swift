@@ -27,6 +27,7 @@ import Factory
     func paperTrashInfoSection() -> [TrashInfoSection]
     func bioTrashInfoSection() -> [TrashInfoSection]
     func mixTrashInfoSection() -> [TrashInfoSection]
+    func heavyLoadInfoSection() -> [TrashInfoSection]
 }
 
 @MainActor final class HomeModelImpl {
@@ -229,4 +230,18 @@ extension HomeModelImpl: HomeModel {
         ]
     }
 
+    func heavyLoadInfoSection() -> [TrashInfoSection] {
+        return [
+            TrashInfoSection(
+                title: "Kontejner na velkoobjemový odpad",
+                text: """
+                - Je umístěn v prostoru bývalé skládky (směrem na Velkou Lečici)
+                - U kontejneru bude služba, která bude kontrolovat odpad
+
+                Do kontejneru nepatří: běžný domovní odpad, sklo, větve, listí, plastové lahve, nebezpečný odpad (baterie, zářivky, autobaterie), stavební suť, dřevo a nábytek o větších rozměrech např. čalouněné soupravy (tento nábytek lze odvézt do sběrného dvoru Mníšek pod Brdy).
+                """,
+                pdfFileURL: Bundle.main.url(forResource: "heavy_load", withExtension: "pdf")!
+            )
+        ]
+    }
 }

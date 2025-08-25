@@ -14,6 +14,7 @@ struct TrashDay: Codable, Equatable, Identifiable, Hashable {
         case plastic
         case paper
         case bio
+        case heavyLoad
 
         var id: String { "\(self)" }
 
@@ -27,6 +28,8 @@ struct TrashDay: Codable, Equatable, Identifiable, Hashable {
                 return "Papír"
             case .bio:
                 return "Bio"
+            case .heavyLoad:
+                return "Velkoobjemový kontejner"
             }
         }
 
@@ -40,6 +43,8 @@ struct TrashDay: Codable, Equatable, Identifiable, Hashable {
                 return .binBlue
             case .bio:
                 return .binBrown
+            case .heavyLoad:
+                return .binHeavyLoad
             }
         }
 
@@ -47,7 +52,7 @@ struct TrashDay: Codable, Equatable, Identifiable, Hashable {
             switch self {
             case .plastic:
                 return .black
-            case .bio, .paper, .mix:
+            case .bio, .paper, .mix, .heavyLoad:
                 return .white
             }
         }
@@ -62,6 +67,8 @@ struct TrashDay: Codable, Equatable, Identifiable, Hashable {
                 return "paper"
             case .bio:
                 return "bio"
+            case .heavyLoad:
+                return "heavyLoad"
             }
         }
     }

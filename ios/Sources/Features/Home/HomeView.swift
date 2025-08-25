@@ -116,22 +116,46 @@ private struct NextTrashDayView: View {
                 }
                 .padding(.bottom, 12)
 
-                HStack {
-                    ForEach(day.bins) { bin in
-                        HStack {
-                            BinIconView(bin: bin, size: 35)
-                                .padding(.trailing, 0)
-
-                            Text(bin.title)
-                                .font(.callout)
-                                .padding(.trailing, 10)
-                                .minimumScaleFactor(0.6)
-                                .fixedSize()
+                VStack {
+                    HStack {
+                        ForEach(day.bins) { bin in
+                            if bin != .heavyLoad {
+                                HStack {
+                                    BinIconView(bin: bin, size: 35)
+                                        .padding(.trailing, 0)
+                                    
+                                    Text(bin.title)
+                                        .font(.callout)
+                                        .padding(.trailing, 10)
+                                        .minimumScaleFactor(0.6)
+                                        .fixedSize()
+                                    
+                                    Spacer()
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
                         }
-                        .frame(maxWidth: .infinity)
+                        
+                        Spacer()
                     }
                     
-                    Spacer()
+                    ForEach(day.bins) { bin in
+                        if bin == .heavyLoad {
+                            HStack {
+                                BinIconView(bin: bin, size: 35)
+                                    .padding(.trailing, 0)
+                                
+                                Text(bin.title)
+                                    .font(.callout)
+                                    .padding(.trailing, 10)
+                                    .minimumScaleFactor(0.6)
+                                    .fixedSize()
+                                
+                                Spacer()
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                    }
                 }
             }
             .padding(20)
@@ -252,6 +276,8 @@ private struct TrashBinsInfoView: View {
                 BinInfoView(bin: .bio) { model.coordinator.tapOnBinInfo(model.bioTrashInfoSection()) }
                 BinInfoView(bin: .mix) { model.coordinator.tapOnBinInfo(model.mixTrashInfoSection()) }
             }
+
+            BinInfoView(bin: .heavyLoad) { model.coordinator.tapOnBinInfo(model.heavyLoadInfoSection()) }
         }
     }
 }

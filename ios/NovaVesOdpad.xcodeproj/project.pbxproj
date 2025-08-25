@@ -44,6 +44,7 @@
 		34A8B8BD2DDFDC22008B6BAA /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A8B8BC2DDFDC22008B6BAA /* Launch Screen.storyboard */; };
 		34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EBFC2DC7C23100C11F28 /* RootModel.swift */; };
 		34C2EC012DC7C33B00C11F28 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */; };
+		9E3EADD52E5C716D0075E32A /* heavy_load.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9E3EADD42E5C716D0075E32A /* heavy_load.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -99,6 +100,7 @@
 		34A8B8BC2DDFDC22008B6BAA /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		34C2EBFC2DC7C23100C11F28 /* RootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootModel.swift; sourceTree = "<group>"; };
 		34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		9E3EADD42E5C716D0075E32A /* heavy_load.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = heavy_load.pdf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +176,7 @@
 			children = (
 				34113BAB2DDD17FE00EE09BA /* kovy_cz_2020.pdf */,
 				34113BAC2DDD17FE00EE09BA /* napojovy-karton_cz_2020.pdf */,
+				9E3EADD42E5C716D0075E32A /* heavy_load.pdf */,
 				34113BAD2DDD17FE00EE09BA /* papir_cz_2020.pdf */,
 				34113BAE2DDD17FE00EE09BA /* plasty_cz_2020.pdf */,
 				34A8B8BC2DDFDC22008B6BAA /* Launch Screen.storyboard */,
@@ -411,6 +414,7 @@
 				34A8B8BD2DDFDC22008B6BAA /* Launch Screen.storyboard in Resources */,
 				34113BAF2DDD17FE00EE09BA /* napojovy-karton_cz_2020.pdf in Resources */,
 				34113BB02DDD17FE00EE09BA /* papir_cz_2020.pdf in Resources */,
+				9E3EADD52E5C716D0075E32A /* heavy_load.pdf in Resources */,
 				34113BB12DDD17FE00EE09BA /* plasty_cz_2020.pdf in Resources */,
 				34113BB22DDD17FE00EE09BA /* kovy_cz_2020.pdf in Resources */,
 				3439DBED2DC7492F008BD7B0 /* Assets.xcassets in Resources */,
