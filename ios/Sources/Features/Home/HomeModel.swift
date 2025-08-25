@@ -235,6 +235,8 @@ extension HomeModelImpl: HomeModel {
             TrashInfoSection(
                 title: "Kontejner na velkoobjemový odpad",
                 text: """
+                Kontejner je k dispozici od 9:00 do 11:00 hodin!!!
+                
                 - Je umístěn v prostoru bývalé skládky (směrem na Velkou Lečici)
                 - U kontejneru bude služba, která bude kontrolovat odpad
 
