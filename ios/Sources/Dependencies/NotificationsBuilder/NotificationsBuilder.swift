@@ -69,19 +69,54 @@ struct NotificationsBuilderImpl {
         let title: String
         let subtitle: String
 
-        switch input.notificationDaysOffset {
-        case 0:
-            title = "Dnes se vyváží odpad"
-            subtitle = "Nachystejte popelnice:"
-        case 1:
-            title = "Odvoz odpadu je již skoro tady"
-            subtitle = "Zítra se budou vyvážet popelnice:"
-        case 2:
-            title = "Odvoz odpadu se blíží"
-            subtitle = "Za dva dny se budou vyvážet popelnice:"
-        default:
-            title = "Odvoz odpadu se blíží"
-            subtitle = "Za tři dny se budou vyvážet popelnice:"
+        if day.bins.contains(.heavyLoad) && day.bins.count == 1 {
+            // jen velkoobjemovy
+            switch input.notificationDaysOffset {
+            case 0:
+                title = "Dnes je přistaven velkoobjemový kontejner"
+                subtitle = "Zavezte odpad na skládku NVpP mezi 9:00-11:00"
+            case 1:
+                title = "Přistavení velkoobjemového kontejneru je již skoro tady"
+                subtitle = "Zítra zavezte odpad na skládku NVpP mezi 9:00-11:00"
+            case 2:
+                title = "Přistavení velkoobjemového kontejneru se blíží"
+                subtitle = "Za dva dny zavezte odpad na skládku NVpP mezi 9:00-11:00"
+            default:
+                title = "Přistavení velkoobjemového kontejneru se blíží"
+                subtitle = "Za tři dny zavezte odpad na skládku NVpP mezi 9:00-11:00"
+            }
+        } else if day.bins.contains(.heavyLoad) && day.bins.count == 1 {
+            // velkoobjemovy + poplenice
+            switch input.notificationDaysOffset {
+            case 0:
+                title = "Dnes se vyváží odpad a je přistaven velkoobjemový kontejner"
+                subtitle = "Nachystejte popelnice:"
+            case 1:
+                title = "Odvoz odpadu a velkoobjemový kontejner jsou již skoro tady"
+                subtitle = "Zítra se budou vyvážet popelnice:"
+            case 2:
+                title = "Odvoz odpadu a velkoobjemový kontejner se blíží"
+                subtitle = "Za dva dny se budou vyvážet popelnice:"
+            default:
+                title = "Odvoz odpadu a velkoobjemový kontejner se blíží"
+                subtitle = "Za tři dny se budou vyvážet popelnice:"
+            }
+        } else {
+            // jen popelnice
+            switch input.notificationDaysOffset {
+            case 0:
+                title = "Dnes se vyváží odpad"
+                subtitle = "Nachystejte popelnice:"
+            case 1:
+                title = "Odvoz odpadu je již skoro tady"
+                subtitle = "Zítra se budou vyvážet popelnice:"
+            case 2:
+                title = "Odvoz odpadu se blíží"
+                subtitle = "Za dva dny se budou vyvážet popelnice:"
+            default:
+                title = "Odvoz odpadu se blíží"
+                subtitle = "Za tři dny se budou vyvážet popelnice:"
+            }
         }
 
         let dayOffset = -(input.notificationDaysOffset * 24 * 3600)
@@ -122,7 +157,11 @@ struct NotificationsBuilderImpl {
         let content = UNMutableNotificationContent()
         content.title = title
         content.subtitle = subtitle
-        content.body = "\(day.bins.map { $0.title }.joined(separator: "\n"))"
+        if day.bins.contains(.heavyLoad) && day.bins.count == 1 {
+            content.body = ""
+        } else {
+            content.body = "\(day.bins.map { $0.title }.joined(separator: "\n"))"
+        }
         content.sound = .default
 
         // Include minute and second to ensure precise triggering
