@@ -6,14 +6,14 @@ plugins {
 
 android {
     namespace = "com.mugeaters.popelnice.nvpp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.mugeaters.popelnice.nvpp"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 10
-        versionName = "1.1"
+        targetSdk = 35
+        versionCode = 11
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

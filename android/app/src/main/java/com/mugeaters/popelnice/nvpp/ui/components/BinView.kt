@@ -66,5 +66,6 @@ private fun getBinIcon(bin: TrashDay.Bin): Int {
         TrashDay.Bin.plastic -> R.drawable.ic_recycle
         TrashDay.Bin.paper -> R.drawable.ic_paper
         TrashDay.Bin.bio -> R.drawable.ic_bio
+        TrashDay.Bin.heavyLoad -> R.drawable.ic_heavy_load
     }
 }

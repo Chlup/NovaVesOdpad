@@ -97,7 +97,7 @@ fun TrashInfoScreen(
                             contentDescription = "PDF dokument",
                             modifier = Modifier.padding(end = 8.dp)
                         )
-                        Text(text = "Otevřít ${fileName.substringBefore('.').replace('_', ' ')}")
+                        Text(text = "Další informace")
                     }
                 }
             }

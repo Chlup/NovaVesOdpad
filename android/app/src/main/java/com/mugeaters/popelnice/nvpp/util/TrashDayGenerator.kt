@@ -37,7 +37,22 @@ class TrashDayGenerator {
             days.add(day)
         }
         
-        return days
+        // Add hardcoded heavy load days
+        addHeavyLoadDay(days, 2025, 9, 2)
+        addHeavyLoadDay(days, 2025, 9, 6)
+        addHeavyLoadDay(days, 2025, 10, 4)
+        addHeavyLoadDay(days, 2025, 11, 8)
+        
+        return days.sortedBy { it.date }
+    }
+    
+    /**
+     * Adds a heavy load day to the list
+     */
+    private fun addHeavyLoadDay(days: MutableList<TrashDay>, year: Int, month: Int, day: Int) {
+        val date = LocalDateTime.of(year, month, day, 0, 0)
+        val heavyLoadDay = TrashDay(date = date, bins = listOf(TrashDay.Bin.heavyLoad))
+        days.add(heavyLoadDay)
     }
     
     /**

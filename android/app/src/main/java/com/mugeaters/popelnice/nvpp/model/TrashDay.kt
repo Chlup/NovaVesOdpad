@@ -31,7 +31,7 @@ data class TrashDay(
      */
     @Serializable
     enum class Bin {
-        mix, plastic, paper, bio;
+        mix, plastic, paper, bio, heavyLoad;
         
         val title: String
             get() = when (this) {
@@ -39,6 +39,7 @@ data class TrashDay(
                 plastic -> "Plast, kov, kartony"
                 paper -> "Papír"
                 bio -> "Bio"
+                heavyLoad -> "Velkoobjemový kontejner"
             }
         
         val color: Color
@@ -47,6 +48,7 @@ data class TrashDay(
                 plastic -> Color.Yellow
                 paper -> Color.Blue
                 bio -> Color(0xFF964B00) // Brown
+                heavyLoad -> Color(0xFF6BB361) // Green (matches iOS)
             }
         
         val backgroundColor: Color
@@ -55,12 +57,13 @@ data class TrashDay(
                 plastic -> Color(0xFFFFD60A)  // Yellow
                 paper -> Color(0xFF2577E7)    // Blue  
                 bio -> Color(0xFFC77234)      // Brown
+                heavyLoad -> Color(0xFF6BB361) // Green (matches iOS)
             }
         
         val iconColor: Color
             get() = when (this) {
                 plastic -> Color.Black
-                paper, bio, mix -> Color.White
+                paper, bio, mix, heavyLoad -> Color.White
             }
     }
 }

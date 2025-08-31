@@ -213,6 +213,24 @@ V souvislosti s tímto odpadem se můžeme setkat také s označením zbytkový 
             )
         )
     }
+
+    /**
+     * Returns heavy load info sections (matches iOS implementation)
+     */
+    fun heavyLoadInfoSection(): List<TrashInfoSection> {
+        return listOf(
+            TrashInfoSection(
+                title = "Velkoobjemový kontejner",
+                text = """Kontejner je k dispozici od 9:00 do 11:00 hodin!!!
+                
+- Je umístěn v prostoru bývalé skládky (směrem na Velkou Lečici)
+- U kontejneru bude služba, která bude kontrolovat odpad
+
+Do kontejneru nepatří: běžný domovní odpad, sklo, větve, listí, plastové lahve, nebezpečný odpad (baterie, zářivky, autobaterie), stavební suť, dřevo a nábytek o větších rozměrech např. čalouněné soupravy (tento nábytek lze odvézt do sběrného dvoru Mníšek pod Brdy).""",
+                pdfFileName = "heavy_load.pdf"
+            )
+        )
+    }
     
     /**
      * Reschedules notifications asynchronously to avoid blocking app startup

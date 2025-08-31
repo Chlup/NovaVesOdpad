@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import android.net.Uri
 import com.mugeaters.popelnice.nvpp.model.TrashDay
 import com.mugeaters.popelnice.nvpp.notification.NotificationReceiver
 import com.mugeaters.popelnice.nvpp.util.Logger
@@ -132,22 +133,65 @@ class NotificationsBuilderImpl(
         val title: String
         val body: String
         
-        when (input.notificationDaysOffset) {
-            0 -> {
-                title = "Dnes se vyváží odpad"
-                body = "Dnes se budou vyvážet tyto popelnice:"
+        if (day.bins.contains(TrashDay.Bin.heavyLoad) && day.bins.size == 1) {
+            // jen velkoobjemovy
+            when (input.notificationDaysOffset) {
+                0 -> {
+                    title = "Velkoobjemový kontejner dnes"
+                    body = "K dispozici mezi 9:00-11:00"
+                }
+                1 -> {
+                    title = "Velkoobjemový kontejner zítra"
+                    body = "Zítra mezi 9:00-11:00"
+                }
+                2 -> {
+                    title = "Velkoobjemový kontejner se blíží"
+                    body = "Za dva dny mezi 9:00-11:00"
+                }
+                else -> {
+                    title = "Velkoobjemový kontejner se blíží"
+                    body = "Za tři dny mezi 9:00-11:00"
+                }
             }
-            1 -> {
-                title = "Odvoz odpadu je již skoro tady"
-                body = "Zítra se budou vyvážet tyto popelnice:"
+        } else if (day.bins.contains(TrashDay.Bin.heavyLoad) && day.bins.size > 1) {
+            // velkoobjemovy + poplenice
+            when (input.notificationDaysOffset) {
+                0 -> {
+                    title = "Odpad a velkoobjemový kontejner již dnes"
+                    body = "Nachystejte popelnice:"
+                }
+                1 -> {
+                    title = "Odpad a velkoobjemový kontejner zítra"
+                    body = "Zítra se budou vyvážet popelnice:"
+                }
+                2 -> {
+                    title = "Odpad a velkoobjemový kontejner se blíží"
+                    body = "Za dva dny se budou vyvážet popelnice:"
+                }
+                else -> {
+                    title = "Odpad a velkoobjemový kontejner se blíží"
+                    body = "Za tři dny se budou vyvážet popelnice:"
+                }
             }
-            2 -> {
-                title = "Odvoz odpadu se blíží"
-                body = "Za dva dny se budou vyvážet tyto popelnice:"
-            }
-            else -> {
-                title = "Odvoz odpadu se blíží"
-                body = "Za tři dny se budou vyvážet tyto popelnice:"
+        } else {
+            // jen popelnice
+            when (input.notificationDaysOffset) {
+                0 -> {
+                    title = "Dnes se vyváží odpad"
+                    body = "Nachystejte popelnice:"
+                }
+                1 -> {
+                    title = "Odvoz odpadu je již skoro tady"
+                    body = "Zítra se budou vyvážet popelnice:"
+                }
+                2 -> {
+                    title = "Odvoz odpadu se blíží"
+                    body = "Za dva dny se budou vyvážet popelnice:"
+                }
+                else -> {
+                    title = "Odvoz odpadu se blíží"
+                    body = "Za tři dny se budou vyvážet popelnice:"
+                }
             }
         }
         
@@ -182,8 +226,14 @@ class NotificationsBuilderImpl(
         
         logger.debug("✅ Scheduling notification for day $day offset $offsetDays hour $hour $notificationDate")
         
-        val binsList = day.bins.joinToString("\n") { it.title }
-        val finalBody = "$body\n$binsList"
+        val finalBody = if (day.bins.contains(TrashDay.Bin.heavyLoad) && day.bins.size == 1) {
+            // For heavyLoad only, don't show bin list
+            body
+        } else {
+            // For regular bins or heavyLoad with other bins, show the list
+            val binsList = day.bins.joinToString("\n") { it.title }
+            "$body\n$binsList"
+        }
         
         return NotificationRequest(
             notificationId = (day.date.toString() + offsetDays.toString()).hashCode(),
@@ -265,6 +315,7 @@ class NotificationsBuilderImpl(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             try {
                 val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    data = Uri.parse("package:${context.packageName}")
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)

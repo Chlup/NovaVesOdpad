@@ -249,24 +249,53 @@ private fun NextTrashDayView(
                 )
             }
             
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                day.bins.forEach { bin ->
+            Column {
+                // Regular bins (non-heavyLoad)
+                val regularBins = day.bins.filter { it != TrashDay.Bin.heavyLoad }
+                if (regularBins.isNotEmpty()) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        BinView(bin = bin, size = 35.dp)
-                        
-                        Spacer(modifier = Modifier.width(8.dp))
-                        
-                        Text(
-                            text = bin.title,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = appColors.regularText,
-                            maxLines = 1,
-                            softWrap = false
-                        )
+                        regularBins.forEach { bin ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                BinView(bin = bin, size = 35.dp)
+                                
+                                Spacer(modifier = Modifier.width(8.dp))
+                                
+                                Text(
+                                    text = bin.title,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = appColors.regularText,
+                                    maxLines = 1,
+                                    softWrap = false
+                                )
+                            }
+                        }
+                    }
+                }
+                
+                // Heavy load bins (if any)
+                val heavyLoadBins = day.bins.filter { it == TrashDay.Bin.heavyLoad }
+                if (heavyLoadBins.isNotEmpty()) {
+                    heavyLoadBins.forEach { bin ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(top = if (regularBins.isNotEmpty()) 8.dp else 0.dp)
+                        ) {
+                            BinView(bin = bin, size = 35.dp)
+                            
+                            Spacer(modifier = Modifier.width(8.dp))
+                            
+                            Text(
+                                text = bin.title,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = appColors.regularText,
+                                maxLines = 1,
+                                softWrap = false
+                            )
+                        }
                     }
                 }
             }
@@ -472,6 +501,13 @@ private fun TrashBinsInfoView(
                 onClick = { onInfoClick("mix") }
             )
         }
+        
+        // Heavy load section (full width like in iOS)
+        BinInfoView(
+            bin = TrashDay.Bin.heavyLoad,
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { onInfoClick("heavyLoad") }
+        )
     }
 }
 

@@ -68,6 +68,7 @@ fun NavGraphBuilder.appNavGraph(
             "paper" -> homeViewModel.paperTrashInfoSection()
             "bio" -> homeViewModel.bioTrashInfoSection()
             "mix" -> homeViewModel.mixTrashInfoSection()
+            "heavyLoad" -> homeViewModel.heavyLoadInfoSection()
             else -> homeViewModel.plasticTrashInfoSection()
         }
         
