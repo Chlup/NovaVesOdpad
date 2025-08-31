@@ -73,32 +73,32 @@ struct NotificationsBuilderImpl {
             // jen velkoobjemovy
             switch input.notificationDaysOffset {
             case 0:
-                title = "Dnes je přistaven velkoobjemový kontejner"
-                subtitle = "Zavezte odpad na skládku NVpP mezi 9:00-11:00"
+                title = "Velkoobjemový kontejner dnes"
+                subtitle = "K dispozici mezi 9:00-11:00"
             case 1:
-                title = "Přistavení velkoobjemového kontejneru je již skoro tady"
-                subtitle = "Zítra zavezte odpad na skládku NVpP mezi 9:00-11:00"
+                title = "Velkoobjemový kontejner zítra"
+                subtitle = "Zítra mezi 9:00-11:00"
             case 2:
-                title = "Přistavení velkoobjemového kontejneru se blíží"
-                subtitle = "Za dva dny zavezte odpad na skládku NVpP mezi 9:00-11:00"
+                title = "Velkoobjemový kontejner se blíží"
+                subtitle = "Za dva dny mezi 9:00-11:00"
             default:
-                title = "Přistavení velkoobjemového kontejneru se blíží"
-                subtitle = "Za tři dny zavezte odpad na skládku NVpP mezi 9:00-11:00"
+                title = "Velkoobjemový kontejner se blíží"
+                subtitle = "Za tři dny mezi 9:00-11:00"
             }
         } else if day.bins.contains(.heavyLoad) && day.bins.count == 1 {
             // velkoobjemovy + poplenice
             switch input.notificationDaysOffset {
             case 0:
-                title = "Dnes se vyváží odpad a je přistaven velkoobjemový kontejner"
+                title = "Odpad a velkoobjemový kontejner již dnes"
                 subtitle = "Nachystejte popelnice:"
             case 1:
-                title = "Odvoz odpadu a velkoobjemový kontejner jsou již skoro tady"
+                title = "Odpad a velkoobjemový kontejner zítra"
                 subtitle = "Zítra se budou vyvážet popelnice:"
             case 2:
-                title = "Odvoz odpadu a velkoobjemový kontejner se blíží"
+                title = "Odpad a velkoobjemový kontejner se blíží"
                 subtitle = "Za dva dny se budou vyvážet popelnice:"
             default:
-                title = "Odvoz odpadu a velkoobjemový kontejner se blíží"
+                title = "Odpad a velkoobjemový kontejner se blíží"
                 subtitle = "Za tři dny se budou vyvážet popelnice:"
             }
         } else {

@@ -62,7 +62,18 @@ extension DaysLoaderImpl: DaysLoader {
             days.append(day)
         }
 
-        return days
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2025, month: 9, day: 6), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2025, month: 10, day: 4), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2025, month: 11, day: 8), to: &days)
+
+        return days.sorted(by: { $0.date < $1.date })
+    }
+
+    func addHeavyLoadDay(calendar: Calendar, now: Date, components: DateComponents, to days: inout [TrashDay]) {
+        let date = Calendar.current.date(from: components)!
+        let daysDifferenceToToday = now.daysDifference(to: date)
+        let day = TrashDay(date: date, daysDifferenceToToday: daysDifferenceToToday, bins: [.heavyLoad])
+        days.append(day)
     }
 }
 
