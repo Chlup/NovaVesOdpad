@@ -189,7 +189,7 @@ struct NotificationsBuilderImpl {
         // Create a new DateComponents with the same day but different hour
         var newComponents = components
         newComponents.hour = newHour
-        newComponents.minute = 56
+        newComponents.minute = 0
         newComponents.second = 0
 
         // Create and return the new date
