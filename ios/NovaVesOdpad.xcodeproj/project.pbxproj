@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		34113BAA2DDD14C200EE09BA /* TrashInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34113BA92DDD14C200EE09BA /* TrashInfoModel.swift */; };
 		34113BAF2DDD17FE00EE09BA /* napojovy-karton_cz_2020.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 34113BAC2DDD17FE00EE09BA /* napojovy-karton_cz_2020.pdf */; };
 		34113BB02DDD17FE00EE09BA /* papir_cz_2020.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 34113BAD2DDD17FE00EE09BA /* papir_cz_2020.pdf */; };
 		34113BB12DDD17FE00EE09BA /* plasty_cz_2020.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 34113BAE2DDD17FE00EE09BA /* plasty_cz_2020.pdf */; };
@@ -15,35 +14,31 @@
 		34113BB52DDD181100EE09BA /* TrashInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34113BB42DDD181100EE09BA /* TrashInfoSection.swift */; };
 		34113BB82DDD277700EE09BA /* NotificationHour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34113BB72DDD277700EE09BA /* NotificationHour.swift */; };
 		343502AB2DDD097E0075036D /* NovaVesOdpadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502AA2DDD097E0075036D /* NovaVesOdpadApp.swift */; };
-		343502B22DDD0D2F0075036D /* TashDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502B12DDD0D2F0075036D /* TashDay.swift */; };
-		343502B82DDD146F0075036D /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502B52DDD146F0075036D /* SettingsCoordinator.swift */; };
-		343502B92DDD146F0075036D /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502B62DDD146F0075036D /* SettingsModel.swift */; };
-		343502BA2DDD146F0075036D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502B72DDD146F0075036D /* SettingsView.swift */; };
-		343502BE2DDD14980075036D /* TrashInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502BB2DDD14980075036D /* TrashInfoCoordinator.swift */; };
-		343502C02DDD14980075036D /* TrashInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502BD2DDD14980075036D /* TrashInfoView.swift */; };
+		343502B22DDD0D2F0075036D /* TrashDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502B12DDD0D2F0075036D /* TrashDay.swift */; };
 		3439DBED2DC7492F008BD7B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3439DBE22DC7492F008BD7B0 /* Assets.xcassets */; };
 		3439DBEF2DC74B36008BD7B0 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DBEE2DC74B36008BD7B0 /* RootView.swift */; };
-		3439DBF82DC74F08008BD7B0 /* TasksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DBF72DC74F08008BD7B0 /* TasksManager.swift */; };
 		3439DBFB2DC7501D008BD7B0 /* Factory in Frameworks */ = {isa = PBXBuildFile; productRef = 3439DBFA2DC7501D008BD7B0 /* Factory */; };
 		3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DC062DC7550F008BD7B0 /* Logger.swift */; };
 		343AACCA2DE0745500D8E8BF /* UncheckedSendableMutableBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343AACC92DE0745500D8E8BF /* UncheckedSendableMutableBox.swift */; };
 		343AACCD2DE0745E00D8E8BF /* SendableCurrentValueSubject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343AACCB2DE0745E00D8E8BF /* SendableCurrentValueSubject.swift */; };
 		343AACCE2DE0745E00D8E8BF /* SendablePassthroughSubject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343AACCC2DE0745E00D8E8BF /* SendablePassthroughSubject.swift */; };
 		344D192D2DDDAF6000E6A046 /* NotificationsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */; };
-		345593B02DC7610C002F346F /* GlobalCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593AF2DC7610C002F346F /* GlobalCoordinator.swift */; };
-		345593B22DC76118002F346F /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B12DC76118002F346F /* AppDestination.swift */; };
-		345593B52DC76303002F346F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B42DC76303002F346F /* HomeView.swift */; };
-		345593B72DC76307002F346F /* HomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345593B62DC76307002F346F /* HomeModel.swift */; };
+		3480EBFD2E65E8E000DAF1FF /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 3480EBFC2E65E8E000DAF1FF /* ComposableArchitecture */; };
+		3480EBFF2E65E8F600DAF1FF /* HomeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480EBFE2E65E8F600DAF1FF /* HomeStore.swift */; };
+		3480EC012E65E8FA00DAF1FF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480EC002E65E8FA00DAF1FF /* HomeView.swift */; };
+		3480EC062E65F2EB00DAF1FF /* SettingsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480EC052E65F2EB00DAF1FF /* SettingsStorage.swift */; };
+		3480EC092E65F6AB00DAF1FF /* DaysListStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480EC082E65F6AB00DAF1FF /* DaysListStore.swift */; };
+		3480EC0B2E65F6B400DAF1FF /* DaysListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480EC0A2E65F6B400DAF1FF /* DaysListView.swift */; };
+		3480EC0E2E65FC6200DAF1FF /* TrashInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480EC0D2E65FC6200DAF1FF /* TrashInfoStore.swift */; };
+		3480EC102E65FC6600DAF1FF /* TrashInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480EC0F2E65FC6600DAF1FF /* TrashInfoView.swift */; };
+		3480EC152E65FFEB00DAF1FF /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480EC142E65FFEB00DAF1FF /* SettingsStore.swift */; };
+		3480EC172E65FFEF00DAF1FF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480EC162E65FFEF00DAF1FF /* SettingsView.swift */; };
 		349CC4472DEEF54800559CFC /* DaysLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349CC4462DEEF54800559CFC /* DaysLoader.swift */; };
 		34A8B8AF2DDF55D7008B6BAA /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8AE2DDF55D7008B6BAA /* Date+Extensions.swift */; };
 		34A8B8B12DDFBDB3008B6BAA /* BinIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B02DDFBDB3008B6BAA /* BinIconView.swift */; };
-		34A8B8B42DDFC36B008B6BAA /* DaysListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */; };
-		34A8B8B62DDFC370008B6BAA /* DaysListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */; };
-		34A8B8B82DDFC375008B6BAA /* DaysListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B72DDFC375008B6BAA /* DaysListView.swift */; };
 		34A8B8BB2DDFC8B0008B6BAA /* TrashMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8BA2DDFC8B0008B6BAA /* TrashMonth.swift */; };
 		34A8B8BD2DDFDC22008B6BAA /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A8B8BC2DDFDC22008B6BAA /* Launch Screen.storyboard */; };
 		34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EBFC2DC7C23100C11F28 /* RootModel.swift */; };
-		34C2EC012DC7C33B00C11F28 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */; };
 		9E3EADD52E5C716D0075E32A /* heavy_load.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9E3EADD42E5C716D0075E32A /* heavy_load.pdf */; };
 /* End PBXBuildFile section */
 
@@ -61,7 +56,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		34113BA92DDD14C200EE09BA /* TrashInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashInfoModel.swift; sourceTree = "<group>"; };
 		34113BAB2DDD17FE00EE09BA /* kovy_cz_2020.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = kovy_cz_2020.pdf; sourceTree = "<group>"; };
 		34113BAC2DDD17FE00EE09BA /* napojovy-karton_cz_2020.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "napojovy-karton_cz_2020.pdf"; sourceTree = "<group>"; };
 		34113BAD2DDD17FE00EE09BA /* papir_cz_2020.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = papir_cz_2020.pdf; sourceTree = "<group>"; };
@@ -69,16 +63,10 @@
 		34113BB42DDD181100EE09BA /* TrashInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashInfoSection.swift; sourceTree = "<group>"; };
 		34113BB72DDD277700EE09BA /* NotificationHour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHour.swift; sourceTree = "<group>"; };
 		343502AA2DDD097E0075036D /* NovaVesOdpadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovaVesOdpadApp.swift; sourceTree = "<group>"; };
-		343502B12DDD0D2F0075036D /* TashDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TashDay.swift; sourceTree = "<group>"; };
-		343502B52DDD146F0075036D /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
-		343502B62DDD146F0075036D /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
-		343502B72DDD146F0075036D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		343502BB2DDD14980075036D /* TrashInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashInfoCoordinator.swift; sourceTree = "<group>"; };
-		343502BD2DDD14980075036D /* TrashInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashInfoView.swift; sourceTree = "<group>"; };
+		343502B12DDD0D2F0075036D /* TrashDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashDay.swift; sourceTree = "<group>"; };
 		3439DBD42DC748DF008BD7B0 /* NovaVesOdpad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovaVesOdpad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3439DBE22DC7492F008BD7B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3439DBEE2DC74B36008BD7B0 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		3439DBF72DC74F08008BD7B0 /* TasksManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksManager.swift; sourceTree = "<group>"; };
 		3439DC062DC7550F008BD7B0 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		343AACC92DE0745500D8E8BF /* UncheckedSendableMutableBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UncheckedSendableMutableBox.swift; sourceTree = "<group>"; };
 		343AACCB2DE0745E00D8E8BF /* SendableCurrentValueSubject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableCurrentValueSubject.swift; sourceTree = "<group>"; };
@@ -86,20 +74,21 @@
 		344D192C2DDDAF6000E6A046 /* NotificationsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsBuilder.swift; sourceTree = "<group>"; };
 		344D19342DDDFFFB00E6A046 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		344D19362DDDFFFB00E6A046 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
-		345593AF2DC7610C002F346F /* GlobalCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoordinator.swift; sourceTree = "<group>"; };
-		345593B12DC76118002F346F /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
-		345593B42DC76303002F346F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		345593B62DC76307002F346F /* HomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModel.swift; sourceTree = "<group>"; };
+		3480EBFE2E65E8F600DAF1FF /* HomeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeStore.swift; sourceTree = "<group>"; };
+		3480EC002E65E8FA00DAF1FF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		3480EC052E65F2EB00DAF1FF /* SettingsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStorage.swift; sourceTree = "<group>"; };
+		3480EC082E65F6AB00DAF1FF /* DaysListStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListStore.swift; sourceTree = "<group>"; };
+		3480EC0A2E65F6B400DAF1FF /* DaysListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListView.swift; sourceTree = "<group>"; };
+		3480EC0D2E65FC6200DAF1FF /* TrashInfoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashInfoStore.swift; sourceTree = "<group>"; };
+		3480EC0F2E65FC6600DAF1FF /* TrashInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashInfoView.swift; sourceTree = "<group>"; };
+		3480EC142E65FFEB00DAF1FF /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		3480EC162E65FFEF00DAF1FF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		349CC4462DEEF54800559CFC /* DaysLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysLoader.swift; sourceTree = "<group>"; };
 		34A8B8AE2DDF55D7008B6BAA /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		34A8B8B02DDFBDB3008B6BAA /* BinIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinIconView.swift; sourceTree = "<group>"; };
-		34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListCoordinator.swift; sourceTree = "<group>"; };
-		34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListModel.swift; sourceTree = "<group>"; };
-		34A8B8B72DDFC375008B6BAA /* DaysListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListView.swift; sourceTree = "<group>"; };
 		34A8B8BA2DDFC8B0008B6BAA /* TrashMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashMonth.swift; sourceTree = "<group>"; };
 		34A8B8BC2DDFDC22008B6BAA /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		34C2EBFC2DC7C23100C11F28 /* RootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootModel.swift; sourceTree = "<group>"; };
-		34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		9E3EADD42E5C716D0075E32A /* heavy_load.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = heavy_load.pdf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3480EBFD2E65E8E000DAF1FF /* ComposableArchitecture in Frameworks */,
 				3439DBFB2DC7501D008BD7B0 /* Factory in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -134,9 +124,8 @@
 		343502B32DDD145B0075036D /* TashInfo */ = {
 			isa = PBXGroup;
 			children = (
-				343502BB2DDD14980075036D /* TrashInfoCoordinator.swift */,
-				34113BA92DDD14C200EE09BA /* TrashInfoModel.swift */,
-				343502BD2DDD14980075036D /* TrashInfoView.swift */,
+				3480EC0D2E65FC6200DAF1FF /* TrashInfoStore.swift */,
+				3480EC0F2E65FC6600DAF1FF /* TrashInfoView.swift */,
 				34113BB32DDD180400EE09BA /* models */,
 			);
 			path = TashInfo;
@@ -145,9 +134,8 @@
 		343502B42DDD14650075036D /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				343502B52DDD146F0075036D /* SettingsCoordinator.swift */,
-				343502B62DDD146F0075036D /* SettingsModel.swift */,
-				343502B72DDD146F0075036D /* SettingsView.swift */,
+				3480EC142E65FFEB00DAF1FF /* SettingsStore.swift */,
+				3480EC162E65FFEF00DAF1FF /* SettingsView.swift */,
 				34113BB62DDD276C00EE09BA /* models */,
 			);
 			path = Settings;
@@ -191,7 +179,7 @@
 				349CC4452DEEF53B00559CFC /* DaysLoader */,
 				3439DC052DC75507008BD7B0 /* Logger */,
 				344D192B2DDDAF5300E6A046 /* NotificationsBuilder */,
-				3439DBF42DC74EF7008BD7B0 /* TasksManager */,
+				3480EC042E65F2DC00DAF1FF /* SettingsStorage */,
 			);
 			path = Dependencies;
 			sourceTree = "<group>";
@@ -221,7 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				343502AA2DDD097E0075036D /* NovaVesOdpadApp.swift */,
-				3439DC0E2DC755E1008BD7B0 /* Coordinator */,
 				3439DBE42DC7492F008BD7B0 /* Dependencies */,
 				3439DBE82DC7492F008BD7B0 /* Features */,
 				344D19532DDE010500E6A046 /* models */,
@@ -231,29 +218,12 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		3439DBF42DC74EF7008BD7B0 /* TasksManager */ = {
-			isa = PBXGroup;
-			children = (
-				3439DBF72DC74F08008BD7B0 /* TasksManager.swift */,
-			);
-			path = TasksManager;
-			sourceTree = "<group>";
-		};
 		3439DC052DC75507008BD7B0 /* Logger */ = {
 			isa = PBXGroup;
 			children = (
 				3439DC062DC7550F008BD7B0 /* Logger.swift */,
 			);
 			path = Logger;
-			sourceTree = "<group>";
-		};
-		3439DC0E2DC755E1008BD7B0 /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				345593B12DC76118002F346F /* AppDestination.swift */,
-				345593AF2DC7610C002F346F /* GlobalCoordinator.swift */,
-			);
-			path = Coordinator;
 			sourceTree = "<group>";
 		};
 		344D192B2DDDAF5300E6A046 /* NotificationsBuilder */ = {
@@ -287,7 +257,7 @@
 		344D19532DDE010500E6A046 /* models */ = {
 			isa = PBXGroup;
 			children = (
-				343502B12DDD0D2F0075036D /* TashDay.swift */,
+				343502B12DDD0D2F0075036D /* TrashDay.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -303,11 +273,18 @@
 		345593B32DC762FB002F346F /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				34C2EC002DC7C33B00C11F28 /* HomeCoordinator.swift */,
-				345593B62DC76307002F346F /* HomeModel.swift */,
-				345593B42DC76303002F346F /* HomeView.swift */,
+				3480EBFE2E65E8F600DAF1FF /* HomeStore.swift */,
+				3480EC002E65E8FA00DAF1FF /* HomeView.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		3480EC042E65F2DC00DAF1FF /* SettingsStorage */ = {
+			isa = PBXGroup;
+			children = (
+				3480EC052E65F2EB00DAF1FF /* SettingsStorage.swift */,
+			);
+			path = SettingsStorage;
 			sourceTree = "<group>";
 		};
 		349CC4452DEEF53B00559CFC /* DaysLoader */ = {
@@ -329,9 +306,8 @@
 		34A8B8B22DDFC35C008B6BAA /* DaysList */ = {
 			isa = PBXGroup;
 			children = (
-				34A8B8B32DDFC36B008B6BAA /* DaysListCoordinator.swift */,
-				34A8B8B52DDFC370008B6BAA /* DaysListModel.swift */,
-				34A8B8B72DDFC375008B6BAA /* DaysListView.swift */,
+				3480EC082E65F6AB00DAF1FF /* DaysListStore.swift */,
+				3480EC0A2E65F6B400DAF1FF /* DaysListView.swift */,
 				34A8B8B92DDFC8A7008B6BAA /* models */,
 			);
 			path = DaysList;
@@ -364,6 +340,7 @@
 			name = NovaVesOdpad;
 			packageProductDependencies = (
 				3439DBFA2DC7501D008BD7B0 /* Factory */,
+				3480EBFC2E65E8E000DAF1FF /* ComposableArchitecture */,
 			);
 			productName = ArchExample;
 			productReference = 3439DBD42DC748DF008BD7B0 /* NovaVesOdpad.app */;
@@ -395,6 +372,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				3439DBF92DC7501D008BD7B0 /* XCRemoteSwiftPackageReference "Factory" */,
+				3480EBFB2E65E8E000DAF1FF /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3439DBD52DC748DF008BD7B0 /* Products */;
@@ -428,33 +406,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				345593B02DC7610C002F346F /* GlobalCoordinator.swift in Sources */,
-				34C2EC012DC7C33B00C11F28 /* HomeCoordinator.swift in Sources */,
-				343502BE2DDD14980075036D /* TrashInfoCoordinator.swift in Sources */,
+				3480EBFF2E65E8F600DAF1FF /* HomeStore.swift in Sources */,
 				34A8B8B12DDFBDB3008B6BAA /* BinIconView.swift in Sources */,
 				343AACCA2DE0745500D8E8BF /* UncheckedSendableMutableBox.swift in Sources */,
-				343502C02DDD14980075036D /* TrashInfoView.swift in Sources */,
-				345593B72DC76307002F346F /* HomeModel.swift in Sources */,
-				34A8B8B42DDFC36B008B6BAA /* DaysListCoordinator.swift in Sources */,
-				345593B52DC76303002F346F /* HomeView.swift in Sources */,
-				343502B82DDD146F0075036D /* SettingsCoordinator.swift in Sources */,
-				343502B92DDD146F0075036D /* SettingsModel.swift in Sources */,
-				343502BA2DDD146F0075036D /* SettingsView.swift in Sources */,
-				345593B22DC76118002F346F /* AppDestination.swift in Sources */,
+				3480EC102E65FC6600DAF1FF /* TrashInfoView.swift in Sources */,
+				3480EC172E65FFEF00DAF1FF /* SettingsView.swift in Sources */,
+				3480EC012E65E8FA00DAF1FF /* HomeView.swift in Sources */,
+				3480EC092E65F6AB00DAF1FF /* DaysListStore.swift in Sources */,
 				34A8B8AF2DDF55D7008B6BAA /* Date+Extensions.swift in Sources */,
-				3439DBF82DC74F08008BD7B0 /* TasksManager.swift in Sources */,
-				343502B22DDD0D2F0075036D /* TashDay.swift in Sources */,
+				3480EC0E2E65FC6200DAF1FF /* TrashInfoStore.swift in Sources */,
+				3480EC062E65F2EB00DAF1FF /* SettingsStorage.swift in Sources */,
+				343502B22DDD0D2F0075036D /* TrashDay.swift in Sources */,
 				343AACCD2DE0745E00D8E8BF /* SendableCurrentValueSubject.swift in Sources */,
 				343AACCE2DE0745E00D8E8BF /* SendablePassthroughSubject.swift in Sources */,
 				3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */,
+				3480EC0B2E65F6B400DAF1FF /* DaysListView.swift in Sources */,
 				34113BB52DDD181100EE09BA /* TrashInfoSection.swift in Sources */,
 				34A8B8BB2DDFC8B0008B6BAA /* TrashMonth.swift in Sources */,
 				34113BB82DDD277700EE09BA /* NotificationHour.swift in Sources */,
-				34A8B8B82DDFC375008B6BAA /* DaysListView.swift in Sources */,
+				3480EC152E65FFEB00DAF1FF /* SettingsStore.swift in Sources */,
 				349CC4472DEEF54800559CFC /* DaysLoader.swift in Sources */,
 				343502AB2DDD097E0075036D /* NovaVesOdpadApp.swift in Sources */,
-				34113BAA2DDD14C200EE09BA /* TrashInfoModel.swift in Sources */,
-				34A8B8B62DDFC370008B6BAA /* DaysListModel.swift in Sources */,
 				3439DBEF2DC74B36008BD7B0 /* RootView.swift in Sources */,
 				344D192D2DDDAF6000E6A046 /* NotificationsBuilder.swift in Sources */,
 				34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */,
@@ -690,7 +662,15 @@
 			repositoryURL = "https://github.com/hmlongco/Factory.git";
 			requirement = {
 				kind = exactVersion;
-				version = 2.4.9;
+				version = 2.5.3;
+			};
+		};
+		3480EBFB2E65E8E000DAF1FF /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.22.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -700,6 +680,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3439DBF92DC7501D008BD7B0 /* XCRemoteSwiftPackageReference "Factory" */;
 			productName = Factory;
+		};
+		3480EBFC2E65E8E000DAF1FF /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3480EBFB2E65E8E000DAF1FF /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

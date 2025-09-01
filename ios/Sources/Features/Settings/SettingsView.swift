@@ -1,16 +1,15 @@
 //
-//  HomeView.swift
-//  ArchExample
+//  SettingsView.swift
+//  NovaVesOdpad
 //
-//  Created by Michal Fousek on 04.05.2025.
+//  Created by Michal Fousek on 01.09.2025.
 //
 
-import Foundation
+import ComposableArchitecture
 import SwiftUI
 
 struct SettingsView: View {
-    let model: SettingsModel
-    @Bindable var state: SettingsModelState
+    @Bindable var store: StoreOf<SettingsScreen>
 
     var body: some View {
         NavigationStack {
@@ -18,47 +17,37 @@ struct SettingsView: View {
                 VStack(alignment: .leading) {
                     TitleView()
 
-                    if !state.notificationsAuthorized {
-                        NotificationsNotEnabledView(model: model)
+                    if !store.notificationsAuthorized {
+                        NotificationsNotEnabledView(store: store)
                     }
 
-                    if state.schedulingNotificationsInProgress {
+                    if store.schedulingNotificationsInProgress {
                         SchedulingNotificationsView()
                     }
 
-                    NotifSetupView(
-                        model: model,
-                        state: state,
-                        title: "Zapnutá notifikace",
-                        isOn: $state.notificationEnabled,
-                        dayOffset: $state.notificationDaysOffset,
-                        hour: $state.selectedNotificationHour
-                    )
+                    NotifSetupView(store: store, title: "Zapnutá notifikace")
                 }
                 .padding(.horizontal, 24)
             }
             .background(.screenBackground)
-            .setupNavigation(model)
-            .setupToolbar(model)
-            .onAppear { model.onAppear() }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                model.onAppear()
-            }
+            .setupNavigation($store)
+            .setupToolbar(store)
+            .onAppear { store.send(.onAppear) }
         }
     }
 }
 
 private extension View {
-    func setupNavigation(_ model: SettingsModel) -> some View {
+    func setupNavigation(_ store: Bindable<StoreOf<SettingsScreen>>) -> some View {
         return self
     }
 
-    func setupToolbar(_ model: SettingsModel) -> some View {
+    func setupToolbar(_ store: StoreOf<SettingsScreen>) -> some View {
         return self
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        model.coordinator.dismiss()
+                        store.send(.dismiss)
                     } label: {
                         Text("Zpět")
                             .foregroundStyle(.regularText)
@@ -82,23 +71,18 @@ private struct TitleView: View {
 }
 
 private struct NotifSetupView: View {
-    let model: SettingsModel
-    let state: SettingsModelState
+    @Bindable var store: StoreOf<SettingsScreen>
     let title: String
-    @Binding var isOn: Bool
-    @Binding var dayOffset: Int
-    @Binding var hour: Int
 
     var body: some View {
         VStack(alignment: .leading) {
-            Toggle(title, isOn: $isOn)
-                .onChange(of: isOn) { model.notifSettingsChanged() }
+            Toggle(title, isOn: $store.notificationEnabled)
                 .font(.headline)
                 .foregroundStyle(.regularText)
                 .padding(.trailing, 10)
-                .disabled(!state.notificationsAuthorized)
+                .disabled(!store.notificationsAuthorized)
 
-            if isOn {
+            if store.notificationEnabled {
                 HStack {
                     Text("Den notifikace")
                         .font(.body)
@@ -106,7 +90,7 @@ private struct NotifSetupView: View {
 
                     Spacer()
 
-                    Picker("", selection: $dayOffset) {
+                    Picker("", selection: $store.notificationDaysOffset) {
                         Text("Tři dny před svozem")
                             .tag(3)
 
@@ -120,7 +104,6 @@ private struct NotifSetupView: View {
                             .tag(0)
                     }
                     .tint(.regularText)
-                    .onChange(of: dayOffset) { model.notifSettingsChanged() }
                 }
 
                 HStack {
@@ -130,8 +113,8 @@ private struct NotifSetupView: View {
 
                     Spacer()
 
-                    Picker("", selection: $hour) {
-                        ForEach(state.notificationHours, id: \.self) { hour in
+                    Picker("", selection: $store.selectedNotificationHour) {
+                        ForEach(store.notificationHours, id: \.self) { hour in
                             if hour < 10 {
                                 Text("0\(hour):00")
                                     .tag(hour)
@@ -142,7 +125,6 @@ private struct NotifSetupView: View {
                         }
                     }
                     .tint(.regularText)
-                    .onChange(of: hour) { model.notifSettingsChanged() }
                 }
             }
         }
@@ -155,7 +137,7 @@ private struct NotifSetupView: View {
 }
 
 private struct NotificationsNotEnabledView: View {
-    let model: SettingsModel
+    let store: StoreOf<SettingsScreen>
 
     var body: some View {
         Section {
@@ -169,7 +151,7 @@ private struct NotificationsNotEnabledView: View {
                 .padding(10)
 
                 Button {
-                    model.coordinator.goToSettings()
+                    store.send(.openSettings)
                 } label: {
                     Text("Jít do nastavení")
                         .foregroundStyle(.white)
@@ -207,12 +189,12 @@ private struct SchedulingNotificationsView: View {
     }
 }
 
-#Preview {
-    let state = SettingsModelState()
-    let model = SettingsModelImpl(
-        state: state,
-        coordinator: SettingsCoordinator(coordinator: GlobalCoordinatorImpl()),
-        days: []
-    )
-    SettingsView(model: model, state: state)
-}
+//#Preview {
+//    let state = SettingsModelState()
+//    let model = SettingsModelImpl(
+//        state: state,
+//        coordinator: SettingsCoordinator(coordinator: GlobalCoordinatorImpl()),
+//        days: []
+//    )
+//    SettingsView(model: model, state: state)
+//}

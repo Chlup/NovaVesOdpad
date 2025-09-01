@@ -27,8 +27,7 @@ extension Container {
 
 struct NotificationsBuilderImpl {
     @ObservationIgnored @Injected(\.logger) private var logger
-    @ObservationIgnored @Injected(\.tasksManager) private var tasks
-
+    
     private let scheduleNotificationsTaskID = "scheduleNotificationsTaskID"
 
     private func runBuild(input: NotificationBuilderInput) async {
@@ -190,7 +189,7 @@ struct NotificationsBuilderImpl {
         // Create a new DateComponents with the same day but different hour
         var newComponents = components
         newComponents.hour = newHour
-        newComponents.minute = 0
+        newComponents.minute = 56
         newComponents.second = 0
 
         // Create and return the new date
@@ -201,8 +200,7 @@ struct NotificationsBuilderImpl {
 extension NotificationsBuilderImpl: NotificationsBuilder {
     
     func build(input: NotificationBuilderInput) async {
-        await tasks.cancelTaskAndWait(id: scheduleNotificationsTaskID)
-        await tasks.addTaskAndWait(id: scheduleNotificationsTaskID) { await self.runBuild(input: input) }
+        await runBuild(input: input)
     }
 
     func cancelAllNotifications() {

@@ -6,47 +6,27 @@
 //
 
 import SwiftUI
-@preconcurrency import UserNotifications
 import Factory
 import NotificationCenter
-import UserNotificationsUI
+import ComposableArchitecture
+@preconcurrency import UserNotifications
 
 final class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotificationCenterDelegate {
     @ObservationIgnored @Injected(\.logger) private var logger
-    @ObservationIgnored @Injected(\.daysLoader) private var daysLoader
-    @ObservationIgnored @Injected(\.notificationsBuilder) private var notificationsBuilder
 
-    let coordinator: GlobalCoordinator
-    let rootModel: RootModel
-    let homeState: HomeModelState
-
-    override init() {
-        let coordinator = GlobalCoordinatorImpl()
-        self.coordinator = coordinator
-        rootModel = RootModelImpl(coordinator: coordinator)
-        homeState = HomeModelState()
-        super.init()
+    let homeStore = StoreOf<Home>(
+        initialState: Home.State()
+    ) {
+        Home()
+//            ._printChanges()
     }
-    
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         // Register the notification delegate
         UNUserNotificationCenter.current().delegate = self
-
-        let days = daysLoader.load()
-        let state = SettingsModelState()
-        let input = NotificationBuilderInput(
-            days: days,
-            notificationEnabled: state.notificationEnabled,
-            notificationDaysOffset: state.notificationDaysOffset,
-            selectedNotificationHour: state.selectedNotificationHour
-        )
-        Task {
-            await notificationsBuilder.build(input: input)
-        }
-
         return true
     }
 
@@ -72,14 +52,15 @@ struct NovaVesOdpadApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView(model: appDelegate.rootModel, homeState: appDelegate.homeState)
-                .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                    appDelegate.rootModel.applicationWillEnterForegroundNotification()
-                }
-                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-                    appDelegate.rootModel.applicationDidEnterBackgroundNotification()
-                }
+            HomeView(
+                store: appDelegate.homeStore
+            )
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                appDelegate.homeStore.send(.appDelegate(.willEnterForeground))
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+                appDelegate.homeStore.send(.appDelegate(.didEnterBackground))
+            }
         }
-        
     }
 }

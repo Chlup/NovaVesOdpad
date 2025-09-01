@@ -1,23 +1,22 @@
 //
-//  HomeView.swift
-//  ArchExample
+//  TrashInfoView.swift
+//  NovaVesOdpad
 //
-//  Created by Michal Fousek on 04.05.2025.
+//  Created by Michal Fousek on 01.09.2025.
 //
 
-import Foundation
+import ComposableArchitecture
 import SwiftUI
 import PDFKit
 
 struct TrashInfoView: View {
-    let model: TrashInfoModel
-    let state: TrashInfoModelState
+    @Bindable var store: StoreOf<TrashInfo>
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
-                    ForEach(state.sections) { section in
+                    ForEach(store.sections) { section in
                         Text(section.title)
                             .font(.title)
                             .foregroundStyle(.regularText)
@@ -39,24 +38,25 @@ struct TrashInfoView: View {
             }
             .padding(.top, 20)
             .padding(.horizontal, 24)
-            .setupNavigation(model)
-            .setupToolbar(model)
+            .setupNavigation($store)
+            .setupToolbar(store)
+            .onAppear { store.send(.onAppear) }
             .background(.screenBackground)
         }
     }
 }
 
 private extension View {
-    func setupNavigation(_ model: TrashInfoModel) -> some View {
+    func setupNavigation(_ store: Bindable<StoreOf<TrashInfo>>) -> some View {
         return self
     }
 
-    func setupToolbar(_ model: TrashInfoModel) -> some View {
+    func setupToolbar(_ store: StoreOf<TrashInfo>) -> some View {
         return self
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        model.coordinator.dismiss()
+                        store.send(.dismiss)
                     } label: {
                         Text("Zpět")
                             .foregroundStyle(.regularText)
@@ -80,37 +80,13 @@ private struct PDFKitView: UIViewRepresentable {
         pdfView.usePageViewController(true)
         pdfView.pageBreakMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         pdfView.backgroundColor = .systemBackground
-        
+
         pdfView.enableDataDetectors = true
         pdfView.isUserInteractionEnabled = true
-        
+
         return pdfView
     }
 
     func updateUIView(_ uiView: PDFView, context: Context) {
     }
-}
-
-#Preview("Bio") {
-    let homeModel = HomeModelImpl(state: HomeModelState(), coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
-    let state = TrashInfoModelState(sections: homeModel.bioTrashInfoSection())
-    TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: GlobalCoordinatorImpl())), state: state)
-}
-
-#Preview("Paper") {
-    let homeModel = HomeModelImpl(state: HomeModelState(), coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
-    let state = TrashInfoModelState(sections: homeModel.paperTrashInfoSection())
-    TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: GlobalCoordinatorImpl())), state: state)
-}
-
-#Preview("Plastic") {
-    let homeModel = HomeModelImpl(state: HomeModelState(), coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
-    let state = TrashInfoModelState(sections: homeModel.plasticTrashInfoSection())
-    TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: GlobalCoordinatorImpl())), state: state)
-}
-
-#Preview("Mix") {
-    let homeModel = HomeModelImpl(state: HomeModelState(), coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
-    let state = TrashInfoModelState(sections: homeModel.mixTrashInfoSection())
-    TrashInfoView(model: TrashInfoModelImpl(state: state, coordinator: TrashInfoCoordinator(coordinator: GlobalCoordinatorImpl())), state: state)
 }

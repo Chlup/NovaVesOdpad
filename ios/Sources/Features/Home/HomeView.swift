@@ -1,53 +1,52 @@
 //
 //  HomeView.swift
-//  ArchExample
+//  NovaVesOdpad
 //
-//  Created by Michal Fousek on 04.05.2025.
+//  Created by Michal Fousek on 01.09.2025.
 //
 
-import Foundation
+import ComposableArchitecture
 import SwiftUI
 
 struct HomeView: View {
-    let model: HomeModel
-    let state: HomeModelState
+    @Bindable var store: StoreOf<Home>
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 TitleView()
-                
-                if let firstDay = state.firstDay {
-                    NextTrashDayView(model: model, day: firstDay)
+
+                if let firstDay = store.firstDay {
+                    NextTrashDayView(store: store, day: firstDay)
                         .padding(.bottom, 18)
                 }
-                
+
                 HStack {
-                    NotificationsButtonView(model: model, state: state)
+                    NotificationsButtonView(store: store)
                         .padding(.trailing, 10)
-                    CalendarButtonView(model: model, state: state)
+                    CalendarButtonView(store: store)
                 }
                 .padding(.bottom, 18)
-                
+
                 Text("Budoucí vývozy")
                     .font(.title3)
                     .bold()
                     .padding(.bottom, 4)
-                
-                ForEach(state.homeDays) { day in
-                    DayView(model: model, day: day)
+
+                ForEach(store.homeDays) { day in
+                    DayView(store: store, day: day)
                         .padding(.bottom, 4)
                 }
-                
+
                 HStack {
                     Text("Typy popelnic")
                         .font(.title3)
                         .bold()
 
                     Spacer()
-                    
+
                     Button {
-                        model.coordinator.openSortingWeb()
+                        store.send(.openSortingWeb)
                     } label: {
                         Image(systemName: "info.circle")
                             .resizable()
@@ -57,29 +56,39 @@ struct HomeView: View {
                 }
                 .padding(.top, 18)
                 .padding(.bottom, 4)
-                
-                TrashBinsInfoView(model: model)
+
+                TrashBinsInfoView(store: store)
                     .padding(.bottom, 24)
             }
             .padding(.horizontal, 24)
         }
         .padding(.vertical, 1)
         .background(.screenBackground)
-        .onAppear { model.onAppear() }
-        .setupNavigation(model)
-        .setupToolbar(model, state)
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            model.onWillEnterForegroundNotification()
-        }
+        .onAppear { store.send(.onAppear) }
+        .setupNavigation($store)
+        .setupToolbar(store)
+        .alert($store.scope(state: \.alert, action: \.alert))
     }
 }
 
 private extension View {
-    func setupNavigation(_ model: HomeModel) -> some View {
+    func setupNavigation(_ store: Bindable<StoreOf<Home>>) -> some View {
         return self
+            .sheet(
+                item: store.scope(state: \.daysList, action: \.daysList),
+                content: { store in DaysListView(store: store) }
+            )
+            .sheet(
+                item: store.scope(state: \.trashInfo, action: \.trashInfo),
+                content: { store in TrashInfoView(store: store) }
+            )
+            .sheet(
+                item: store.scope(state: \.settingsScreen, action: \.settingsScreen),
+                content: { store in SettingsView(store: store) }
+            )
     }
 
-    func setupToolbar(_ model: HomeModel, _ state: HomeModelState) -> some View {
+    func setupToolbar(_ store: StoreOf<Home>) -> some View {
         return self
             .toolbar(.hidden, for: .navigationBar)
     }
@@ -95,7 +104,7 @@ private struct TitleView: View {
 }
 
 private struct NextTrashDayView: View {
-    let model: HomeModel
+    let store: StoreOf<Home>
     let day: TrashDay
 
     var body: some View {
@@ -107,10 +116,10 @@ private struct NextTrashDayView: View {
                     .padding(.bottom, 1)
 
                 HStack {
-                    Text(model.titleForNextDay(day.date))
+                    Text(store.titleForNextDay)
                         .font(.callout)
 
-                    Text(model.daysToNextTrashDayText(numberOfDays: day.daysDifferenceToToday))
+                    Text(store.daysToNextTrashDayText)
                         .font(.subheadline)
                         .foregroundStyle(.grayText)
                 }
@@ -123,34 +132,34 @@ private struct NextTrashDayView: View {
                                 HStack {
                                     BinIconView(bin: bin, size: 35)
                                         .padding(.trailing, 0)
-                                    
+
                                     Text(bin.title)
                                         .font(.callout)
                                         .padding(.trailing, 10)
                                         .minimumScaleFactor(0.6)
                                         .fixedSize()
-                                    
+
                                     Spacer()
                                 }
                                 .frame(maxWidth: .infinity)
                             }
                         }
-                        
+
                         Spacer()
                     }
-                    
+
                     ForEach(day.bins) { bin in
                         if bin == .heavyLoad {
                             HStack {
                                 BinIconView(bin: bin, size: 35)
                                     .padding(.trailing, 0)
-                                
+
                                 Text(bin.title)
                                     .font(.callout)
                                     .padding(.trailing, 10)
                                     .minimumScaleFactor(0.6)
                                     .fixedSize()
-                                
+
                                 Spacer()
                             }
                             .frame(maxWidth: .infinity)
@@ -178,12 +187,11 @@ private struct NextTrashDayView: View {
 }
 
 private struct NotificationsButtonView: View {
-    let model: HomeModel
-    let state: HomeModelState
+    let store: StoreOf<Home>
 
     var body: some View {
         Button {
-            model.coordinator.tapOnNotificationsButton(allDays: state.allDays)
+            store.send(.openSettings)
         } label: {
             HStack {
                 Image(systemName: "square.grid.2x2")
@@ -205,12 +213,11 @@ private struct NotificationsButtonView: View {
 }
 
 private struct CalendarButtonView: View {
-    let model: HomeModel
-    let state: HomeModelState
+    let store: StoreOf<Home>
 
     var body: some View {
         Button {
-            model.coordinator.tapOnCalendarButton(allDays: state.allDays)
+            store.send(.openDaysList)
         } label: {
             HStack {
                 Image(systemName: "calendar")
@@ -233,7 +240,7 @@ private struct CalendarButtonView: View {
 }
 
 private struct DayView: View {
-    let model: HomeModel
+    let store: StoreOf<Home>
     let day: TrashDay
 
     var body: some View {
@@ -241,11 +248,11 @@ private struct DayView: View {
             Spacer()
 
             HStack {
-                Text(model.titleForDay(day.date))
+                Text(store.titlesForDay[day.id] ?? "")
                     .font(.callout)
 
                 Spacer()
-                
+
                 ForEach(day.bins) { bin in
                     BinIconView(bin: bin, size: 30)
                 }
@@ -263,32 +270,32 @@ private struct DayView: View {
 }
 
 private struct TrashBinsInfoView: View {
-    let model: HomeModel
+    let store: StoreOf<Home>
 
     var body: some View {
         VStack(spacing: 14) {
             HStack(spacing: 14) {
-                BinInfoView(bin: .plastic) { model.coordinator.tapOnBinInfo(model.plasticTrashInfoSection()) }
-                BinInfoView(bin: .paper) { model.coordinator.tapOnBinInfo(model.paperTrashInfoSection()) }
-            }
-            
-            HStack(spacing: 14) {
-                BinInfoView(bin: .bio) { model.coordinator.tapOnBinInfo(model.bioTrashInfoSection()) }
-                BinInfoView(bin: .mix) { model.coordinator.tapOnBinInfo(model.mixTrashInfoSection()) }
+                BinInfoView(store: store, bin: .plastic)
+                BinInfoView(store: store, bin: .paper)
             }
 
-            BinInfoView(bin: .heavyLoad) { model.coordinator.tapOnBinInfo(model.heavyLoadInfoSection()) }
+            HStack(spacing: 14) {
+                BinInfoView(store: store, bin: .bio)
+                BinInfoView(store: store, bin: .mix)
+            }
+
+            BinInfoView(store: store, bin: .heavyLoad)
         }
     }
 }
 
 private struct BinInfoView: View {
+    let store: StoreOf<Home>
     let bin: TrashDay.Bin
-    let action: () -> Void
 
     var body: some View {
         Button {
-            action()
+            store.send(.openTrashInfo(bin))
         } label: {
             HStack {
                 BinIconView(bin: bin, size: 35)
@@ -307,8 +314,8 @@ private struct BinInfoView: View {
     }
 }
 
-#Preview {
-    let state = HomeModelState()
-    let model = HomeModelImpl(state: state, coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
-    HomeView(model: model, state: state)
-}
+//#Preview {
+//    let state = HomeModelState()
+//    let model = HomeModelImpl(state: state, coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
+//    HomeView(model: model, state: state)
+//}

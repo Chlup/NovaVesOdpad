@@ -2,28 +2,27 @@
 //  DaysListView.swift
 //  NovaVesOdpad
 //
-//  Created by Michal Fousek on 22.05.2025.
+//  Created by Michal Fousek on 01.09.2025.
 //
 
-import Foundation
+import ComposableArchitecture
 import SwiftUI
 
 struct DaysListView: View {
-    let model: DaysListModel
-    let state: DaysListState
+    @Bindable var store: StoreOf<DaysList>
 
     var body: some View {
         NavigationStack {
             List {
                 TitleView()
 
-                ForEach(state.months) { month in
+                ForEach(store.months) { month in
                     Section {
                         ForEach(month.days) { day in
-                            DayView(model: model, day: day)
+                            DayView(store: store, day: day)
                         }
                     } header: {
-                        Text(model.titleForMonth(month.date))
+                        Text(store.titlesForMonth[month.id] ?? "")
                             .font(.title3)
                             .bold()
                             .foregroundStyle(.regularText)
@@ -40,24 +39,24 @@ struct DaysListView: View {
             .listSectionSpacing(.compact)
             .scrollContentBackground(.hidden)
             .background(.screenBackground)
-            .setupNavigation(model)
-            .setupToolbar(model, state)
-            .onAppear { model.onAppear() }
+            .setupNavigation($store)
+            .setupToolbar(store)
+            .onAppear { store.send(.onAppear) }
         }
     }
 }
 
 private extension View {
-    func setupNavigation(_ model: DaysListModel) -> some View {
+    func setupNavigation(_ store: Bindable<StoreOf<DaysList>>) -> some View {
         return self
     }
 
-    func setupToolbar(_ model: DaysListModel, _ state: DaysListState) -> some View {
+    func setupToolbar(_ store: StoreOf<DaysList>) -> some View {
         return self
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        model.coordinator.dismiss()
+                        store.send(.dismiss)
                     } label: {
                         Text("Zpět")
                             .foregroundStyle(.regularText)
@@ -80,34 +79,19 @@ private struct TitleView: View {
 }
 
 private struct DayView: View {
-    let model: DaysListModel
+    let store: StoreOf<DaysList>
     let day: TrashDay
 
     var body: some View {
         HStack {
-            Text(model.titleForDay(day.date))
+            Text(store.titlesForDay[day.id] ?? "")
                 .font(.callout)
 
             Spacer()
-            
+
             ForEach(day.bins) { bin in
                 BinIconView(bin: bin, size: 30)
             }
         }
     }
 }
-
-//#Preview {
-//    let homeState = HomeModelState()
-//    let homeModel = HomeModelImpl(state: homeState, coordinator: HomeCoordinator(coordinator: GlobalCoordinatorImpl()))
-//
-//    let state = DaysListState(allDays: homeState.allDays)
-//    let model = DaysListModelImpl(state: state, coordinator: DaysListCoordinator(coordinator: GlobalCoordinatorImpl()))
-//    DaysListView(model: model, state: state)
-//        .onAppear {
-//            homeModel.loadDays()
-//            state.allDays = homeState.allDays
-//            model.groupDays()
-//        }
-//}
-
