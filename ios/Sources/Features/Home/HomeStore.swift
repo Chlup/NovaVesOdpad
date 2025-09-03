@@ -14,10 +14,10 @@ import UIKit
 @Reducer
 struct Home {
     @Dependency(\.dismiss) var dismiss
-    @ObservationIgnored @Injected(\.logger) private var logger
-    @ObservationIgnored @Injected(\.daysLoader) private var daysLoader
-    @ObservationIgnored @Injected(\.notificationsBuilder) private var notificationsBuilder
-    @ObservationIgnored @Injected(\.settingsStorage) private var settingsStorage
+    @Injected(\.logger) private var logger
+    @Injected(\.daysLoader) private var daysLoader
+    @Injected(\.notificationsBuilder) private var notificationsBuilder
+    @Injected(\.settingsStorage) private var settingsStorage
 
     enum CancelID: CaseIterable {
         case scheduleNotifications

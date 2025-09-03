@@ -13,7 +13,7 @@ import Factory
 @Reducer
 struct DaysList {
     @Dependency(\.dismiss) var dismiss
-    @ObservationIgnored @Injected(\.logger) private var logger
+    @Injected(\.logger) private var logger
 
     @ObservableState
     struct State: Equatable {

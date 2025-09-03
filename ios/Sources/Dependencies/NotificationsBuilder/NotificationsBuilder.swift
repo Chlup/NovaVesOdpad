@@ -26,7 +26,7 @@ extension Container {
 }
 
 struct NotificationsBuilderImpl {
-    @ObservationIgnored @Injected(\.logger) private var logger
+    @Injected(\.logger) private var logger
     
     private let scheduleNotificationsTaskID = "scheduleNotificationsTaskID"
 

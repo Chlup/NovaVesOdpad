@@ -16,7 +16,6 @@
 		343502AB2DDD097E0075036D /* NovaVesOdpadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502AA2DDD097E0075036D /* NovaVesOdpadApp.swift */; };
 		343502B22DDD0D2F0075036D /* TrashDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343502B12DDD0D2F0075036D /* TrashDay.swift */; };
 		3439DBED2DC7492F008BD7B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3439DBE22DC7492F008BD7B0 /* Assets.xcassets */; };
-		3439DBEF2DC74B36008BD7B0 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DBEE2DC74B36008BD7B0 /* RootView.swift */; };
 		3439DBFB2DC7501D008BD7B0 /* Factory in Frameworks */ = {isa = PBXBuildFile; productRef = 3439DBFA2DC7501D008BD7B0 /* Factory */; };
 		3439DC072DC7550F008BD7B0 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3439DC062DC7550F008BD7B0 /* Logger.swift */; };
 		343AACCA2DE0745500D8E8BF /* UncheckedSendableMutableBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343AACC92DE0745500D8E8BF /* UncheckedSendableMutableBox.swift */; };
@@ -38,7 +37,6 @@
 		34A8B8B12DDFBDB3008B6BAA /* BinIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8B02DDFBDB3008B6BAA /* BinIconView.swift */; };
 		34A8B8BB2DDFC8B0008B6BAA /* TrashMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B8BA2DDFC8B0008B6BAA /* TrashMonth.swift */; };
 		34A8B8BD2DDFDC22008B6BAA /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A8B8BC2DDFDC22008B6BAA /* Launch Screen.storyboard */; };
-		34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C2EBFC2DC7C23100C11F28 /* RootModel.swift */; };
 		9E3EADD52E5C716D0075E32A /* heavy_load.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9E3EADD42E5C716D0075E32A /* heavy_load.pdf */; };
 /* End PBXBuildFile section */
 
@@ -66,7 +64,6 @@
 		343502B12DDD0D2F0075036D /* TrashDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashDay.swift; sourceTree = "<group>"; };
 		3439DBD42DC748DF008BD7B0 /* NovaVesOdpad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovaVesOdpad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3439DBE22DC7492F008BD7B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3439DBEE2DC74B36008BD7B0 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		3439DC062DC7550F008BD7B0 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		343AACC92DE0745500D8E8BF /* UncheckedSendableMutableBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UncheckedSendableMutableBox.swift; sourceTree = "<group>"; };
 		343AACCB2DE0745E00D8E8BF /* SendableCurrentValueSubject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableCurrentValueSubject.swift; sourceTree = "<group>"; };
@@ -88,7 +85,6 @@
 		34A8B8B02DDFBDB3008B6BAA /* BinIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinIconView.swift; sourceTree = "<group>"; };
 		34A8B8BA2DDFC8B0008B6BAA /* TrashMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashMonth.swift; sourceTree = "<group>"; };
 		34A8B8BC2DDFDC22008B6BAA /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		34C2EBFC2DC7C23100C11F28 /* RootModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootModel.swift; sourceTree = "<group>"; };
 		9E3EADD42E5C716D0075E32A /* heavy_load.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = heavy_load.pdf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -184,21 +180,11 @@
 			path = Dependencies;
 			sourceTree = "<group>";
 		};
-		3439DBE72DC7492F008BD7B0 /* Root */ = {
-			isa = PBXGroup;
-			children = (
-				34C2EBFC2DC7C23100C11F28 /* RootModel.swift */,
-				3439DBEE2DC74B36008BD7B0 /* RootView.swift */,
-			);
-			path = Root;
-			sourceTree = "<group>";
-		};
 		3439DBE82DC7492F008BD7B0 /* Features */ = {
 			isa = PBXGroup;
 			children = (
 				34A8B8B22DDFC35C008B6BAA /* DaysList */,
 				345593B32DC762FB002F346F /* Home */,
-				3439DBE72DC7492F008BD7B0 /* Root */,
 				343502B42DDD14650075036D /* Settings */,
 				343502B32DDD145B0075036D /* TashInfo */,
 			);
@@ -427,9 +413,7 @@
 				3480EC152E65FFEB00DAF1FF /* SettingsStore.swift in Sources */,
 				349CC4472DEEF54800559CFC /* DaysLoader.swift in Sources */,
 				343502AB2DDD097E0075036D /* NovaVesOdpadApp.swift in Sources */,
-				3439DBEF2DC74B36008BD7B0 /* RootView.swift in Sources */,
 				344D192D2DDDAF6000E6A046 /* NotificationsBuilder.swift in Sources */,
-				34C2EBFD2DC7C23100C11F28 /* RootModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,7 +12,7 @@ import ComposableArchitecture
 @preconcurrency import UserNotifications
 
 final class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotificationCenterDelegate {
-    @ObservationIgnored @Injected(\.logger) private var logger
+    @Injected(\.logger) private var logger
 
     let homeStore = StoreOf<Home>(
         initialState: Home.State()

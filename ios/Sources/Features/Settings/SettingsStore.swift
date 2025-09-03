@@ -15,9 +15,9 @@ import UIKit
 @Reducer
 struct SettingsScreen {
     @Dependency(\.dismiss) var dismiss
-    @ObservationIgnored @Injected(\.logger) private var logger
-    @ObservationIgnored @Injected(\.settingsStorage) private var settingsStorage
-    @ObservationIgnored @Injected(\.notificationsBuilder) private var notificationsBuilder
+    @Injected(\.logger) private var logger
+    @Injected(\.settingsStorage) private var settingsStorage
+    @Injected(\.notificationsBuilder) private var notificationsBuilder
 
     enum CancelID: CaseIterable {
         case scheduleNotifications
