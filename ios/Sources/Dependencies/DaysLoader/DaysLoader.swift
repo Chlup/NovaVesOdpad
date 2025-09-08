@@ -70,7 +70,16 @@ extension DaysLoaderImpl: DaysLoader {
     }
 
     func addHeavyLoadDay(calendar: Calendar, now: Date, components: DateComponents, to days: inout [TrashDay]) {
+        // Set late hour and minute so comparison to now is easy and doesn't need any additional logic.
+        var components = components
+        components.hour = 23
+        components.minute = 59
+
         let date = Calendar.current.date(from: components)!
+
+        // Heavy load dates are hardcoded so with time some of those will be in past.
+        guard date.timeIntervalSince(now) >= 0 else { return }
+
         let daysDifferenceToToday = now.daysDifference(to: date)
         let day = TrashDay(date: date, daysDifferenceToToday: daysDifferenceToToday, bins: [.heavyLoad])
         days.append(day)
