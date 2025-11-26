@@ -15,7 +15,9 @@ protocol DaysLoader: Sendable {
     func load() -> [TrashDay]
 }
 
-struct DaysLoaderImpl { }
+struct DaysLoaderImpl {
+    private let nonBioMonths: Set<Int> = [12, 1, 2, 3]
+}
 
 extension DaysLoaderImpl: DaysLoader {
     func nextWednesday(from date: Date) -> Date {
@@ -53,7 +55,12 @@ extension DaysLoaderImpl: DaysLoader {
 
             let bins: [TrashDay.Bin]
             if weekNumber % 2 == 0 {
-                bins = [.paper, .bio, .mix]
+                let monthNumber = calendar.component(.month, from: dayDate)
+                if nonBioMonths.contains(monthNumber) {
+                    bins = [.paper, .mix]
+                } else {
+                    bins = [.paper, .bio, .mix]
+                }
             } else {
                 bins = [.plastic, .mix]
             }
