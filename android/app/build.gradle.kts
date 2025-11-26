@@ -12,8 +12,8 @@ android {
         applicationId = "com.mugeaters.popelnice.nvpp"
         minSdk = 26
         targetSdk = 35
-        versionCode = 13
-        versionName = "1.4"
+        versionCode = 14
+        versionName = "1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
