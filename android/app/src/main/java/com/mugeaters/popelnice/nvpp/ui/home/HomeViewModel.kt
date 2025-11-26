@@ -193,7 +193,9 @@ Do modrého kontejneru naopak nepatří celé svazky knih (vhazovat pouze bez pe
         return listOf(
             TrashInfoSection(
                 title = "Bio odpad",
-                text = """Jedná se o biologicky rozložitelný odpad rostlinného původu pocházející především z údržby zahrad, ale i rostlinné zbytky z kuchyní. Ke sběru se pak nejčastěji využívají hnědé popelnice a kontejnery, nebo velkokapacitní kontejnery. Případně je možné je odkládat ve sběrném dvoře. Bioodpady je také možné využít na zahradách v kompostérech nebo komunitních a obecních kompostárnách.""",
+                text = """Bio popelnice se vyváží v období od 1. Dubna do 30. Listopadu.
+                    
+Jedná se o biologicky rozložitelný odpad rostlinného původu pocházející především z údržby zahrad, ale i rostlinné zbytky z kuchyní. Ke sběru se pak nejčastěji využívají hnědé popelnice a kontejnery, nebo velkokapacitní kontejnery. Případně je možné je odkládat ve sběrném dvoře. Bioodpady je také možné využít na zahradách v kompostérech nebo komunitních a obecních kompostárnách.""".trimMargin(),
                 pdfFileName = null
             )
         )

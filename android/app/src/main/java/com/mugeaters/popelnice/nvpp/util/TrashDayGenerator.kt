@@ -9,7 +9,9 @@ import java.time.temporal.WeekFields
  * Algorithm: every Wednesday, alternating bin types based on week number
  */
 class TrashDayGenerator {
-    
+
+    private val nonBioMonths: Set<Int> = setOf(12, 1, 2, 3)
+
     /**
      * Generates trash collection days programmatically
      * Algorithm matches iOS implementation - every Wednesday, alternating bin types based on week number
@@ -24,15 +26,20 @@ class TrashDayGenerator {
         for (i in 0..52) {
             val dayDate = nextWednesday.plusWeeks(i.toLong())
             val weekOfYear = dayDate.get(WeekFields.ISO.weekOfWeekBasedYear())
-            
+
             val bins = if (weekOfYear % 2 == 0) {
-                // Even weeks: paper, bio, mix
-                listOf(TrashDay.Bin.paper, TrashDay.Bin.bio, TrashDay.Bin.mix)
+                // Even weeks: paper, bio (only Apr-Nov), mix
+                val monthNumber = dayDate.monthValue
+                if (nonBioMonths.contains(monthNumber)) {
+                    listOf(TrashDay.Bin.paper, TrashDay.Bin.mix)
+                } else {
+                    listOf(TrashDay.Bin.paper, TrashDay.Bin.bio, TrashDay.Bin.mix)
+                }
             } else {
                 // Odd weeks: plastic, mix
                 listOf(TrashDay.Bin.plastic, TrashDay.Bin.mix)
             }
-            
+
             val day = TrashDay(date = dayDate, bins = bins)
             days.add(day)
         }
