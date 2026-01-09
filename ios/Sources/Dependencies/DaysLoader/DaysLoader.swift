@@ -69,9 +69,16 @@ extension DaysLoaderImpl: DaysLoader {
             days.append(day)
         }
 
-        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2025, month: 9, day: 6), to: &days)
-        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2025, month: 10, day: 4), to: &days)
-        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2025, month: 11, day: 8), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2026, month: 2, day: 7), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2026, month: 3, day: 7), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2026, month: 4, day: 11), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2026, month: 5, day: 2), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2026, month: 6, day: 6), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2026, month: 7, day: 4), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2026, month: 8, day: 1), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2026, month: 9, day: 5), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2026, month: 10, day: 3), to: &days)
+        addHeavyLoadDay(calendar: calendar, now: now, components: DateComponents(year: 2026, month: 11, day: 7), to: &days)
 
         return days.sorted(by: { $0.date < $1.date })
     }
