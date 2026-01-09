@@ -45,9 +45,16 @@ class TrashDayGenerator {
         }
         
         // Add hardcoded heavy load days
-        addHeavyLoadDay(days, 2025, 9, 6)
-        addHeavyLoadDay(days, 2025, 10, 4)
-        addHeavyLoadDay(days, 2025, 11, 8)
+        addHeavyLoadDay(days, 2026, 2, 7)
+        addHeavyLoadDay(days, 2026, 3, 7)
+        addHeavyLoadDay(days, 2026, 4, 11)
+        addHeavyLoadDay(days, 2026, 5, 2)
+        addHeavyLoadDay(days, 2026, 6, 6)
+        addHeavyLoadDay(days, 2026, 7, 4)
+        addHeavyLoadDay(days, 2026, 8, 1)
+        addHeavyLoadDay(days, 2026, 9, 5)
+        addHeavyLoadDay(days, 2026, 10, 3)
+        addHeavyLoadDay(days, 2026, 11, 7)
         
         return days.sortedBy { it.date }
     }
